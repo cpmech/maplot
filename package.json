@@ -1,0 +1,51 @@
+{
+  "name": "@plabs/maplot",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Pedroso Labs",
+    "email": "pedroso.xlabs@gmail.com",
+    "url": "https://github.com/pedrosolabs"
+  },
+  "repository": "pedrosolabs/maplot",
+  "scripts": {
+    "tsnode": "ts-node -O '{\"module\":\"commonjs\",\"resolveJsonModule\":true}'",
+    "start": "yarn tsnode src/index.ts",
+    "build": "rm -rf dist && rollup --config rollup.config-tslib.js",
+    "test": "jest --verbose",
+    "tw": "jest --watch --verbose",
+    "cov": "yarn build && jest --coverage",
+    "integ": "jest -c jest.config-integ.js --verbose",
+    "integw": "jest -c jest.config-integ.js --verbose --watch",
+    "dist": "yarn build && yarn publish --access=public"
+  },
+  "description": "maplot",
+  "keywords": [
+    "maplot"
+  ],
+  "files": [
+    "dist"
+  ],
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/esm/index.d.ts",
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@types/node": "^12.7.4",
+    "@types/sprintf-js": "^1.1.2",
+    "jest": "^24.9.0",
+    "jest-canvas-mock": "^2.1.1",
+    "prettier": "^1.18.2",
+    "rollup": "^1.20.3",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-typescript2": "^0.24.0",
+    "ts-jest": "^24.0.2",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.19.0",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.6.2"
+  },
+  "dependencies": {
+    "sprintf-js": "^1.1.2"
+  }
+}
