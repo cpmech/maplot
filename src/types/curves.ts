@@ -19,7 +19,7 @@ export interface ICurveStyle {
 
 export interface ICurve {
   label: string; // curve name or connection pair such as 'San Francisco -> Los Angeles'
-  type: string; // e.g. connection, city, fortress, base, mine, ...
+  kind: string; // e.g. connection, city, fortress, base, mine, ...
   x: number[]; // x-coordinates
   y: number[]; // y-coordinates
   z: number[]; // z-coordinates
@@ -30,3 +30,22 @@ export interface ICurve {
 export interface ICurves {
   list: ICurve[];
 }
+
+export const defaultCurveStyle: ICurveStyle = {
+  // lines
+  lineColor: '',
+  lineAlpha: 1,
+  lineStyle: '',
+  lineWidth: 1,
+
+  // markers
+  markerType: '',
+  markerColor: '',
+  markerAlpha: 1,
+  markerSize: 0,
+  markerEvery: 0,
+  markerLineColor: '',
+  markerLineWidth: 1,
+  markerLineStyle: '',
+  markerIsVoid: false,
+};

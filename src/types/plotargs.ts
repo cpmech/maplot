@@ -110,7 +110,7 @@ export interface IPlotArgs {
   frameLineStyle: string; // line style of frame
 }
 
-export const zeroPlotArgs: IPlotArgs = {
+export const defaultPlotArgs: IPlotArgs = {
   // title and labels
   title: 'XY Plot',
   xLabel: 'x ►',
