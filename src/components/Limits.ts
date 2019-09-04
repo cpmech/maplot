@@ -1,7 +1,7 @@
 import { ICurves, IPlotArgs, ILimits } from '../types';
 import { cteEps } from './constants';
 
-export default class Limits {
+export class Limits {
   // input
   args: IPlotArgs;
   curves: ICurves;

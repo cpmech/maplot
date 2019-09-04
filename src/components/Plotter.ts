@@ -4,9 +4,9 @@ import { activateStyleForLine, drawMarker, getMarkerSize } from '../marker';
 import { pointRectInsideL } from '../geometry';
 import { toInt, numFmt } from '../helpers';
 import { cteSqrtEps, cteEps } from './constants';
-import Metrics from './Metrics';
+import { Metrics } from './Metrics';
 
-export default class Plotter {
+export class Plotter {
   dc: CanvasRenderingContext2D;
   args: IPlotArgs;
   curves: ICurves;

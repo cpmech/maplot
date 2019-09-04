@@ -18,7 +18,7 @@ export const zeroListener: IListener = {
   },
 };
 
-export default class Resizer {
+export class Resizer {
   callbackFcn: IResizeFunction = zeroResizeFunction;
   listener: IListener = zeroListener;
 

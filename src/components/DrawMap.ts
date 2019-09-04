@@ -1,11 +1,11 @@
 import { ICurves, IPlotArgs, ICoords } from '../types';
 import { numFmt } from '../helpers';
 import { getMousePos, IListener } from '../dom';
-import Metrics from './Metrics';
-import Plotter from './Plotter';
-import StatusBar from './StatusBar';
+import { Metrics } from './Metrics';
+import { Plotter } from './Plotter';
+import { StatusBar } from './StatusBar';
 
-export default class DrawMap {
+export class DrawMap {
   // constants
   zoomFactor: number = 1.1; // must be greater than 1.0
 

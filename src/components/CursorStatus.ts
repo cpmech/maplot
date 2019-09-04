@@ -1,7 +1,7 @@
 import { displayIsOff } from '../dom/showAndHide';
 import { prettyNum } from '../helpers';
 
-export default class CursorStatus {
+export class CursorStatus {
   show: boolean;
   element: HTMLElement;
   gapX: number = 5;

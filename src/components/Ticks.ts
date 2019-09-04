@@ -2,9 +2,9 @@ import { ITicksInfo } from '../types';
 import { toInt } from '../helpers';
 import { IPlotArgs } from '../types/plotargs';
 import { cteSqrtEps, cteEps, cteMin, cteMax } from './constants';
-import Limits from './Limits';
+import { Limits } from './Limits';
 
-export default class Ticks {
+export class Ticks {
   // input
   args: IPlotArgs;
   limits: Limits;

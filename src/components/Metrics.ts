@@ -3,8 +3,8 @@ import { toInt, numFmt } from '../helpers';
 import { textWidthPx } from '../canvas';
 import { getMarkerSize } from '../marker';
 import { cteEps } from './constants';
-import Limits, { getLimitsAroundCurves, checkLimitsForConsistency } from './Limits';
-import Ticks from './Ticks';
+import { Limits, getLimitsAroundCurves, checkLimitsForConsistency } from './Limits';
+import { Ticks } from './Ticks';
 
 //                |←——————————————————— W ————————————————————→|
 //                       |←——————————— ww ——————————→|
@@ -39,7 +39,7 @@ import Ticks from './Ticks';
 //    BL : Bottom Legend       RL : Right Legend       xReal,yReal: x-y (real data) coords
 //    DH : Delta Horizontal    DV : Delta Vertical
 
-export default class Metrics {
+export class Metrics {
   // input
   dc: CanvasRenderingContext2D;
   args: IPlotArgs;

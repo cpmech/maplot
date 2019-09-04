@@ -1,6 +1,6 @@
 import { displayIsOff } from '../dom/showAndHide';
 
-export default class StatusBar {
+export class StatusBar {
   show: boolean;
   element: HTMLElement;
 
