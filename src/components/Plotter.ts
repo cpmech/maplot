@@ -2,7 +2,7 @@ import { ICurves, IPlotArgs } from '../types';
 import { drawRect, setStroke, drawLine, drawText, drawTextVertUp, textWidthPx } from '../canvas';
 import { activateStyleForLine, drawMarker, getMarkerSize } from '../marker';
 import { pointRectInsideL } from '../geometry';
-import { toInt, numFmt } from '../helpers';
+import { numFmt } from '../helpers';
 import { cteSqrtEps, cteEps } from './constants';
 import { Metrics } from './Metrics';
 
@@ -336,7 +336,7 @@ export class Plotter {
     let xl = this.args.legGap; // initial x-coord on icon line
     let yl = this.metrics.yf + this.metrics.xScaleH + hei / 2; // initial y-coord on icon line
     let col = 0; // column number
-    let ncol = toInt(this.curves.list.length / this.args.legNrow); // number of columns
+    let ncol = Math.trunc(this.curves.list.length / this.args.legNrow); // number of columns
     if (this.curves.list.length % this.args.legNrow > 0) {
       ncol++;
     }

@@ -1,5 +1,5 @@
 import { IPlotArgs, ICurves, ILimits } from '../types';
-import { toInt, numFmt } from '../helpers';
+import { numFmt } from '../helpers';
 import { textWidthPx } from '../canvas';
 import { getMarkerSize } from '../marker';
 import { cteEps } from './constants';
@@ -203,15 +203,15 @@ export class Metrics {
 
   // xScr converts real x-coords to to screen coordinates
   xScr(x: number): number {
-    return toInt(this.p0 + this.sfx * (x - this.limits.xmin));
+    return Math.trunc(this.p0 + this.sfx * (x - this.limits.xmin));
   }
 
   // yScr converts real y-coords to to screen coordinates
   yScr(y: number): number {
     if (this.args.invertYscale) {
-      return toInt(this.q0 + this.sfy * (y - this.limits.ymin));
+      return Math.trunc(this.q0 + this.sfy * (y - this.limits.ymin));
     } else {
-      return toInt(this.qf - this.sfy * (y - this.limits.ymin));
+      return Math.trunc(this.qf - this.sfy * (y - this.limits.ymin));
     }
   }
 

@@ -1,4 +1,3 @@
-import { toInt } from '../helpers/toInt';
 import { getOrthoVec } from '../geometry';
 
 export const setStroke = (
@@ -186,8 +185,8 @@ export const drawGrid = (
   const ls = smax - smin;
   const dr = lr / ndiv;
   const ds = ls / ndiv;
-  const nr = toInt(lr / dr) + 1;
-  const ns = toInt(ls / ds) + 1;
+  const nr = Math.trunc(lr / dr) + 1;
+  const ns = Math.trunc(ls / ds) + 1;
   for (let i = 0; i < nr; i++) {
     const r = rmin + i * dr;
     drawLine(dc, r, smin, r, smax);

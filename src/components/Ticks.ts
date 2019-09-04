@@ -1,5 +1,4 @@
 import { ITicksInfo } from '../types';
-import { toInt } from '../helpers';
 import { IPlotArgs } from '../types/plotargs';
 import { cteSqrtEps, cteEps, cteMin, cteMax } from './constants';
 import { Limits } from './Limits';
@@ -48,8 +47,8 @@ export class Ticks {
   }
 
   decreaseLo(dx: number, dy: number) {
-    const nx = toInt(dx / this.x.unit);
-    const ny = toInt(dy / this.y.unit);
+    const nx = Math.trunc(dx / this.x.unit);
+    const ny = Math.trunc(dy / this.y.unit);
     this.x.lo -= nx * this.x.unit;
     this.y.lo -= ny * this.y.unit;
   }
@@ -72,7 +71,7 @@ export class Ticks {
     const h5 = 0.5 + 1.5 * h;
 
     // local variables
-    const minN = toInt(toInt(nDiv) / toInt(3));
+    const minN = Math.trunc(Math.trunc(nDiv) / Math.trunc(3));
     let lo = Lo;
     let hi = Hi;
     const dx = hi - lo;
@@ -167,7 +166,7 @@ export class Ticks {
     }
 
     // find number of divisions
-    let ndv = toInt(0.5 + nu - ns);
+    let ndv = Math.trunc(0.5 + nu - ns);
     if (ndv < minN) {
       const k = minN - ndv;
       if (ns >= 0.0) {
