@@ -203,7 +203,11 @@ export class Metrics {
 
   // xScr converts real x-coords to to screen coordinates
   xScr(x: number): number {
-    return Math.trunc(this.p0 + this.sfx * (x - this.limits.xmin));
+    if (this.args.invertXscale) {
+      return Math.trunc(this.pf - this.sfx * (x - this.limits.xmin));
+    } else {
+      return Math.trunc(this.p0 + this.sfx * (x - this.limits.xmin));
+    }
   }
 
   // yScr converts real y-coords to to screen coordinates
@@ -217,7 +221,11 @@ export class Metrics {
 
   // xReal converts to real coordinates
   xReal(xscr: number) {
-    return this.limits.xmin + (xscr - this.p0) / this.sfx;
+    if (this.args.invertXscale) {
+      return this.limits.xmin + (this.pf - xscr) / this.sfx;
+    } else {
+      return this.limits.xmin + (xscr - this.p0) / this.sfx;
+    }
   }
 
   // xReal converts to real coordinates
@@ -367,7 +375,11 @@ export class Metrics {
 
     // expand limits along larger dimension
     if (this.w > this.h) {
-      this.limits.xmax = this.xReal(this.xf);
+      if (this.args.invertXscale) {
+        this.limits.xmax = this.xReal(this.x0);
+      } else {
+        this.limits.xmax = this.xReal(this.xf);
+      }
     } else {
       if (this.args.invertYscale) {
         this.limits.ymax = this.yReal(this.yf);

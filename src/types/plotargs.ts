@@ -9,6 +9,7 @@ export interface IPlotArgs {
   xIs: string; // x-axis is 'x', for example
   yIs: string; // y-axis is 'z', for example
   equalScale: boolean; // equal scale factors
+  invertXscale: boolean; // invert x-scale
   invertYscale: boolean; // invert y-scale
   clipOn: boolean; // clip outside lines
   deltaH: number; // DH increment
@@ -121,6 +122,7 @@ export const defaultPlotArgs: IPlotArgs = {
   xIs: 'x',
   yIs: 'y',
   equalScale: true,
+  invertXscale: false,
   invertYscale: false,
   clipOn: false,
   deltaH: 8,

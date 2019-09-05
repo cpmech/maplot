@@ -12,10 +12,11 @@ export function yzRender() {
   const args = {
     ...defaultPlotArgs,
     title: 'Y-Z Plot',
-    xIs: 'y',
-    yIs: 'z',
-    xLabel: 'y ►',
-    yLabel: 'z ►',
+    xIs: 'z',
+    yIs: 'y',
+    xLabel: '◄ z',
+    yLabel: 'y ►',
+    invertXscale: true,
   };
 
   const curves = {

@@ -63,8 +63,13 @@ export class Limits {
   }
 
   translateRelativeToCopy(dx: number, dy: number) {
-    this.xmin = this.xminCopy - dx;
-    this.xmax = this.xmaxCopy - dx;
+    if (this.args.invertXscale) {
+      this.xmin = this.xminCopy + dx;
+      this.xmax = this.xmaxCopy + dx;
+    } else {
+      this.xmin = this.xminCopy - dx;
+      this.xmax = this.xmaxCopy - dx;
+    }
     if (this.args.invertYscale) {
       this.ymin = this.yminCopy - dy;
       this.ymax = this.ymaxCopy - dy;
