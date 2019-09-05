@@ -17,7 +17,7 @@ app.use('/dist', express.static(__dirname + '/dist'));
 app.use('/', express.static(__dirname + '/examples'));
 
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname, '/examples', 'example1.html'));
+  res.sendFile(path.join(__dirname, 'examples', 'js', 'example1.html'));
 });
 
 const server = http.createServer(app);
@@ -29,8 +29,11 @@ reload(app)
       console.log('Web server listening on port ' + app.get('port'));
     });
 
+    // files to be watched
+    const files = [__dirname + '/dist/examples/js', __dirname + '/examples/js/*.html'];
+
     // watch changes
-    chokidar.watch(__dirname + '/dist', { ignored: /(^|[\/\\])\../ }).on('all', (event, path) => {
+    chokidar.watch(files, { ignored: /(^|[\/\\])\../ }).on('all', (event, path) => {
       reloadReturned.reload();
     });
   })
