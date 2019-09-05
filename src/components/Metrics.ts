@@ -402,8 +402,8 @@ export class Metrics {
       const dy = ycen - ymid;
       this.limits.xmin -= dx;
       this.limits.xmax -= dx;
-      this.limits.ymin += dy;
-      this.limits.ymax += dy;
+      this.limits.ymin -= dy;
+      this.limits.ymax -= dy;
       this.ticks.decreaseLo(dx, dy);
     }
   }
