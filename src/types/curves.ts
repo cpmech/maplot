@@ -33,19 +33,19 @@ export interface ICurves {
 
 export const defaultCurveStyle: ICurveStyle = {
   // lines
-  lineColor: '',
-  lineAlpha: 1,
-  lineStyle: '',
-  lineWidth: 1,
+  lineColor: '#b33434',
+  lineAlpha: 0.7,
+  lineStyle: '-',
+  lineWidth: 3,
 
   // markers
-  markerType: '',
-  markerColor: '',
+  markerType: 'o',
+  markerColor: '#4c4deb',
   markerAlpha: 1,
   markerSize: 0,
   markerEvery: 0,
-  markerLineColor: '',
-  markerLineWidth: 1,
+  markerLineColor: '#ffffff',
+  markerLineWidth: 3,
   markerLineStyle: '',
   markerIsVoid: false,
 };

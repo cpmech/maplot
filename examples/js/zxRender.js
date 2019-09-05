@@ -23,15 +23,11 @@ export function zxRender() {
       {
         label: 'z-x Curve',
         kind: 'Group A',
-        x,
-        y,
-        z,
+        x: x.slice(6, 11),
+        y: y.slice(6, 11),
+        z: z.slice(6, 11),
         style: {
           ...defaultCurveStyle,
-          lineColor: '#ff0000',
-          lineStyle: '-',
-          markerType: 'o',
-          markerColor: '#00ff00',
         },
         tagFirstPoint: false,
       },

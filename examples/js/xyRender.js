@@ -21,15 +21,11 @@ export function xyRender() {
       {
         label: 'x-y Curve',
         kind: 'Group A',
-        x,
-        y,
-        z,
+        x: x.slice(0, 7),
+        y: y.slice(0, 7),
+        z: z.slice(0, 7),
         style: {
           ...defaultCurveStyle,
-          lineColor: '#ff0000',
-          lineStyle: '-',
-          markerType: 'o',
-          markerColor: '#00ff00',
         },
         tagFirstPoint: false,
       },
