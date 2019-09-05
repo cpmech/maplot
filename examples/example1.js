@@ -1,4 +1,4 @@
-const plt = require('../dist/cjs/index');
+import { Metrics, Plotter, defaultPlotArgs, defaultCurveStyle } from '../dist/index-esm.js';
 
 const canvas = document.getElementById('myCanvas');
 if (!canvas) {
@@ -8,7 +8,7 @@ if (!canvas) {
 const dc = canvas.getContext('2d');
 
 const args = {
-  ...plt.defaultPlotArgs,
+  ...defaultPlotArgs,
   // legendOn: true,
 };
 
@@ -21,7 +21,7 @@ const curves = {
       y: [0.0, 1.0, 1.0, 0.7, 0.3, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.8, 0.6, 0.4, 0.4],
       z: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.2, 0.5, 0.8, 1.0, 1.0, 0.5, 0.0, 0.0, 0.5, 1.0],
       style: {
-        ...plt.defaultCurveStyle,
+        ...defaultCurveStyle,
         lineColor: '#ff0000',
         lineStyle: '-',
         markerType: 'o',
@@ -32,10 +32,10 @@ const curves = {
   ],
 };
 
-const metrics = new plt.Metrics(dc, args, curves);
+const metrics = new Metrics(dc, args, curves);
 
 metrics.resize(canvas.width, canvas.height);
 
-const plotter = new plt.Plotter(dc, args, curves, metrics);
+const plotter = new Plotter(dc, args, curves, metrics);
 
 plotter.render();

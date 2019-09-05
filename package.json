@@ -11,8 +11,10 @@
   "scripts": {
     "tsnode": "ts-node -O '{\"module\":\"commonjs\",\"resolveJsonModule\":true}'",
     "start": "yarn tsnode src/index.ts",
-    "build-wp": "yarn webpack",
-    "build": "rm -rf dist && rollup --config rollup.config-tslib.js && yarn build-wp",
+    "build": "rm -rf dist && rollup --config rollup.config-tslib.js",
+    "build-web": "rm -rf dist && rollup --config rollup.config-web.js",
+    "watch": "rollup --watch --config rollup.config-web.js",
+    "serve": "node server.js",
     "test": "jest --verbose",
     "tw": "jest --watch --verbose",
     "cov": "yarn build && jest --coverage",
@@ -34,19 +36,22 @@
     "@types/jest": "^24.0.18",
     "@types/node": "^12.7.4",
     "@types/sprintf-js": "^1.1.2",
+    "chokidar": "^3.0.2",
+    "express": "^4.17.1",
     "jest": "^24.9.0",
     "jest-canvas-mock": "^2.1.1",
+    "morgan": "^1.9.1",
     "prettier": "^1.18.2",
+    "reload": "^3.0.1",
     "rollup": "^1.20.3",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-typescript2": "^0.24.0",
     "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "tslint": "^5.19.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.6.2",
-    "webpack": "^4.39.3",
-    "webpack-cli": "^3.3.7"
+    "typescript": "^3.6.2"
   },
   "dependencies": {
     "sprintf-js": "^1.1.2"
