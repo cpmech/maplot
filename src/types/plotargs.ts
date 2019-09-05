@@ -114,14 +114,14 @@ export const defaultPlotArgs: IPlotArgs = {
   // title and labels
   title: 'XY Plot',
   xLabel: 'x ►',
-  yLabel: '◄ y',
+  yLabel: 'y ►',
   yLabelVert: true,
 
   // options
   xIs: 'x',
-  yIs: 'z',
+  yIs: 'y',
   equalScale: true,
-  invertYscale: true,
+  invertYscale: false,
   clipOn: false,
   deltaH: 8,
   deltaV: 8,

@@ -11,7 +11,8 @@
   "scripts": {
     "tsnode": "ts-node -O '{\"module\":\"commonjs\",\"resolveJsonModule\":true}'",
     "start": "yarn tsnode src/index.ts",
-    "build": "rm -rf dist && rollup --config rollup.config-tslib.js",
+    "build-wp": "yarn webpack",
+    "build": "rm -rf dist && rollup --config rollup.config-tslib.js && yarn build-wp",
     "test": "jest --verbose",
     "tw": "jest --watch --verbose",
     "cov": "yarn build && jest --coverage",
@@ -43,7 +44,9 @@
     "ts-node": "^8.3.0",
     "tslint": "^5.19.0",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.6.2"
+    "typescript": "^3.6.2",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7"
   },
   "dependencies": {
     "sprintf-js": "^1.1.2"
