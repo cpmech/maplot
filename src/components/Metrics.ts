@@ -256,7 +256,7 @@ export class Metrics {
     // x-scale (BR): tick text height
     this.xTickH = this.args.fsizeTicks;
     if (this.args.xTicksVert) {
-      const tx = '+' + numFmt(this.args.xTicksFormat, this.args.xTicksDecDigits, this.ticks.x.lo);
+      const tx = '+' + numFmt(this.ticks.x.lo, this.args.xTicksDecDigits);
       const tw = textWidthPx(this.dc, tx, fontTicks);
       this.xTickH = tw;
     }
@@ -265,7 +265,7 @@ export class Metrics {
     this.xLblH = this.args.fsizeLabels;
 
     // y-scale (LR): tick text width
-    const ty = '+' + numFmt(this.args.yTicksFormat, this.args.yTicksDecDigits, this.ticks.y.lo);
+    const ty = '+' + numFmt(this.ticks.y.lo, this.args.yTicksDecDigits);
     this.yTickW = textWidthPx(this.dc, ty, fontTicks);
 
     // y-scale (LR): y-label text width

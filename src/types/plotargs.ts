@@ -44,8 +44,6 @@ export interface IPlotArgs {
   yTicksWholeNums: boolean; // use whole numbers only
   xTicksLength: number; // length of tick lines
   yTicksLength: number; // length of tick lines
-  xTicksFormat: string; // sprintf format for digits of x-ticks
-  yTicksFormat: string; // sprintf format for digits of y-ticks
   xTicksDecDigits: number; // number of decimal digits of x-ticks (-1 means all possible digits)
   yTicksDecDigits: number; // number of decimal digits of y-ticks (-1 means all possible digits)
   xTicksColor: string; // color
@@ -153,14 +151,12 @@ export const defaultPlotArgs: IPlotArgs = {
   xTicksVert: true,
   xTicksNumber: 8,
   yTicksNumber: 8,
-  xTicksWholeNums: true,
-  yTicksWholeNums: true,
+  xTicksWholeNums: false,
+  yTicksWholeNums: false,
   xTicksLength: 6,
   yTicksLength: 6,
-  xTicksFormat: '%g',
-  yTicksFormat: '%g',
-  xTicksDecDigits: 0,
-  yTicksDecDigits: 0,
+  xTicksDecDigits: -1,
+  yTicksDecDigits: -1,
   xTicksColor: '#414141',
   yTicksColor: '#414141',
   xTicksAlpha: 1.0,

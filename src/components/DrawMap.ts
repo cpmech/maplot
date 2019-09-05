@@ -227,10 +227,10 @@ export class DrawMap {
       if (this.statusBar && this.statusBar.show && this.args && this.metrics) {
         const xreal = this.metrics.xReal(x);
         const yreal = this.metrics.yReal(y);
-        const txr = numFmt(this.args.xTicksFormat, this.args.xTicksDecDigits, xreal);
-        const tyr = numFmt(this.args.yTicksFormat, this.args.xTicksDecDigits, yreal);
-        const txn = numFmt(this.args.xTicksFormat, this.args.xTicksDecDigits, xreal / 8);
-        const tyn = numFmt(this.args.yTicksFormat, this.args.xTicksDecDigits, yreal / 8);
+        const txr = numFmt(xreal, this.args.xTicksDecDigits);
+        const tyr = numFmt(yreal, this.args.xTicksDecDigits);
+        const txn = numFmt(xreal / 8, this.args.xTicksDecDigits);
+        const tyn = numFmt(yreal / 8, this.args.xTicksDecDigits);
         const tworld = `WORLD ${this.args.xIs} = ${txr} : ${this.args.yIs} = ${tyr}`;
         const tnether = `NETHER ${this.args.xIs} = ${txn} : ${this.args.yIs} = ${tyn}`;
         this.statusBar.set(`${tworld} | ${tnether}`);

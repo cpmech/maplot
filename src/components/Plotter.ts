@@ -219,7 +219,7 @@ export class Plotter {
         );
         drawLine(this.dc, x, this.metrics.yf, x, this.metrics.yf + this.args.xTicksLength);
         let y = this.metrics.yf + this.args.xTicksLength;
-        const tx = numFmt(this.args.xTicksFormat, this.args.xTicksDecDigits, xreal);
+        const tx = numFmt(xreal, this.args.xTicksDecDigits);
         if (this.args.xTicksVert) {
           y += this.args.padSmall;
           drawTextVertUp(this.dc, tx, x, y, 'right', 'center', fontTicks, this.args.xTicksColor);
@@ -266,7 +266,7 @@ export class Plotter {
           this.args.yTicksLineStyle,
         );
         drawLine(this.dc, this.metrics.x0 - this.args.yTicksLength, y, this.metrics.x0, y);
-        const ty = numFmt(this.args.xTicksFormat, this.args.xTicksDecDigits, yreal);
+        const ty = numFmt(yreal, this.args.xTicksDecDigits);
         const x = this.metrics.x0 - this.args.yTicksLength - 1;
         drawText(this.dc, ty, x, y, 'right', 'center', fontTicks, this.args.yTicksColor);
       }
