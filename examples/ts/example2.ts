@@ -1,5 +1,6 @@
 import {
   ICurves,
+  IPlotArgs,
   Metrics,
   Plotter,
   defaultPlotArgs,
@@ -19,7 +20,7 @@ if (!dc) {
   throw new Error('Cannot get device context');
 }
 
-const args = {
+const args: IPlotArgs = {
   ...defaultPlotArgs,
   title: 'Many Curves',
   xIs: 'x',

@@ -13,6 +13,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json()); // Parses json, multi-part (file), url-encoded
 
 app.use('/assets', express.static(__dirname + '/assets'));
+app.use('/images', express.static(__dirname + '/examples/images'));
 app.use('/dist', express.static(__dirname + '/dist'));
 
 app.get('/', function(req, res) {
@@ -25,6 +26,10 @@ app.get('/1', function(req, res) {
 
 app.get('/2', function(req, res) {
   res.sendFile(path.join(__dirname, 'examples', 'ts', 'example2.html'));
+});
+
+app.get('/3', function(req, res) {
+  res.sendFile(path.join(__dirname, 'examples', 'ts', 'example3.html'));
 });
 
 const server = http.createServer(app);
