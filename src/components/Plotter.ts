@@ -1,6 +1,5 @@
-import { ICurves, IPlotArgs } from '../types';
+import { ICurves, IPlotArgs, ICurveStyle } from '../types';
 import { drawRect, setStroke, drawLine, drawText, drawTextVertUp, textWidthPx } from '../canvas';
-import { activateStyleForLine, drawMarker, getMarkerSize } from '../marker';
 import { pointRectInsideL } from '../geometry';
 import { numFmt } from '../helpers';
 import { cteSqrtEps, cteEps } from './constants';
@@ -107,7 +106,13 @@ export class Plotter {
     this.curves.list.forEach(curve => {
       const c = curve as any;
       if (curve.style.lineStyle && c[u].length > 1) {
-        activateStyleForLine(this.dc, curve.style);
+        setStroke(
+          this.dc,
+          curve.style.lineColor,
+          curve.style.lineAlpha,
+          curve.style.lineWidth,
+          curve.style.lineStyle,
+        );
         let x = this.metrics.xScr(c[u][0]);
         let y = this.metrics.yScr(c[v][0]);
         this.dc.beginPath();
@@ -131,8 +136,6 @@ export class Plotter {
     // draw markers
     const fontMarkerLabel = `${this.args.fsizeMarkerLabel}px ${this.args.fnameMarkerLabel}`;
     const mm = this.metrics.markerMultiplier;
-    const smin = this.args.markerSizeMin;
-    const smax = this.args.markerSizeMax;
     this.curves.list.forEach(curve => {
       const c = curve as any;
       if (curve.style.markerType) {
@@ -143,11 +146,11 @@ export class Plotter {
             if (i >= idx) {
               const x = this.metrics.xScr(c[u][i]);
               let y = this.metrics.yScr(c[v][i]);
-              drawMarker(this.dc, x, y, curve.style, mm, smin, smax);
+              this.metrics.markers.draw(x, y, curve.style, mm);
               if (i === 0 && curve.tagFirstPoint) {
                 const lbl = curve.label;
                 const clr = this.args.colorMarkerLabel;
-                y -= getMarkerSize(curve.style, mm, smin, smax) / 2;
+                y -= this.metrics.markers.getSize(curve.style, mm) / 2;
                 drawText(this.dc, lbl, x, y, 'center', 'bottom', fontMarkerLabel, clr);
               }
               idx += curve.style.markerEvery;
@@ -342,18 +345,23 @@ export class Plotter {
     }
 
     const mm = this.metrics.markerMultiplier;
-    const smin = this.args.markerSizeMin;
-    const smax = this.args.markerSizeMax;
     this.curves.list.forEach(curve => {
       // icon={line,marker} and label
       if (curve.style.markerType) {
-        if (xl + hll + getMarkerSize(curve.style, mm, smin, smax) < this.metrics.xf) {
-          drawMarker(this.dc, xl + hll, yl, curve.style, mm, smin, smax);
+        const sz = this.metrics.markers.getSize(curve.style, mm);
+        if (xl + hll + sz < this.metrics.xf) {
+          this.metrics.markers.draw(xl + hll, yl, curve.style, mm);
         }
       }
       if (curve.style.lineStyle) {
         if (xl + lll < this.metrics.xf) {
-          activateStyleForLine(this.dc, curve.style);
+          setStroke(
+            this.dc,
+            curve.style.lineColor,
+            curve.style.lineAlpha,
+            curve.style.lineWidth,
+            curve.style.lineStyle,
+          );
           drawLine(this.dc, xl, yl, xl + lll, yl);
         }
       }
@@ -412,10 +420,16 @@ export class Plotter {
     this.curves.list.forEach(curve => {
       // icon={line,marker} and label
       if (curve.style.markerType) {
-        drawMarker(this.dc, xl + hll, yl, curve.style, mm, smin, smax);
+        this.metrics.markers.draw(xl + hll, yl, curve.style, mm);
       }
       if (curve.style.lineStyle) {
-        activateStyleForLine(this.dc, curve.style);
+        setStroke(
+          this.dc,
+          curve.style.lineColor,
+          curve.style.lineAlpha,
+          curve.style.lineWidth,
+          curve.style.lineStyle,
+        );
         drawLine(this.dc, xl, yl, xl + lll, yl);
       }
       if (curve.label) {

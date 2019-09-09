@@ -6,7 +6,8 @@ export interface ICurveStyle {
   lineWidth: number; // width
 
   // markers
-  markerType: string; // type, e.g. "o", "s", "+", "x", "img:filename.png"
+  markerType: 'o' | 's' | '+' | 'x' | 'img' | 'none';
+  markerImg: string; // image filename
   markerColor: string; // color
   markerAlpha: number; // alpha (0, 1]
   markerSize: number; // size; when using images, set markerSize=0 to use the image width
@@ -40,6 +41,7 @@ export const defaultCurveStyle: ICurveStyle = {
 
   // markers
   markerType: 'o',
+  markerImg: '',
   markerColor: '#4c4deb',
   markerAlpha: 1,
   markerSize: 0,

@@ -1,9 +1,9 @@
 import { IPlotArgs, ICurves, ILimits } from '../types';
 import { numFmt } from '../helpers';
 import { textWidthPx } from '../canvas';
-import { getMarkerSize } from '../marker';
 import { cteEps } from './constants';
 import { Limits, getLimitsAroundCurves, checkLimitsForConsistency } from './Limits';
+import { Markers } from './Markers';
 import { Ticks } from './Ticks';
 
 //                |←——————————————————— W ————————————————————→|
@@ -44,6 +44,7 @@ export class Metrics {
   dc: CanvasRenderingContext2D;
   args: IPlotArgs;
   curves: ICurves;
+  markers: Markers;
 
   // limits and ticks
   limits: Limits;
@@ -96,18 +97,10 @@ export class Metrics {
   qf: number = 0; // y-max of plotting area
 
   constructor(dc: CanvasRenderingContext2D, args: IPlotArgs, curves: ICurves) {
-    if (!dc) {
-      throw new Error(`Metircs: dc = ${dc} is invalid`);
-    }
-    if (!args) {
-      throw new Error(`Metircs: args = ${args} is invalid`);
-    }
-    if (!curves) {
-      throw new Error(`Metircs: curves = ${curves} is invalid`);
-    }
     this.dc = dc;
     this.args = args;
     this.curves = curves;
+    this.markers = new Markers(dc, args.markerSizeMin, args.markerSizeMax);
     this.limits = new Limits(args, curves);
     this.ticks = new Ticks(args, this.limits);
   }
@@ -282,12 +275,10 @@ export class Metrics {
     if (this.args.legendOn) {
       const th = this.args.fsizeLegend;
       const mm = this.markerMultiplier;
-      const smin = this.args.markerSizeMin;
-      const smax = this.args.markerSizeMax;
       this.curves.list.forEach(curve => {
         const tw = textWidthPx(this.dc, curve.label, fontLegend);
         this.legTxtW = Math.max(this.legTxtW, tw);
-        this.legTxtH = Math.max(this.legTxtH, th, getMarkerSize(curve.style, mm, smin, smax));
+        this.legTxtH = Math.max(this.legTxtH, th, this.markers.getSize(curve.style, mm));
       });
       this.legH = (this.args.padLines + this.legTxtH) * this.args.legNrow;
     }

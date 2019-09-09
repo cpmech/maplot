@@ -5,5 +5,4 @@ export * from './dom';
 export * from './geometry';
 export * from './helpers';
 export * from './io';
-export * from './marker';
 export * from './types';

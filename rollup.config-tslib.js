@@ -38,7 +38,6 @@ export default [
       geometry: 'src/geometry/index.ts',
       helpers: 'src/helpers/index.ts',
       io: 'src/io/index.ts',
-      marker: 'src/marker/index.ts',
     },
     output: [
       {
