@@ -51,8 +51,7 @@ export class Metrics {
   ticks: Ticks;
 
   // marker multiplier
-  markerMultiplier: number = 1; // to update marker sizes upon zoom
-  markerSizePct: number = 0.5; // percentage of marker relative to real bounds of curves
+  markerRefWidth: number = 800; // reference width to update marker sizes upon zoom
   curveLimits: ILimits = { xmin: -1, xmax: +1, ymin: -1, ymax: +1 }; // reference values to set markers
 
   // size of ticks and labels
@@ -100,7 +99,7 @@ export class Metrics {
     this.dc = dc;
     this.args = args;
     this.curves = curves;
-    this.markers = new Markers(dc, args.markerSizeMin, args.markerSizeMax);
+    this.markers = new Markers(dc, args);
     this.limits = new Limits(args, curves);
     this.ticks = new Ticks(args, this.limits);
   }
@@ -274,11 +273,11 @@ export class Metrics {
     this.legH = 0;
     if (this.args.legendOn) {
       const th = this.args.fsizeLegend;
-      const mm = this.markerMultiplier;
+      const rw = this.markerRefWidth;
       this.curves.list.forEach(curve => {
         const tw = textWidthPx(this.dc, curve.label, fontLegend);
         this.legTxtW = Math.max(this.legTxtW, tw);
-        this.legTxtH = Math.max(this.legTxtH, th, this.markers.getSize(curve.style, mm));
+        this.legTxtH = Math.max(this.legTxtH, th, this.markers.getSize(curve.style, rw));
       });
       this.legH = (this.args.padLines + this.legTxtH) * this.args.legNrow;
     }
@@ -400,13 +399,6 @@ export class Metrics {
   }
 
   private calcMarkerMultiplier() {
-    const dxrealcurve = this.curveLimits.xmax - this.curveLimits.xmin;
-    const dyrealcurve = this.curveLimits.ymax - this.curveLimits.ymin;
-    const dcurve = Math.min(dxrealcurve, dyrealcurve);
-    const dmreal = this.markerSizePct * dcurve;
-    const dmavescr = (this.args.markerSizeMin + this.args.markerSizeMax) / 2;
-    const dmavereal = this.dxReal(dmavescr);
-    const avemultiplier = dmreal / dmavereal;
-    this.markerMultiplier = avemultiplier;
+    this.markerRefWidth = Math.min(this.w, this.h);
   }
 }

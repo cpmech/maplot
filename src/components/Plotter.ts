@@ -135,7 +135,7 @@ export class Plotter {
 
     // draw markers
     const fontMarkerLabel = `${this.args.fsizeMarkerLabel}px ${this.args.fnameMarkerLabel}`;
-    const mm = this.metrics.markerMultiplier;
+    const mm = this.metrics.markerRefWidth;
     this.curves.list.forEach(curve => {
       const c = curve as any;
       if (curve.style.markerType) {
@@ -344,7 +344,7 @@ export class Plotter {
       ncol++;
     }
 
-    const mm = this.metrics.markerMultiplier;
+    const mm = this.metrics.markerRefWidth;
     this.curves.list.forEach(curve => {
       // icon={line,marker} and label
       if (curve.style.markerType) {
@@ -414,9 +414,7 @@ export class Plotter {
     const xl = this.metrics.xf + this.args.padLegRR;
     let yl = this.metrics.TR + this.args.legGap + hei / 2;
 
-    const mm = this.metrics.markerMultiplier;
-    const smin = this.args.markerSizeMin;
-    const smax = this.args.markerSizeMax;
+    const mm = this.metrics.markerRefWidth;
     this.curves.list.forEach(curve => {
       // icon={line,marker} and label
       if (curve.style.markerType) {

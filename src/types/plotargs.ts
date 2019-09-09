@@ -14,8 +14,14 @@ export interface IPlotArgs {
   clipOn: boolean; // clip outside lines
   deltaH: number; // DH increment
   deltaV: number; // DV increment
+
+  // markers
+  markerImgPaths: string[]; // image paths
+  markerSizeAuto: boolean; // automatic resize markers
+  markerSizeDefault: number; // default marker size. NOTE: also used as reference to auto-marker-size
   markerSizeMin: number; // min marker size
   markerSizeMax: number; // max marker size
+  markerSizeRefProp: number; // reference proportion in screen coords e.g. 1/800
 
   // legend
   legendOn: boolean; // legend is on
@@ -125,8 +131,14 @@ export const defaultPlotArgs: IPlotArgs = {
   clipOn: false,
   deltaH: 8,
   deltaV: 8,
-  markerSizeMin: 10,
-  markerSizeMax: 200,
+
+  // markers
+  markerImgPaths: [],
+  markerSizeAuto: true,
+  markerSizeDefault: 7,
+  markerSizeMin: 5,
+  markerSizeMax: 50,
+  markerSizeRefProp: 1 / 800,
 
   // legend
   legendOn: false,
