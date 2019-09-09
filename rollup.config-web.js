@@ -6,17 +6,21 @@ import commonjs from 'rollup-plugin-commonjs';
 
 const cacheRoot = '/tmp/rollup_typescript_cache';
 
-const isJSFile = filename => /\.[jt]sx?$/.test(filename);
+const isJSFile = filename => /\.[j]sx?$/.test(filename);
+const isTSFile = filename => /\.[t]sx?$/.test(filename);
 
-const examplesDir = path.resolve(__dirname, 'examples', 'js');
+const examplesDirJS = path.resolve(__dirname, 'examples', 'js');
+const examplesDirTS = path.resolve(__dirname, 'examples', 'ts');
 
-const exampleFiles = fs.readdirSync(examplesDir).filter(n => isJSFile(n));
+const exampleFilesJS = fs.readdirSync(examplesDirJS).filter(n => isJSFile(n));
+const exampleFilesTS = fs.readdirSync(examplesDirTS).filter(n => isTSFile(n));
 
 export default [
+  // the ESM module including all dependencies
   {
     input: 'src/index.ts',
     output: {
-      file: 'dist/index-esm.js',
+      file: 'dist/esm/index-all-in-one.js',
       format: 'esm',
     },
     plugins: [
@@ -32,12 +36,36 @@ export default [
       commonjs(),
     ],
   },
-  ...exampleFiles.map(f => ({
+
+  // examples written in JS
+  ...exampleFilesJS.map(f => ({
     input: `examples/js/${f}`,
     output: {
       name: f,
       file: `dist/examples/js/${f}`,
       format: 'iife',
     },
+  })),
+
+  // examples written in TS
+  ...exampleFilesTS.map(f => ({
+    input: `examples/ts/${f}`,
+    output: {
+      name: f,
+      file: `dist/examples/ts/${f.replace(/\.[^\.]+$/, '.js')}`,
+      format: 'iife',
+    },
+    plugins: [
+      typescript({
+        cacheRoot,
+        typescript: require('typescript'),
+        tsconfigOverride: { compilerOptions: { declaration: false } },
+      }),
+      resolve({
+        mainFields: ['module'],
+        preferBuiltins: true,
+      }),
+      commonjs(),
+    ],
   })),
 ];

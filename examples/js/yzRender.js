@@ -1,4 +1,9 @@
-import { Metrics, Plotter, defaultPlotArgs, defaultCurveStyle } from '../../dist/index-esm';
+import {
+  Metrics,
+  Plotter,
+  defaultPlotArgs,
+  defaultCurveStyle,
+} from '../../dist/esm/index-all-in-one';
 import { x, y, z } from './data1';
 
 export function yzRender() {

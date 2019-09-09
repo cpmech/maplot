@@ -1,4 +1,4 @@
-import { Resizer } from '../../dist/index-esm';
+import { Resizer } from '../../dist/esm/index-all-in-one';
 import { xyRender } from './xyRender';
 import { yzRender } from './yzRender';
 import { zxRender } from './zxRender';

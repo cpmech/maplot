@@ -14,10 +14,17 @@ app.use(bodyParser.json()); // Parses json, multi-part (file), url-encoded
 
 app.use('/assets', express.static(__dirname + '/assets'));
 app.use('/dist', express.static(__dirname + '/dist'));
-app.use('/', express.static(__dirname + '/examples'));
 
 app.get('/', function(req, res) {
   res.sendFile(path.join(__dirname, 'examples', 'js', 'example1.html'));
+});
+
+app.get('/1', function(req, res) {
+  res.sendFile(path.join(__dirname, 'examples', 'js', 'example1.html'));
+});
+
+app.get('/2', function(req, res) {
+  res.sendFile(path.join(__dirname, 'examples', 'ts', 'example2.html'));
 });
 
 const server = http.createServer(app);
@@ -30,7 +37,12 @@ reload(app)
     });
 
     // files to be watched
-    const files = [__dirname + '/dist/examples/js', __dirname + '/examples/js/*.html'];
+    const files = [
+      __dirname + '/dist/examples/js',
+      __dirname + '/dist/examples/ts',
+      __dirname + '/examples/js/*.html',
+      __dirname + '/examples/ts/*.html',
+    ];
 
     // watch changes
     chokidar.watch(files, { ignored: /(^|[\/\\])\../ }).on('all', (event, path) => {
