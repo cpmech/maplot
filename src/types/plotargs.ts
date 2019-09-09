@@ -119,7 +119,7 @@ export const defaultPlotArgs: IPlotArgs = {
   // options
   xIs: 'x',
   yIs: 'y',
-  equalScale: true,
+  equalScale: false,
   invertXscale: false,
   invertYscale: false,
   clipOn: false,
