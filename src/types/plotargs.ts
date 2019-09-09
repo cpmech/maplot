@@ -30,6 +30,7 @@ export interface IPlotArgs {
   legGap: number; // legend: gap between icons
   legTxtGap: number; // legend: gap between line and text
   legNrow: number; // legend: number of rows
+  legMarkerSize: number; // legend: marker size
 
   // constants
   padTitle: number; // padding for title drawing
@@ -135,9 +136,9 @@ export const defaultPlotArgs: IPlotArgs = {
   // markers
   markerImgPaths: [],
   markerSizeAuto: true,
-  markerSizeDefault: 7,
-  markerSizeMin: 5,
-  markerSizeMax: 50,
+  markerSizeDefault: 10,
+  markerSizeMin: 1,
+  markerSizeMax: 1000,
   markerSizeRefProp: 1 / 800,
 
   // legend
@@ -147,6 +148,7 @@ export const defaultPlotArgs: IPlotArgs = {
   legGap: 20,
   legTxtGap: 4,
   legNrow: 1,
+  legMarkerSize: 0,
 
   // constants
   padTitle: 20,

@@ -12,15 +12,18 @@ import {
 const { canvas, dc } = getContext2d('myCanvas');
 
 const images = [
-  { filePath: 'images/base-200.png', markerSize: 60, label: 'Base' },
-  { filePath: 'images/city-200.png', markerSize: 100, label: 'City' },
-  { filePath: 'images/fortress-200.png', markerSize: 60, label: 'Fortress' },
-  { filePath: 'images/house-200.png', markerSize: 60, label: 'House' },
-  { filePath: 'images/intersection-200.png', markerSize: 60, label: 'Intersection' },
-  { filePath: 'images/lookout-200.png', markerSize: 60, label: 'Lookout' },
-  { filePath: 'images/mine-200.png', markerSize: 60, label: 'Mine' },
-  { filePath: 'images/station-200.png', markerSize: 60, label: 'Station' },
-  { filePath: 'images/tower-200.png', markerSize: 60, label: 'Tower' },
+  { filePath: 'images/blue-hrect.png', markerSize: 0, label: 'H-Rect' },
+  { filePath: 'images/red-vrect.png', markerSize: 0, label: 'V-Rect' },
+  { filePath: 'images/yellow-square.png', markerSize: 0, label: 'Square' },
+  // { filePath: 'images/base-200.png', markerSize: 16, label: 'Base' },
+  // { filePath: 'images/city-200.png', markerSize: 32, label: 'City' },
+  // { filePath: 'images/fortress-200.png', markerSize: 24, label: 'Fortress' },
+  // { filePath: 'images/house-200.png', markerSize: 16, label: 'House' },
+  // { filePath: 'images/intersection-200.png', markerSize: 14, label: 'Intersection' },
+  // { filePath: 'images/lookout-200.png', markerSize: 16, label: 'Lookout' },
+  // { filePath: 'images/mine-200.png', markerSize: 16, label: 'Mine' },
+  // { filePath: 'images/station-200.png', markerSize: 16, label: 'Station' },
+  // { filePath: 'images/tower-200.png', markerSize: 16, label: 'Tower' },
 ];
 
 const args: IPlotArgs = {
@@ -29,28 +32,30 @@ const args: IPlotArgs = {
   xIs: 'x',
   yIs: 'y',
   markerImgPaths: images.map(image => image.filePath),
-  legendOn: true,
+  legendOn: false,
   markerSizeAuto: true,
+  equalScale: true,
 };
 
 const curves: ICurves = {
   list: images.map((image, i) => ({
     label: image.label,
     kind: 'curve',
-    x: [i / images.length],
-    y: [i / images.length],
+    x: [0],
+    y: [0],
     z: [],
     style: {
       ...defaultCurveStyle,
       lineStyle: '',
       markerType: 'img',
       markerImg: image.filePath,
-      markerSize: image.markerSize,
+      // markerSize: image.markerSize,
     },
     tagFirstPoint: false,
   })),
 };
 
+/*
 curves.list.push({
   label: 'With Marker',
   kind: 'curve',
@@ -65,6 +70,7 @@ curves.list.push({
   },
   tagFirstPoint: false,
 });
+*/
 
 const metrics = new Metrics(dc, args, curves);
 const plotter = new Plotter(dc, args, curves, metrics);

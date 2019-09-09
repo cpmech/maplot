@@ -22,15 +22,62 @@ export class Markers {
     }
   }
 
-  getSize(style: ICurveStyle, referenceWidth: number): number {
-    if (style.markerType === 'img' && style.markerSize === 0) {
-      const img = this.img(style);
-      return this.size(img.width, referenceWidth);
+  getSize(style: ICurveStyle, referenceLength: number, fixedSize?: number): number {
+    if (fixedSize && fixedSize > 0) {
+      return fixedSize;
     }
-    return this.size(style.markerSize, referenceWidth);
+
+    if (style.markerType === 'none') {
+      return 0;
+    }
+
+    let mm = 1.0;
+    if (this.args.markerSizeAuto) {
+      mm = this.args.markerSizeRefProp * referenceLength;
+    }
+
+    let ms = style.markerSize;
+    if (ms === 0) {
+      if (style.markerType === 'img') {
+        const img = this.img(style);
+        ms = Math.max(img.width, img.height);
+      } else {
+        ms = this.args.markerSizeDefault;
+      }
+    }
+
+    let c = 1.0;
+
+    // 'img'
+    if (style.markerType === 'img') {
+      c = 1.0;
+    }
+
+    // 'o'
+    if (style.markerType === 'o') {
+      c = 1.1;
+    }
+
+    // 's'
+    if (style.markerType === 's') {
+      c = 1.0;
+    }
+
+    // '+'
+    if (style.markerType === '+') {
+      c = 0.8;
+    }
+
+    // 'x'
+    if (style.markerType === 'x') {
+      c = 0.6;
+    }
+
+    const size = c * mm * ms;
+    return Math.max(this.args.markerSizeMin, Math.min(size, this.args.markerSizeMax));
   }
 
-  draw(x: number, y: number, style: ICurveStyle, referenceWidth: number) {
+  draw(x: number, y: number, style: ICurveStyle, referenceLength: number, fixedSize?: number) {
     // 'none'
     if (style.markerType === 'none') {
       return;
@@ -39,16 +86,21 @@ export class Markers {
     // 'img'
     if (style.markerType === 'img') {
       const img = this.img(style);
-      const msize = style.markerSize === 0 ? img.width : style.markerSize;
-      const s = this.size(msize, referenceWidth);
-      const h = s / 2;
-      this.dc.drawImage(img, x - h, y - h, s, s);
+      const f = img.height / img.width;
+      const s = this.getSize(style, referenceLength, fixedSize);
+      const r = s / 2;
+      if (img.width > img.height) {
+        this.dc.drawImage(img, x - r, y - r * f, s, s * f);
+      } else {
+        this.dc.drawImage(img, x - r / f, y - r, s / f, s);
+      }
       return;
     }
 
     // 'o'
     if (style.markerType === 'o') {
-      const r = this.size(style.markerSize, referenceWidth);
+      const s = this.getSize(style, referenceLength, fixedSize);
+      const r = s / 2;
       this.activateStyle(style);
       if (style.markerIsVoid) {
         drawCircle(this.dc, x, y, r, false);
@@ -70,7 +122,7 @@ export class Markers {
 
     // 's'
     if (style.markerType === 's') {
-      const s = this.size(style.markerSize, referenceWidth) * 1.6;
+      const s = this.getSize(style, referenceLength, fixedSize);
       const h = s / 2;
       this.activateStyle(style);
       if (style.markerIsVoid) {
@@ -93,19 +145,19 @@ export class Markers {
 
     // '+'
     if (style.markerType === '+') {
-      const h = this.size(style.markerSize, referenceWidth);
+      const s = this.getSize(style, referenceLength, fixedSize);
       this.activateStyle(style);
-      drawLine(this.dc, x - h, y, x + h, y);
-      drawLine(this.dc, x, y - h, x, y + h);
+      drawLine(this.dc, x - s, y, x + s, y);
+      drawLine(this.dc, x, y - s, x, y + s);
       return;
     }
 
     // 'x'
     if (style.markerType === 'x') {
-      const h = this.size(style.markerSize, referenceWidth) * 0.8;
+      const s = this.getSize(style, referenceLength, fixedSize);
       this.activateStyle(style);
-      drawLine(this.dc, x - h, y - h, x + h, y + h);
-      drawLine(this.dc, x - h, y + h, x + h, y - h);
+      drawLine(this.dc, x - s, y - s, x + s, y + s);
+      drawLine(this.dc, x - s, y + s, x + s, y - s);
       return;
     }
 
@@ -117,19 +169,6 @@ export class Markers {
       throw new Error(`cannot find image named ${style.markerImg}. did you forget to call init()?`);
     }
     return this.images[style.markerImg];
-  }
-
-  private size(markerSize: number, referenceWidth: number): number {
-    const mm = this.args.markerSizeAuto ? this.args.markerSizeRefProp * referenceWidth : 1.0;
-    const ms = markerSize === 0 ? this.args.markerSizeDefault : markerSize;
-    const sz = mm * ms;
-    if (sz < this.args.markerSizeMin) {
-      return this.args.markerSizeMin;
-    }
-    if (sz > this.args.markerSizeMax) {
-      return this.args.markerSizeMax;
-    }
-    return sz;
   }
 
   private activateStyle(style: ICurveStyle) {

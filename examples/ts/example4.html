@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Map And Plot Utilities -- Example 3</title>
+
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
+  </head>
+
+  <style>
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      max-height: 100%;
+      float: left;
+      width: 100%;
+    }
+
+    .root {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .content {
+      background: #ececec;
+    }
+
+    .canvasGrid {
+      display: flex;
+      flex-flow: column;
+    }
+
+    .canvasRow {
+      display: flex;
+      flex-flow: row;
+    }
+
+    #xyCanvas {
+      background: red;
+    }
+    #yzCanvas {
+      background: green;
+    }
+    #zxCanvas {
+      background: blue;
+    }
+  </style>
+
+  <body>
+    <div class="root">
+      <div class="content">
+        <div class="canvasGrid">
+          <div class="canvasRow">
+            <canvas id="myCanvas"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/dist/examples/ts/example4.js"></script>
+    <script src="/reload/reload.js"></script>
+  </body>
+</html>

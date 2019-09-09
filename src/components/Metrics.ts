@@ -51,7 +51,7 @@ export class Metrics {
   ticks: Ticks;
 
   // marker multiplier
-  markerRefWidth: number = 800; // reference width to update marker sizes upon zoom
+  markerRefLength: number = 800; // reference width to update marker sizes upon zoom
   curveLimits: ILimits = { xmin: -1, xmax: +1, ymin: -1, ymax: +1 }; // reference values to set markers
 
   // size of ticks and labels
@@ -273,11 +273,13 @@ export class Metrics {
     this.legH = 0;
     if (this.args.legendOn) {
       const th = this.args.fsizeLegend;
-      const rw = this.markerRefWidth;
+      const mrl = this.markerRefLength;
+      const lms = this.args.legMarkerSize;
       this.curves.list.forEach(curve => {
         const tw = textWidthPx(this.dc, curve.label, fontLegend);
+        const s = this.markers.getSize(curve.style, mrl, lms);
         this.legTxtW = Math.max(this.legTxtW, tw);
-        this.legTxtH = Math.max(this.legTxtH, th, this.markers.getSize(curve.style, rw));
+        this.legTxtH = Math.max(this.legTxtH, th, s / 2);
       });
       this.legH = (this.args.padLines + this.legTxtH) * this.args.legNrow;
     }
@@ -399,6 +401,6 @@ export class Metrics {
   }
 
   private calcMarkerMultiplier() {
-    this.markerRefWidth = Math.min(this.w, this.h);
+    this.markerRefLength = Math.min(this.w, this.h);
   }
 }

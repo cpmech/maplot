@@ -135,7 +135,7 @@ export class Plotter {
 
     // draw markers
     const fontMarkerLabel = `${this.args.fsizeMarkerLabel}px ${this.args.fnameMarkerLabel}`;
-    const mm = this.metrics.markerRefWidth;
+    const mm = this.metrics.markerRefLength;
     this.curves.list.forEach(curve => {
       const c = curve as any;
       if (curve.style.markerType) {
@@ -344,13 +344,13 @@ export class Plotter {
       ncol++;
     }
 
-    const mm = this.metrics.markerRefWidth;
+    const mm = this.metrics.markerRefLength;
     this.curves.list.forEach(curve => {
       // icon={line,marker} and label
       if (curve.style.markerType) {
-        const sz = this.metrics.markers.getSize(curve.style, mm);
+        const sz = this.metrics.markers.getSize(curve.style, mm, this.args.legMarkerSize);
         if (xl + hll + sz < this.metrics.xf) {
-          this.metrics.markers.draw(xl + hll, yl, curve.style, mm);
+          this.metrics.markers.draw(xl + hll, yl, curve.style, mm, this.args.legMarkerSize);
         }
       }
       if (curve.style.lineStyle) {
@@ -414,11 +414,11 @@ export class Plotter {
     const xl = this.metrics.xf + this.args.padLegRR;
     let yl = this.metrics.TR + this.args.legGap + hei / 2;
 
-    const mm = this.metrics.markerRefWidth;
+    const mm = this.metrics.markerRefLength;
     this.curves.list.forEach(curve => {
       // icon={line,marker} and label
-      if (curve.style.markerType) {
-        this.metrics.markers.draw(xl + hll, yl, curve.style, mm);
+      if (curve.style.markerType !== 'none') {
+        this.metrics.markers.draw(xl + hll, yl, curve.style, mm, this.args.legMarkerSize);
       }
       if (curve.style.lineStyle) {
         setStroke(

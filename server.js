@@ -32,6 +32,10 @@ app.get('/3', function(req, res) {
   res.sendFile(path.join(__dirname, 'examples', 'ts', 'example3.html'));
 });
 
+app.get('/4', function(req, res) {
+  res.sendFile(path.join(__dirname, 'examples', 'ts', 'example4.html'));
+});
+
 const server = http.createServer(app);
 
 reload(app)

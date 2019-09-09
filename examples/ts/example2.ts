@@ -38,6 +38,9 @@ const curves: ICurves = {
       z: [],
       style: {
         ...defaultCurveStyle,
+        lineColor: '#0f0',
+        markerColor: '#f00',
+        markerLineColor: '#000',
       },
       tagFirstPoint: false,
     },
