@@ -30,6 +30,7 @@ const I = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19,
 const X = I.map(i => i / 20.0);
 const XX = X.map(x => x * x);
 const mX = X.map(x => 1 - x);
+const mX2 = X.map(x => 1 - x * x);
 const zp5 = X.map(x => 0.5);
 
 const curves: ICurves = {
@@ -68,7 +69,7 @@ const curves: ICurves = {
         ...defaultCurveStyle,
         lineColor: getColor(1),
         markerType: '+',
-        markerColor: '#cecece',
+        markerColor: '#555555',
       },
       tagFirstPoint: true,
     },
@@ -80,11 +81,26 @@ const curves: ICurves = {
       z: [],
       style: {
         ...defaultCurveStyle,
-        lineColor: getColor(2),
+        lineColor: getColor(5),
         markerType: 'x',
-        markerColor: '#ff0000',
+        markerColor: '#f18a1f',
       },
       tagFirstPoint: true,
+    },
+    {
+      label: 'y = 1 - x²',
+      kind: 'curve',
+      x: X,
+      y: mX2,
+      z: [],
+      style: {
+        ...defaultCurveStyle,
+        lineColor: getColor(2),
+        markerType: 's',
+        markerColor: '#ffd600',
+        markerLineColor: '#000000',
+      },
+      tagFirstPoint: false,
     },
   ],
 };

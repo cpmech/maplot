@@ -47,7 +47,7 @@ export const defaultCurveStyle: ICurveStyle = {
   markerSize: 0,
   markerEvery: 0,
   markerLineColor: '#ffffff',
-  markerLineWidth: 3,
+  markerLineWidth: 2,
   markerLineStyle: '',
   markerIsVoid: false,
 };

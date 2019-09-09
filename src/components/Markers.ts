@@ -70,12 +70,13 @@ export class Markers {
 
     // 's'
     if (style.markerType === 's') {
-      const w = this.size(style.markerSize, referenceWidth);
+      const s = this.size(style.markerSize, referenceWidth) * 1.6;
+      const h = s / 2;
       this.activateStyle(style);
       if (style.markerIsVoid) {
-        drawRect(this.dc, x, y, w, w, false);
+        drawRect(this.dc, x - h, y - h, s, s, false);
       } else {
-        drawRect(this.dc, x, y, w, w, true);
+        drawRect(this.dc, x - h, y - h, s, s, true);
         if (style.markerLineColor && style.markerLineColor !== style.markerColor) {
           setStroke(
             this.dc,
@@ -84,7 +85,7 @@ export class Markers {
             style.markerLineWidth,
             style.markerLineStyle,
           );
-          drawRect(this.dc, x, y, w, w, false);
+          drawRect(this.dc, x - h, y - h, s, s, false);
         }
       }
       return;
@@ -101,7 +102,7 @@ export class Markers {
 
     // 'x'
     if (style.markerType === 'x') {
-      const h = this.size(style.markerSize, referenceWidth);
+      const h = this.size(style.markerSize, referenceWidth) * 0.8;
       this.activateStyle(style);
       drawLine(this.dc, x - h, y - h, x + h, y + h);
       drawLine(this.dc, x - h, y + h, x + h, y - h);
