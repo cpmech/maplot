@@ -6,18 +6,10 @@ import {
   defaultPlotArgs,
   defaultCurveStyle,
   Resizer,
+  getContext2d,
 } from '../../src';
 
-const el = document.getElementById('myCanvas');
-if (!el) {
-  throw new Error('Cannot get "myCanvas"');
-}
-
-const canvas = el as HTMLCanvasElement;
-const dc = canvas.getContext('2d');
-if (!dc) {
-  throw new Error('Cannot get device context');
-}
+const { canvas, dc } = getContext2d('myCanvas');
 
 const markerImgPaths = [
   'images/base-200.png',

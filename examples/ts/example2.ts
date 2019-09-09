@@ -7,18 +7,10 @@ import {
   defaultCurveStyle,
   Resizer,
   getColor,
+  getContext2d,
 } from '../../src';
 
-const el = document.getElementById('myCanvas');
-if (!el) {
-  throw new Error('Cannot get "myCanvas"');
-}
-
-const canvas = el as HTMLCanvasElement;
-const dc = canvas.getContext('2d');
-if (!dc) {
-  throw new Error('Cannot get device context');
-}
+const { canvas, dc } = getContext2d('myCanvas');
 
 const args: IPlotArgs = {
   ...defaultPlotArgs,

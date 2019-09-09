@@ -3,16 +3,12 @@ import {
   Plotter,
   defaultPlotArgs,
   defaultCurveStyle,
+  getContext2d,
 } from '../../dist/esm/index-all-in-one';
 import { x, y, z } from './data1';
 
 export function yzRender() {
-  const canvas = document.getElementById('yzCanvas');
-  if (!canvas) {
-    throw new Error('Cannot get "myCanvas"');
-  }
-
-  const dc = canvas.getContext('2d');
+  const { canvas, dc } = getContext2d('yzCanvas');
 
   const args = {
     ...defaultPlotArgs,
