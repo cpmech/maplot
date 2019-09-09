@@ -102,6 +102,7 @@ export class Markers {
     // 'x'
     if (style.markerType === 'x') {
       const h = this.size(style.markerSize, referenceWidth);
+      this.activateStyle(style);
       drawLine(this.dc, x - h, y - h, x + h, y + h);
       drawLine(this.dc, x - h, y + h, x + h, y - h);
       return;
