@@ -1,13 +1,5 @@
-import {
-  Metrics,
-  Plotter,
-  defaultPlotArgs,
-  defaultCurveStyle,
-  getContext2d,
-} from '../../dist/esm/index-all-in-one';
+import { defaultPlotArgs, defaultCurveStyle, StaticGraph } from '../../dist/esm/index-all-in-one';
 import { x, y, z } from './data1';
-
-const { canvas, dc } = getContext2d('xyCanvas');
 
 const args = {
   ...defaultPlotArgs,
@@ -21,7 +13,6 @@ const curves = {
   list: [
     {
       label: 'x-y Curve',
-      kind: 'Group A',
       x: x.slice(0, 7),
       y: y.slice(0, 7),
       z: z.slice(0, 7),
@@ -31,19 +22,12 @@ const curves = {
         markerImg: 'images/circle-cross1.png',
         markerSize: 128,
       },
-      tagFirstPoint: false,
     },
   ],
 };
 
-const metrics = new Metrics(dc, args, curves);
-const plotter = new Plotter(dc, args, curves, metrics);
+const graph = new StaticGraph(args, curves, 'xyCanvas', 0.5, 0.5);
 
-export async function xyInit() {
-  await metrics.markers.init();
-}
-
-export function xyResizeAndRender(width, height) {
-  metrics.resize(canvas.width, canvas.height);
-  plotter.render();
-}
+(async () => {
+  await graph.init();
+})();

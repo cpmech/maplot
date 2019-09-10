@@ -1,13 +1,5 @@
-import {
-  Metrics,
-  Plotter,
-  defaultPlotArgs,
-  defaultCurveStyle,
-  getContext2d,
-} from '../../dist/esm/index-all-in-one';
+import { defaultPlotArgs, defaultCurveStyle, StaticGraph } from '../../dist/esm/index-all-in-one';
 import { x, y, z } from './data1';
-
-const { canvas, dc } = getContext2d('yzCanvas');
 
 const args = {
   ...defaultPlotArgs,
@@ -32,7 +24,6 @@ const curves = {
   list: [
     {
       label: 'y-z Curve',
-      kind: 'Group A',
       x: x.slice(10),
       y: y.slice(10),
       z: z.slice(10),
@@ -42,19 +33,12 @@ const curves = {
         markerImg: 'images/star2.png',
         markerSize: 128,
       },
-      tagFirstPoint: false,
     },
   ],
 };
 
-const metrics = new Metrics(dc, args, curves);
-const plotter = new Plotter(dc, args, curves, metrics);
+const graph = new StaticGraph(args, curves, 'yzCanvas', 0.5, 0.5);
 
-export async function yzInit() {
-  await metrics.markers.init();
-}
-
-export function yzResizeAndRender(width, height) {
-  metrics.resize(canvas.width, canvas.height);
-  plotter.render();
-}
+(async () => {
+  await graph.init();
+})();

@@ -35,5 +35,6 @@ export class StaticGraph {
 
   async init() {
     await this.markers.init();
+    this.resizer.start();
   }
 }

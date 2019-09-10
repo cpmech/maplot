@@ -1,15 +1,4 @@
-import {
-  ICurves,
-  IPlotArgs,
-  Metrics,
-  Plotter,
-  defaultPlotArgs,
-  defaultCurveStyle,
-  Resizer,
-  getContext2d,
-} from '../../src';
-
-const { canvas, dc } = getContext2d('myCanvas');
+import { ICurves, IPlotArgs, defaultPlotArgs, defaultCurveStyle, StaticGraph } from '../../src';
 
 const images = [
   { filePath: 'images/base-200.png', markerSize: 60, label: 'Base' },
@@ -36,10 +25,8 @@ const args: IPlotArgs = {
 const curves: ICurves = {
   list: images.map((image, i) => ({
     label: image.label,
-    kind: 'curve',
     x: [i / images.length],
     y: [i / images.length],
-    z: [],
     style: {
       ...defaultCurveStyle,
       lineStyle: 'none',
@@ -47,7 +34,6 @@ const curves: ICurves = {
       markerImg: image.filePath,
       markerSize: image.markerSize,
     },
-    tagFirstPoint: false,
   })),
 };
 
@@ -56,30 +42,16 @@ curves.list.push({
   kind: 'curve',
   x: [1],
   y: [1],
-  z: [],
   style: {
     ...defaultCurveStyle,
     markerType: 'o',
     markerColor: '#ffd600',
     markerLineColor: '#000',
   },
-  tagFirstPoint: false,
 });
 
-const metrics = new Metrics(dc, args, curves);
-const plotter = new Plotter(dc, args, curves, metrics);
-const resizer = new Resizer();
-
-function resizeCanvas() {
-  const width = document.documentElement.clientWidth;
-  const height = document.documentElement.clientHeight;
-  canvas.width = width;
-  canvas.height = height;
-  metrics.resize(canvas.width, canvas.height);
-  plotter.render();
-}
+const graph = new StaticGraph(args, curves, 'myCanvas');
 
 (async () => {
-  await metrics.markers.init();
-  resizer.init(resizeCanvas);
+  await graph.init();
 })();
