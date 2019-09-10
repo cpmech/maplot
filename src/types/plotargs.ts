@@ -37,6 +37,11 @@ export interface IAxisArgs {
 export interface ILegendArgs {
   on: boolean; // legend is on
   atBottom: boolean; // legend at bottom
+  nCol: number; // number of columns
+  lineLen: number; // length of line
+  gapLineLabel: number; // gap between line and label
+  gapIconsHoriz: number; // gap between icons (horizonal)
+  gapIconsVert: number; // gap between icons (vertical)
 }
 
 export interface IPlotArgs {
@@ -149,6 +154,11 @@ export const defaultAxisArgs: IAxisArgs = {
 export const defaultLegendArgs: ILegendArgs = {
   on: true,
   atBottom: false,
+  nCol: 3,
+  lineLen: 100,
+  gapLineLabel: 10,
+  gapIconsHoriz: 5,
+  gapIconsVert: 5,
 };
 
 export const defaultPlotArgs: IPlotArgs = {
@@ -192,9 +202,9 @@ export const defaultPlotArgs: IPlotArgs = {
   // constants
   dH: 8,
   dV: 8,
-  gLR: 0,
+  gLR: 6,
   gRR: 6,
-  gBR: 0,
+  gBR: 6,
   gTR: 6,
   minTR: 6,
   minBR: 6,

@@ -13,8 +13,7 @@ const args: IPlotArgs = {
   ...defaultPlotArgs,
   x: {
     ...defaultAxisArgs,
-    label:
-      '1XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX2',
+    label: 'x ►',
   },
   l: {
     ...defaultLegendArgs,
