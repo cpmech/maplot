@@ -1,5 +1,5 @@
-import { ICurves, IPlotArgs, ICurveStyle } from '../types';
-import { drawRect, setStroke, drawLine, drawText, drawTextVertUp, textWidthPx } from '../canvas';
+import { ICurves, IPlotArgs } from '../types';
+import { drawRect, setStroke, drawLine, drawText, drawTextVertUp } from '../canvas';
 import { pointRectInsideL } from '../geometry';
 import { numFmt } from '../helpers';
 import { cteSqrtEps, cteEps } from './constants';
@@ -51,10 +51,9 @@ export class Plotter {
     this.drawCurves();
     this.drawTopRuler();
     this.drawRightRuler();
-    this.drawLegendAtRightRuler();
     this.drawBottomRuler();
-    this.drawLegendAtBottomRuler();
     this.drawLeftRuler();
+    this.legend.render();
     this.drawFrame();
   }
 
@@ -325,139 +324,5 @@ export class Plotter {
       );
       drawRect(this.dc, 0, 0, this.metrics.W, this.metrics.H, false);
     }
-  }
-
-  drawLegendAtBottomRuler() {
-    // check
-    if (this.metrics.BR < 1 || !this.args.legendOn || !this.args.legendAtBottom) {
-      return;
-    }
-
-    // font strings
-    const fontLabels = `${this.args.fsizeLabels}px ${this.args.fnameLabels}`;
-    const fontLegend = `${this.args.fsizeLegend}px ${this.args.fnameLegend}`;
-
-    /*
-
-    // compute legend data, where the legend "icon" dimensions are:
-    //
-    //        |← legLineLen →|← labelLen →|
-    //   [gap][      line    |    txt     ]     example:     ——x——Curve1
-    //
-    //   [gap][line|txt][gap][line|txt] ...  ←  yl
-    //        ↑              ↑
-    //        x              x
-    //
-    const hei = this.args.padSmall + this.metrics.legTxtH; // icon height
-    const lll = this.args.legLineLen; // length of legend line
-    const hll = lll / 2; // half length of legend line
-    let xl = this.args.legGap; // initial x-coord on icon line
-    let yl = this.metrics.yf + this.metrics.xScaleH + hei / 2; // initial y-coord on icon line
-    let col = 0; // column number
-    let ncol = Math.trunc(this.curves.list.length / this.args.legNrow); // number of columns
-    if (this.curves.list.length % this.args.legNrow > 0) {
-      ncol++;
-    }
-
-    const mm = this.metrics.markerRefLength;
-    this.curves.list.forEach(curve => {
-      // icon={line,marker} and label
-      if (curve.style.markerType) {
-        const sz = this.markers.getSize(curve.style, mm, this.args.legMarkerSizeRefProp);
-        if (xl + hll + sz < this.metrics.xf) {
-          this.markers.draw(xl + hll, yl, curve.style, mm, this.args.legMarkerSizeRefProp);
-        }
-      }
-      if (curve.style.lineStyle) {
-        if (xl + lll < this.metrics.xf) {
-          setStroke(
-            this.dc,
-            curve.style.lineColor,
-            curve.style.lineAlpha,
-            curve.style.lineWidth,
-            curve.style.lineStyle,
-          );
-          drawLine(this.dc, xl, yl, xl + lll, yl);
-        }
-      }
-      if (curve.label) {
-        const xt = xl + lll + this.args.legTxtGap;
-        if (xt + this.metrics.legTxtW < this.metrics.xf) {
-          drawText(this.dc, curve.label, xt, yl, 'left', 'center', fontLegend);
-        }
-      }
-
-      // update column position
-      let tw = this.metrics.legTxtW;
-      if (this.args.legNrow < 2) {
-        tw = textWidthPx(this.dc, curve.label, fontLabels);
-      }
-      xl += lll + this.args.legTxtGap + tw + this.args.legGap;
-
-      // update row position
-      if (this.args.legNrow > 1) {
-        if (col === ncol - 1) {
-          col = -1;
-          xl = this.args.legGap;
-          yl += hei;
-        }
-        col++;
-      }
-    });
-
-    */
-  }
-
-  drawLegendAtRightRuler() {
-    // check
-    if (this.metrics.RR < 1 || !this.args.legendOn || this.args.legendAtBottom) {
-      return;
-    }
-
-    // font strings
-    const fontLegend = `${this.args.fsizeLegend}px ${this.args.fnameLegend}`;
-
-    /*
-
-    // compute legend data, where the legend "icon" dimensions are:
-    //
-    //        |← LegHlen →|
-    //   [gap][   line    |txt]  ← yl
-    //   [gap][   line    |txt]
-    //        ↑
-    //        xl
-    //
-    const hei = this.args.padSmall + this.metrics.legTxtH; // icon height
-    const lll = this.args.legLineLen; // length of legend line
-    const hll = lll / 2; // half length of legend line
-    const xl = this.metrics.xf + this.args.padLegRR;
-    let yl = this.metrics.TR + this.args.legGap + hei / 2;
-
-    const mm = this.metrics.markerRefLength;
-    this.curves.list.forEach(curve => {
-      // icon={line,marker} and label
-      if (curve.style.markerType !== 'none') {
-        this.markers.draw(xl + hll, yl, curve.style, mm, this.args.legMarkerSizeRefProp);
-      }
-      if (curve.style.lineStyle) {
-        setStroke(
-          this.dc,
-          curve.style.lineColor,
-          curve.style.lineAlpha,
-          curve.style.lineWidth,
-          curve.style.lineStyle,
-        );
-        drawLine(this.dc, xl, yl, xl + lll, yl);
-      }
-      if (curve.label) {
-        const xt = xl + lll + this.args.legTxtGap;
-        drawText(this.dc, curve.label, xt, yl, 'left', 'center', fontLegend);
-      }
-
-      // update row position
-      yl += hei + this.args.legGap;
-    });
-
-    */
   }
 }
