@@ -42,7 +42,7 @@ const curves: ICurves = {
     z: [],
     style: {
       ...defaultCurveStyle,
-      lineStyle: '',
+      lineStyle: 'none',
       markerType: 'img',
       markerImg: image.filePath,
       markerSize: image.markerSize,
@@ -68,6 +68,7 @@ curves.list.push({
 
 const metrics = new Metrics(dc, args, curves);
 const plotter = new Plotter(dc, args, curves, metrics);
+const resizer = new Resizer();
 
 function resizeCanvas() {
   const width = document.documentElement.clientWidth;
@@ -77,8 +78,6 @@ function resizeCanvas() {
   metrics.resize(canvas.width, canvas.height);
   plotter.render();
 }
-
-const resizer = new Resizer();
 
 (async () => {
   await metrics.markers.init();

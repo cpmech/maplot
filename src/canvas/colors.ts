@@ -1,4 +1,4 @@
-import { IPalettes } from '../types/canvas';
+import { IPalettes } from '../types';
 
 export const palettes: IPalettes = {
   standard: ['blue', 'green', 'magenta', 'orange', 'red', 'cyan', 'black'],

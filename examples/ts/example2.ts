@@ -18,18 +18,57 @@ const args: IPlotArgs = {
   xIs: 'x',
   yIs: 'y',
   legendOn: true,
-  legAtBottom: true,
+  legAtBottom: false,
+  markerImgPaths: ['images/blue-hrect.png', 'images/road-sign1.png'],
 };
 
 const I = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 const X = I.map(i => i / 20.0);
 const XX = X.map(x => x * x);
-const mX = X.map(x => 1 - x);
-const mX2 = X.map(x => 1 - x * x);
-const zp5 = X.map(x => 0.5);
+const OMX = X.map(x => 1 - x);
+const OMX2 = X.map(x => 1 - x * x);
+const ZP5 = X.map(x => 0.5);
+const MX = X.map(x => 4 * x * (1 - x));
+const NX = X.map(x => 1 - 4 * x * (1 - x));
 
 const curves: ICurves = {
   list: [
+    {
+      label: 'y = -4 x (1 - x)',
+      kind: 'curve',
+      x: X,
+      y: NX,
+      z: [],
+      style: {
+        ...defaultCurveStyle,
+        lineColor: getColor(0, 'medium2'),
+        markerType: 'img',
+        markerImg: 'images/road-sign1.png',
+        markerSize: 64,
+        markerColor: '#ffd600',
+        markerLineColor: '#000000',
+        markerEvery: 5,
+      },
+      tagFirstPoint: false,
+    },
+    {
+      label: 'y = 4 x (1 - x)',
+      kind: 'curve',
+      x: X,
+      y: MX,
+      z: [],
+      style: {
+        ...defaultCurveStyle,
+        lineColor: getColor(4, 'medium2'),
+        markerType: 'img',
+        markerImg: 'images/blue-hrect.png',
+        markerSize: 128,
+        markerColor: '#ffd600',
+        markerLineColor: '#000000',
+        markerEvery: 5,
+      },
+      tagFirstPoint: false,
+    },
     {
       label: 'y = x',
       kind: 'curve',
@@ -61,7 +100,7 @@ const curves: ICurves = {
       label: 'y = 1 - x',
       kind: 'curve',
       x: X,
-      y: mX,
+      y: OMX,
       z: [],
       style: {
         ...defaultCurveStyle,
@@ -69,13 +108,13 @@ const curves: ICurves = {
         markerType: '+',
         markerColor: '#555555',
       },
-      tagFirstPoint: true,
+      tagFirstPoint: false,
     },
     {
       label: 'y = 0.5',
       kind: 'curve',
       x: X,
-      y: zp5,
+      y: ZP5,
       z: [],
       style: {
         ...defaultCurveStyle,
@@ -89,7 +128,7 @@ const curves: ICurves = {
       label: 'y = 1 - x²',
       kind: 'curve',
       x: X,
-      y: mX2,
+      y: OMX2,
       z: [],
       style: {
         ...defaultCurveStyle,
@@ -105,6 +144,7 @@ const curves: ICurves = {
 
 const metrics = new Metrics(dc, args, curves);
 const plotter = new Plotter(dc, args, curves, metrics);
+const resizer = new Resizer();
 
 function resizeCanvas() {
   const width = document.documentElement.clientWidth;
@@ -115,8 +155,7 @@ function resizeCanvas() {
   plotter.render();
 }
 
-const resizer = new Resizer();
-
-resizer.init(resizeCanvas);
-
-resizeCanvas();
+(async () => {
+  await metrics.markers.init();
+  resizer.init(resizeCanvas);
+})();

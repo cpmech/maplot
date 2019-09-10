@@ -59,11 +59,12 @@ export class Metrics {
   xLblH: number = 0; // bottom (x) label height
   yTickW: number = 0; // left (y) tick width
   yLblW: number = 0; // left (y) label width
-  legTxtW: number = 0; // legend text width
-  legTxtH: number = 0; // legend text height
-  legH: number = 0; // total legend height
   xScaleH: number = 0; // total bottom (x) scale height
   yScaleW: number = 0; // total bottom (y) scale width
+
+  // legTxtW: number = 0; // legend text width
+  // legTxtH: number = 0; // legend text height
+  // legH: number = 0; // total legend height
 
   // geometry
   W: number = 0; // figure width
@@ -268,13 +269,14 @@ export class Metrics {
     }
 
     // legend dimensions
+    /*
     this.legTxtW = 0;
     this.legTxtH = 0;
     this.legH = 0;
     if (this.args.legendOn) {
       const th = this.args.fsizeLegend;
       const mrl = this.markerRefLength;
-      const lms = this.args.legMarkerSize;
+      const lms = this.args.legMarkerSizeRefProp;
       this.curves.list.forEach(curve => {
         const tw = textWidthPx(this.dc, curve.label, fontLegend);
         const s = this.markers.getSize(curve.style, mrl, lms);
@@ -282,6 +284,20 @@ export class Metrics {
         this.legTxtH = Math.max(this.legTxtH, th, s / 2);
       });
       this.legH = (this.args.padLines + this.legTxtH) * this.args.legNrow;
+    }
+    */
+    if (this.args.legendOn) {
+      const mrl = this.markerRefLength;
+      let legLineLen = this.args.legLineLen;
+      if (this.args.legAtBottom) {
+        /* TODO */
+      } else {
+        this.curves.list.forEach(curve => {
+          const s = this.markers.getSize(curve.style, mrl);
+          if (curve.style.lineStyle === '') legLineLen = Math.max(legLineLen, s);
+        });
+        console.log(legLineLen);
+      }
     }
 
     // height of x-scale (ticks + label)
@@ -299,12 +315,14 @@ export class Metrics {
     this.BL = 0;
     this.BR = Math.max(this.BR, this.xScaleH);
     this.LR = Math.max(this.LR, this.yScaleW);
+    /*
     if (this.args.legAtBottom) {
       this.BR += this.legH;
     } else {
       this.RR = this.args.legLineLen + this.args.legTxtGap + this.legTxtW;
       this.RR += this.args.padSmall + this.args.padLegRR;
     }
+    */
 
     // minimum values
     this.LR = Math.max(this.LR, this.args.minWidthLR);

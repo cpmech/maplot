@@ -1,7 +1,9 @@
 import { Resizer } from '../../dist/esm/index-all-in-one';
-import { xyRender } from './xyRender';
-import { yzRender } from './yzRender';
-import { zxRender } from './zxRender';
+import { xyInit, xyResizeAndRender } from './xyRender';
+import { yzInit, yzResizeAndRender } from './yzRender';
+import { zxInit, zxResizeAndRender } from './zxRender';
+
+const resizer = new Resizer();
 
 function resizeCanvas() {
   const width = document.documentElement.clientWidth;
@@ -14,13 +16,14 @@ function resizeCanvas() {
       canvas.height = height / 2;
     }
   });
-  xyRender();
-  yzRender();
-  zxRender();
+  xyResizeAndRender();
+  yzResizeAndRender();
+  zxResizeAndRender();
 }
 
-const resizer = new Resizer();
-
-resizer.init(resizeCanvas);
-
-resizeCanvas();
+(async () => {
+  await xyInit();
+  await yzInit();
+  await zxInit();
+  resizer.init(resizeCanvas);
+})();

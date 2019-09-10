@@ -1,12 +1,16 @@
+import { LineStyle } from '../types';
+
+export type MarkerType = 'o' | 's' | '+' | 'x' | 'img' | 'none';
+
 export interface ICurveStyle {
   // lines
   lineColor: string; // color
   lineAlpha: number; // alpha (0, 1]. A<1e-14 => A=1.0
-  lineStyle: string; // style '-'='', '--', ':'
+  lineStyle: LineStyle; // style
   lineWidth: number; // width
 
   // markers
-  markerType: 'o' | 's' | '+' | 'x' | 'img' | 'none';
+  markerType: MarkerType; // type
   markerImg: string; // image filename
   markerColor: string; // color
   markerAlpha: number; // alpha (0, 1]
@@ -14,7 +18,7 @@ export interface ICurveStyle {
   markerEvery: number; // mark-every
   markerLineColor: string; // edge color
   markerLineWidth: number; // edge width
-  markerLineStyle: string; // edge style: '-'='', '--', ':'
+  markerLineStyle: LineStyle; // edge style
   markerIsVoid: boolean; // void marker (draw edge only)
 }
 
@@ -48,6 +52,6 @@ export const defaultCurveStyle: ICurveStyle = {
   markerEvery: 0,
   markerLineColor: '#ffffff',
   markerLineWidth: 2,
-  markerLineStyle: '',
+  markerLineStyle: 'none',
   markerIsVoid: false,
 };

@@ -1,3 +1,5 @@
+import { LineStyle } from '../types';
+
 export interface IPlotArgs {
   // title and labels
   title: string; // Title
@@ -30,7 +32,7 @@ export interface IPlotArgs {
   legGap: number; // legend: gap between icons
   legTxtGap: number; // legend: gap between line and text
   legNrow: number; // legend: number of rows
-  legMarkerSize: number; // legend: marker size
+  legMarkerSizeRefProp: number; // legend: marker size
 
   // constants
   padTitle: number; // padding for title drawing
@@ -59,8 +61,8 @@ export interface IPlotArgs {
   yTicksAlpha: number; // alpha
   xTicksLineWidth: number; // linewidth
   yTicksLineWidth: number; // linewidth
-  xTicksLineStyle: string; // line style
-  yTicksLineStyle: string; // line style
+  xTicksLineStyle: LineStyle; // line style
+  yTicksLineStyle: LineStyle; // line style
 
   // scale
   xminStart: number; // start x-min
@@ -101,19 +103,19 @@ export interface IPlotArgs {
   gridColor: string; // color of grid
   gridAlpha: number; // alpha of grid
   gridLineWidth: number; // line width of grid
-  gridLineStyle: string; // line style of grid
+  gridLineStyle: LineStyle; // line style of grid
 
   // border and frame
   borderShow: boolean; // draw (inner) borders
   borderColor: string; // color of (inner) border
   borderAlpha: number; // alpha of (inner) border
   borderLineWidth: number; // line width of (inner) border
-  borderLineStyle: string; // line style of (inner) border
+  borderLineStyle: LineStyle; // line style of (inner) border
   frameShow: boolean; // draw (external) frame
   frameColor: string; // color of frame
   frameAlpha: number; // alpha of frame
   frameLineWidth: number; // line width of frame
-  frameLineStyle: string; // line style of frame
+  frameLineStyle: LineStyle; // line style of frame
 }
 
 export const defaultPlotArgs: IPlotArgs = {
@@ -148,7 +150,7 @@ export const defaultPlotArgs: IPlotArgs = {
   legGap: 20,
   legTxtGap: 4,
   legNrow: 1,
-  legMarkerSize: 0,
+  legMarkerSizeRefProp: 0,
 
   // constants
   padTitle: 20,

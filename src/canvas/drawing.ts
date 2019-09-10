@@ -1,25 +1,28 @@
 import { getOrthoVec } from '../geometry';
+import { LineStyle } from '../types';
 
 export const setStroke = (
   dc: CanvasRenderingContext2D,
   color: string,
   alpha: number = 1.0,
   width: number = 1.0,
-  style: string = '-',
+  style: LineStyle = '-',
 ) => {
+  if (style === 'none') {
+    return;
+  }
   dc.fillStyle = '';
   dc.strokeStyle = color;
   dc.globalAlpha = alpha;
   dc.lineWidth = width;
-  switch (style) {
-    case '--':
-      dc.setLineDash([5, 5]);
-      break;
-    case ':':
-      dc.setLineDash([2, 2]);
-      break;
-    default:
-      dc.setLineDash([]);
+  if (style === '-') {
+    dc.setLineDash([]);
+  }
+  if (style === '--') {
+    dc.setLineDash([5, 5]);
+  }
+  if (style === ':') {
+    dc.setLineDash([2, 2]);
   }
 };
 
