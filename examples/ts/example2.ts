@@ -3,14 +3,25 @@ import {
   IPlotArgs,
   defaultPlotArgs,
   defaultCurveStyle,
+  defaultLegendArgs,
+  defaultAxisArgs,
   getColor,
   StaticGraph,
 } from '../../src';
 
 const args: IPlotArgs = {
   ...defaultPlotArgs,
+  x: {
+    ...defaultAxisArgs,
+    label:
+      '1XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX2',
+  },
+  l: {
+    ...defaultLegendArgs,
+    on: true,
+    atBottom: true,
+  },
   title: 'Many Curves',
-  legendOn: true,
   markerImgPaths: ['images/blue-hrect.png', 'images/road-sign1.png'],
 };
 

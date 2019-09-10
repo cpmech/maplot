@@ -265,15 +265,15 @@ export class Metrics {
     // legend dimensions
     this.BL = 0;
     this.RL = 0;
-    let gBRtotal = this.args.gBR; // because of scale
-    let gRRtotal = 0;
-    if (this.legend && this.args.legendOn) {
+    let gBRtotal = this.args.gBR;
+    let gRRtotal = this.args.gRR;
+    if (this.legend && this.args.l.on) {
       const legDims = this.legend.getDims();
-      if (this.args.legendAtBottom) {
+      if (this.args.l.atBottom) {
         gBRtotal += this.args.gBR;
         this.BL = legDims.height;
       } else {
-        gRRtotal = 2 * this.args.gRR;
+        gRRtotal = this.args.gRR;
         this.RL = legDims.width;
       }
     }
@@ -285,8 +285,8 @@ export class Metrics {
     this.RR = Math.max(this.args.minRR, gRRtotal + this.RS + this.RL);
 
     // geometry
-    this.ww = Math.max(1, this.W - (this.LR + this.RR + this.RL));
-    this.hh = Math.max(1, this.H - (this.TR + this.BR + this.BL));
+    this.ww = Math.max(1, this.W - this.LR - this.RR);
+    this.hh = Math.max(1, this.H - this.TR - this.BR);
     this.w = Math.max(1, this.ww - 2 * this.args.dH);
     this.h = Math.max(1, this.hh - 2 * this.args.dV);
 

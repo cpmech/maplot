@@ -34,6 +34,11 @@ export interface IAxisArgs {
   maxFixOn: boolean; // use or not maxFix
 }
 
+export interface ILegendArgs {
+  on: boolean; // legend is on
+  atBottom: boolean; // legend at bottom
+}
+
 export interface IPlotArgs {
   // options
   title: string; // Title
@@ -53,8 +58,7 @@ export interface IPlotArgs {
   y: IAxisArgs;
 
   // legend
-  legendOn: boolean; // legend is on
-  legendAtBottom: boolean; // legend at bottom
+  l: ILegendArgs;
 
   // constants
   dH: number; // DH increment
@@ -142,6 +146,11 @@ export const defaultAxisArgs: IAxisArgs = {
   maxFixOn: false,
 };
 
+export const defaultLegendArgs: ILegendArgs = {
+  on: true,
+  atBottom: false,
+};
+
 export const defaultPlotArgs: IPlotArgs = {
   // options
   title: 'XY Plot',
@@ -178,15 +187,14 @@ export const defaultPlotArgs: IPlotArgs = {
   },
 
   // legend
-  legendOn: false,
-  legendAtBottom: false,
+  l: { ...defaultLegendArgs },
 
   // constants
   dH: 8,
   dV: 8,
-  gLR: 6,
+  gLR: 0,
   gRR: 6,
-  gBR: 6,
+  gBR: 0,
   gTR: 6,
   minTR: 6,
   minBR: 6,

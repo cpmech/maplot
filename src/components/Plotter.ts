@@ -53,8 +53,12 @@ export class Plotter {
     this.drawBottomRuler();
     this.drawLeftRuler();
     this.drawFrame();
-    if (this.legend && this.args.legendOn) {
-      this.legend.render(this.metrics.xf + this.metrics.RR, this.metrics.TR);
+    if (this.legend && this.args.l.on) {
+      if (this.args.l.atBottom) {
+        this.legend.render(this.args.gLR, this.metrics.H - this.args.gBR - this.metrics.BL);
+      } else {
+        this.legend.render(this.metrics.xf + this.metrics.RR, this.metrics.TR);
+      }
     }
   }
 
