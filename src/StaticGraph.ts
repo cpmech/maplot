@@ -20,7 +20,7 @@ export class StaticGraph {
     this.markers = new Markers(dc, args);
     this.legend = new Legend(dc, args, curves, this.markers);
     this.metrics = new Metrics(dc, args, curves, this.markers, this.legend);
-    this.plotter = new Plotter(dc, args, curves, this.markers, this.legend, this.metrics);
+    this.plotter = new Plotter(dc, args, curves, this.markers, this.metrics, this.legend);
     this.resizer = new Resizer(
       ({ clientWidth, clientHeight }) => {
         canvas.width = clientWidth;

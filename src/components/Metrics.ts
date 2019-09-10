@@ -54,7 +54,7 @@ export class Metrics {
   args: IPlotArgs;
   curves: ICurves;
   markers: Markers;
-  legend: Legend;
+  legend?: Legend;
 
   // scale, limits and ticks
   xscale: Scale;
@@ -102,7 +102,7 @@ export class Metrics {
     args: IPlotArgs,
     curves: ICurves,
     markers: Markers,
-    legend: Legend,
+    legend?: Legend,
   ) {
     this.dc = dc;
     this.args = args;
@@ -267,7 +267,7 @@ export class Metrics {
     this.RL = 0;
     let gBRtotal = this.args.gBR; // because of scale
     let gRRtotal = 0;
-    if (this.args.legendOn) {
+    if (this.legend && this.args.legendOn) {
       const legDims = this.legend.getDims();
       if (this.args.legendAtBottom) {
         gBRtotal += this.args.gBR;

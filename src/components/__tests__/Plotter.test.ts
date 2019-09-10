@@ -39,13 +39,13 @@ describe('Plotter', () => {
 
   it('constructor works', () => {
     const metrics = new Metrics(dc, args, curves, markers, legend);
-    const plt = new Plotter(dc, args, curves, markers, legend, metrics);
+    const plt = new Plotter(dc, args, curves, markers, metrics, legend);
     expect(plt.curves.list.length).toBe(1);
   });
 
   it('default render works', () => {
     const metrics = new Metrics(dc, args, curves, markers, legend);
-    const plt = new Plotter(dc, args, curves, markers, legend, metrics);
+    const plt = new Plotter(dc, args, curves, markers, metrics, legend);
     plt.render();
     expect(dc).toMatchSnapshot();
   });

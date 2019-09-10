@@ -11,23 +11,23 @@ export class Plotter {
   args: IPlotArgs;
   curves: ICurves;
   markers: Markers;
-  legend: Legend;
   metrics: Metrics;
+  legend?: Legend;
 
   constructor(
     dc: CanvasRenderingContext2D,
     args: IPlotArgs,
     curves: ICurves,
     markers: Markers,
-    legend: Legend,
     metrics: Metrics,
+    legend?: Legend,
   ) {
     this.dc = dc;
     this.args = args;
     this.curves = curves;
     this.markers = markers;
-    this.legend = legend;
     this.metrics = metrics;
+    this.legend = legend;
   }
 
   render() {
@@ -53,7 +53,9 @@ export class Plotter {
     this.drawBottomRuler();
     this.drawLeftRuler();
     this.drawFrame();
-    this.legend.render(this.metrics.xf + this.metrics.RR, this.metrics.TR);
+    if (this.legend && this.args.legendOn) {
+      this.legend.render(this.metrics.xf + this.metrics.RR, this.metrics.TR);
+    }
   }
 
   clearBackground() {
