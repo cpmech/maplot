@@ -57,7 +57,7 @@ export class Plotter {
       if (this.args.l.atBottom) {
         this.legend.render(this.args.gLR, this.metrics.H - this.args.gBR - this.metrics.BL);
       } else {
-        this.legend.render(this.metrics.xf + this.metrics.RR, this.metrics.TR);
+        this.legend.render(this.metrics.xf + this.args.gRR, this.metrics.TR);
       }
     }
   }

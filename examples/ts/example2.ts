@@ -19,7 +19,7 @@ const args: IPlotArgs = {
   l: {
     ...defaultLegendArgs,
     on: true,
-    atBottom: true,
+    atBottom: false,
   },
   title: 'Many Curves',
   markerImgPaths: ['images/blue-hrect.png', 'images/road-sign1.png'],

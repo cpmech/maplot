@@ -18,7 +18,7 @@ export class Legend {
 
   getDims(): { width: number; height: number } {
     return {
-      width: 30,
+      width: 300,
       height: 20,
     };
   }

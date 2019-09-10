@@ -273,7 +273,7 @@ export class Metrics {
         gBRtotal += this.args.gBR;
         this.BL = legDims.height;
       } else {
-        gRRtotal = this.args.gRR;
+        gRRtotal += this.args.gRR;
         this.RL = legDims.width;
       }
     }
