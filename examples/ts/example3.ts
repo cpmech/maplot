@@ -15,8 +15,6 @@ const images = [
 const args: IPlotArgs = {
   ...defaultPlotArgs,
   title: 'Many Curves',
-  xIs: 'x',
-  yIs: 'y',
   markerImgPaths: images.map(image => image.filePath),
   legendOn: true,
   markerSizeAuto: true,

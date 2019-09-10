@@ -225,12 +225,12 @@ export class DrawMap {
       if (this.statusBar && this.statusBar.show && this.args && this.metrics) {
         const xreal = this.metrics.xReal(x);
         const yreal = this.metrics.yReal(y);
-        const txr = numFmt(xreal, this.args.xTicksDecDigits);
-        const tyr = numFmt(yreal, this.args.xTicksDecDigits);
-        const txn = numFmt(xreal / 8, this.args.xTicksDecDigits);
-        const tyn = numFmt(yreal / 8, this.args.xTicksDecDigits);
-        const tworld = `WORLD ${this.args.xIs} = ${txr} : ${this.args.yIs} = ${tyr}`;
-        const tnether = `NETHER ${this.args.xIs} = ${txn} : ${this.args.yIs} = ${tyn}`;
+        const txr = numFmt(xreal, this.args.x.t.decDigits);
+        const tyr = numFmt(yreal, this.args.x.t.decDigits);
+        const txn = numFmt(xreal / 8, this.args.x.t.decDigits);
+        const tyn = numFmt(yreal / 8, this.args.x.t.decDigits);
+        const tworld = `WORLD ${this.args.x.coordName} = ${txr} : ${this.args.y.coordName} = ${tyr}`;
+        const tnether = `NETHER ${this.args.x.coordName} = ${txn} : ${this.args.y.coordName} = ${tyn}`;
         this.statusBar.set(`${tworld} | ${tnether}`);
       }
       if (this.dragging) {

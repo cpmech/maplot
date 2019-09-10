@@ -1,11 +1,22 @@
-import { defaultPlotArgs, defaultCurveStyle, StaticGraph } from '../../dist/esm/index-all-in-one';
+import {
+  defaultPlotArgs,
+  defaultAxisArgs,
+  defaultCurveStyle,
+  StaticGraph,
+} from '../../dist/esm/index-all-in-one';
 import { x, y, z } from './data1';
 
 const args = {
   ...defaultPlotArgs,
+  x: {
+    ...defaultAxisArgs,
+    coordName: 'x',
+  },
+  y: {
+    ...defaultAxisArgs,
+    coordName: 'y',
+  },
   title: 'X-Y Plot',
-  xIs: 'x',
-  yIs: 'y',
   markerImgPaths: ['images/circle-cross1.png'],
 };
 

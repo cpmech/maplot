@@ -1,21 +1,44 @@
 import { LineStyle } from '../types';
 
-export interface IPlotArgs {
-  // title and labels
-  title: string; // Title
-  xLabel: string; // XLabel
-  yLabel: string; // YLabel
-  yLabelVert: boolean; // draw y-label vertically
+export interface ITicksArgs {
+  vertNums: boolean; // vertical scale numbers
+  wholeNums: boolean; // use whole numbers only
+  approxNumber: number; // approximate number of ticks
+  maxNumber: number; // maximum number
+  length: number; // length of tick lines
+  decDigits: number; // number of decimal digits of ticks (-1 means all possible digits)
+  color: string; // color
+  alpha: number; // alpha
+  lineWidth: number; // linewidth
+  lineStyle: LineStyle; // line style
+  gapValue: number; // gap between tick and its corresponding value
+  gapLabel: number; // gap between tick line and label
+}
 
+export interface IAxisArgs {
   // options
-  xIs: string; // x-axis is 'x', for example
-  yIs: string; // y-axis is 'z', for example
+  label: string; // label
+  coordName: 'x' | 'y' | 'z'; // coordinate name in Curves' data
+  labelVert: boolean; // label vertically
+  invert: boolean; // invert scale
+
+  // ticks
+  t: ITicksArgs; // ticks
+
+  // scale
+  minStart: number; // start min
+  maxStart: number; // start max
+  minFix: number; // fixed minimum value (real coordinates)
+  maxFix: number; // fixed maximum value (real coordinates)
+  minFixOn: boolean; // use or not minFix
+  maxFixOn: boolean; // use or not maxFix
+}
+
+export interface IPlotArgs {
+  // options
+  title: string; // Title
   equalScale: boolean; // equal scale factors
-  invertXscale: boolean; // invert x-scale
-  invertYscale: boolean; // invert y-scale
   clipOn: boolean; // clip outside lines
-  deltaH: number; // DH increment
-  deltaV: number; // DV increment
 
   // markers
   markerImgPaths: string[]; // image paths
@@ -25,58 +48,25 @@ export interface IPlotArgs {
   markerSizeMax: number; // max marker size
   markerSizeRefProp: number; // reference proportion in screen coords e.g. 1/800
 
+  // axes
+  x: IAxisArgs;
+  y: IAxisArgs;
+
   // legend
   legendOn: boolean; // legend is on
   legendAtBottom: boolean; // legend at bottom
-  // legLineLen: number; // length of legend line indicator
-  // legGap: number; // legend: gap between icons
-  // legTxtGap: number; // legend: gap between line and text
-  // legNrow: number; // legend: number of rows
-  // legMarkerSizeRefProp: number; // legend: marker size
 
   // constants
-  padTitle: number; // padding for title drawing
-  padLines: number; // padding between lines
-  padXlabel: number; // padding between x-label and scale nubmers
-  padYlabel: number; // padding between y-label and scale nubmers
-  padLegRR: number; // padding between legend and plot area in right-ruler
-  padSmall: number; // small padding
-  minWidthLR: number; // minimum width of left ruler
-  minHeightBR: number; // minimum height of bottom ruler
-  minWidthRR: number; // minimum width of right ruler
-
-  // ticks
-  xTicksVert: boolean; // draw x ticks vertically
-  xTicksNumber: number; // number of x-ticks
-  yTicksNumber: number; // number of y-ticks
-  xTicksWholeNums: boolean; // use whole numbers only
-  yTicksWholeNums: boolean; // use whole numbers only
-  xTicksLength: number; // length of tick lines
-  yTicksLength: number; // length of tick lines
-  xTicksDecDigits: number; // number of decimal digits of x-ticks (-1 means all possible digits)
-  yTicksDecDigits: number; // number of decimal digits of y-ticks (-1 means all possible digits)
-  xTicksColor: string; // color
-  yTicksColor: string; // color
-  xTicksAlpha: number; // alpha
-  yTicksAlpha: number; // alpha
-  xTicksLineWidth: number; // linewidth
-  yTicksLineWidth: number; // linewidth
-  xTicksLineStyle: LineStyle; // line style
-  yTicksLineStyle: LineStyle; // line style
-
-  // scale
-  xminStart: number; // start x-min
-  xmaxStart: number; // start x-max
-  yminStart: number; // start y-min
-  ymaxStart: number; // start y-max
-  xminFix: number; // fixed minimum x value (real coordinates)
-  xmaxFix: number; // fixed maximum x value (real coordinates)
-  yminFix: number; // fixed minimum y value (real coordinates)
-  ymaxFix: number; // fixed maximum y value (real coordinates)
-  xminFixOn: boolean; // use or not xminFix
-  xmaxFixOn: boolean; // use or not xmaxFix
-  yminFixOn: boolean; // use or not yminFix
-  ymaxFixOn: boolean; // use or not ymaxFix
+  dH: number; // DH increment
+  dV: number; // DV increment
+  gLR: number; // gap for left-ruler
+  gRR: number; // gap for right-ruler
+  gBR: number; // gap for bottom-ruler
+  gTR: number; // gap for top-ruler
+  minTR: number; // minimum width of top-ruler
+  minBR: number; // minimum width of bottom-ruler
+  minLR: number; // minimum width of left-ruler
+  minRR: number; // minimum width of right-ruler
 
   // fonts
   fnameTitle: string; // font name for title text
@@ -118,22 +108,45 @@ export interface IPlotArgs {
   frameLineStyle: LineStyle; // line style of frame
 }
 
-export const defaultPlotArgs: IPlotArgs = {
-  // title and labels
-  title: 'XY Plot',
-  xLabel: 'x ►',
-  yLabel: 'y ►',
-  yLabelVert: true,
+export const defaultTicksArgs: ITicksArgs = {
+  vertNums: false,
+  wholeNums: false,
+  approxNumber: 8,
+  maxNumber: 100,
+  length: 8,
+  decDigits: -1,
+  color: '#414141',
+  alpha: 1.0,
+  lineWidth: 2,
+  lineStyle: '-',
+  gapValue: 3,
+  gapLabel: 6,
+};
 
+export const defaultAxisArgs: IAxisArgs = {
   // options
-  xIs: 'x',
-  yIs: 'y',
+  label: '',
+  coordName: 'x',
+  labelVert: false,
+  invert: false,
+
+  // ticks
+  t: { ...defaultTicksArgs },
+
+  // scale
+  minStart: -10000,
+  maxStart: +10000,
+  minFix: 0,
+  maxFix: 0,
+  minFixOn: false,
+  maxFixOn: false,
+};
+
+export const defaultPlotArgs: IPlotArgs = {
+  // options
+  title: 'XY Plot',
   equalScale: false,
-  invertXscale: false,
-  invertYscale: false,
   clipOn: false,
-  deltaH: 8,
-  deltaV: 8,
 
   // markers
   markerImgPaths: [],
@@ -143,58 +156,42 @@ export const defaultPlotArgs: IPlotArgs = {
   markerSizeMax: 1000,
   markerSizeRefProp: 1 / 800,
 
+  // axes
+  x: {
+    ...defaultAxisArgs,
+    t: {
+      ...defaultTicksArgs,
+      vertNums: true,
+    },
+    label: 'x ►',
+    coordName: 'x',
+  },
+  y: {
+    ...defaultAxisArgs,
+    t: {
+      ...defaultTicksArgs,
+      vertNums: false,
+    },
+    label: 'y ►',
+    coordName: 'y',
+    labelVert: true,
+  },
+
   // legend
   legendOn: false,
   legendAtBottom: false,
-  // legLineLen: 30,
-  // legGap: 20,
-  // legTxtGap: 4,
-  // legNrow: 1,
-  // legMarkerSizeRefProp: 0,
 
   // constants
-  padTitle: 20,
-  padLines: 2,
-  padXlabel: 8,
-  padYlabel: 8,
-  padLegRR: 20,
-  padSmall: 2,
-  minWidthLR: 70,
-  minHeightBR: 70,
-  minWidthRR: 0,
-
-  // ticks
-  xTicksVert: true,
-  xTicksNumber: 8,
-  yTicksNumber: 8,
-  xTicksWholeNums: false,
-  yTicksWholeNums: false,
-  xTicksLength: 6,
-  yTicksLength: 6,
-  xTicksDecDigits: -1,
-  yTicksDecDigits: -1,
-  xTicksColor: '#414141',
-  yTicksColor: '#414141',
-  xTicksAlpha: 1.0,
-  yTicksAlpha: 1.0,
-  xTicksLineWidth: 1.0,
-  yTicksLineWidth: 1.0,
-  xTicksLineStyle: '-',
-  yTicksLineStyle: '-',
-
-  // scale
-  xminStart: -10000,
-  xmaxStart: +10000,
-  yminStart: -10000,
-  ymaxStart: +10000,
-  xminFix: 0,
-  xmaxFix: 0,
-  yminFix: 0,
-  ymaxFix: 0,
-  xminFixOn: false,
-  xmaxFixOn: false,
-  yminFixOn: false,
-  ymaxFixOn: false,
+  dH: 8,
+  dV: 8,
+  gLR: 6,
+  gRR: 6,
+  gBR: 6,
+  gTR: 6,
+  minTR: 6,
+  minBR: 6,
+  minLR: 6,
+  minRR: 6,
 
   // fonts
   fnameTitle: 'Arial',

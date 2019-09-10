@@ -1,13 +1,24 @@
-import { defaultPlotArgs, defaultCurveStyle, StaticGraph } from '../../dist/esm/index-all-in-one';
+import {
+  defaultPlotArgs,
+  defaultAxisArgs,
+  defaultCurveStyle,
+  StaticGraph,
+} from '../../dist/esm/index-all-in-one';
 import { x, y, z } from './data1';
 
 const args = {
   ...defaultPlotArgs,
+  x: {
+    ...defaultAxisArgs,
+    label: 'z ►',
+    coordName: 'z',
+  },
+  y: {
+    ...defaultAxisArgs,
+    label: 'x ►',
+    coordName: 'x',
+  },
   title: 'Z-X Plot',
-  xIs: 'z',
-  yIs: 'x',
-  xLabel: 'z ►',
-  yLabel: 'x ►',
   markerImgPaths: ['images/star1.png'],
 };
 

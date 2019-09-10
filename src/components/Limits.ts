@@ -63,14 +63,14 @@ export class Limits {
   }
 
   translateRelativeToCopy(dx: number, dy: number) {
-    if (this.args.invertXscale) {
+    if (this.args.x.invert) {
       this.xmin = this.xminCopy + dx;
       this.xmax = this.xmaxCopy + dx;
     } else {
       this.xmin = this.xminCopy - dx;
       this.xmax = this.xmaxCopy - dx;
     }
-    if (this.args.invertYscale) {
+    if (this.args.y.invert) {
       this.ymin = this.yminCopy - dy;
       this.ymax = this.ymaxCopy - dy;
     } else {
@@ -89,17 +89,17 @@ export class Limits {
   }
 
   private setFixedLimits() {
-    if (this.args.xminFixOn) {
-      this.xmin = this.args.xminFix;
+    if (this.args.x.minFixOn) {
+      this.xmin = this.args.x.minFix;
     }
-    if (this.args.xmaxFixOn) {
-      this.xmax = this.args.xmaxFix;
+    if (this.args.x.maxFixOn) {
+      this.xmax = this.args.x.maxFix;
     }
-    if (this.args.yminFixOn) {
-      this.ymin = this.args.yminFix;
+    if (this.args.y.minFixOn) {
+      this.ymin = this.args.y.minFix;
     }
-    if (this.args.ymaxFixOn) {
-      this.ymax = this.args.ymaxFix;
+    if (this.args.y.maxFixOn) {
+      this.ymax = this.args.y.maxFix;
     }
   }
 
@@ -121,8 +121,8 @@ export class Limits {
 
 export const getLimitsAroundCurves = (args: IPlotArgs, curves: ICurves): ILimits => {
   const res: ILimits = { xmin: -1, xmax: +1, ymin: -1, ymax: +1 };
-  const u = args.xIs;
-  const v = args.yIs;
+  const u = args.x.coordName;
+  const v = args.y.coordName;
   curves.list.forEach((curve, index) => {
     const c = curve as any;
     if (c[u].length !== c[v].length) {

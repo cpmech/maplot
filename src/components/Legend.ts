@@ -1,5 +1,5 @@
 import { IPlotArgs, ICurves, ICurveStyle } from '../types';
-import { setStroke, drawLine } from '../canvas';
+import { setStroke, drawLine, drawRect } from '../canvas';
 import { Markers } from './Markers';
 
 export class Legend {
@@ -16,7 +16,28 @@ export class Legend {
     this.markers = markers;
   }
 
-  render() {}
+  getDims(): { width: number; height: number } {
+    return {
+      width: 30,
+      height: 20,
+    };
+  }
+
+  render(offsetX: number, offsetY: number) {
+    // const fontLegend = `${this.args.fsizeLegend}px ${this.args.fnameLegend}`;
+
+    const { width, height } = this.getDims();
+    this.dc.save();
+    this.dc.translate(offsetX, offsetY);
+
+    this.dc.fillStyle = '#9ec6e7';
+    drawRect(this.dc, 0, 0, width, height, true);
+    setStroke(this.dc, '#ff0000', 1, 1, '-');
+    drawRect(this.dc, 0, 0, width, height, false);
+
+    this.iconTextAtRight(0, 100, this.curves.list[0].style);
+    this.dc.restore();
+  }
 
   private iconTextAtRight(u0: number, v0: number, style: ICurveStyle) {
     const lineLen = 20;

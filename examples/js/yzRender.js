@@ -1,23 +1,34 @@
-import { defaultPlotArgs, defaultCurveStyle, StaticGraph } from '../../dist/esm/index-all-in-one';
+import {
+  defaultPlotArgs,
+  defaultAxisArgs,
+  defaultCurveStyle,
+  StaticGraph,
+} from '../../dist/esm/index-all-in-one';
 import { x, y, z } from './data1';
 
 const args = {
   ...defaultPlotArgs,
+  x: {
+    ...defaultAxisArgs,
+    label: '◄ z',
+    coordName: 'z',
+    invert: true,
+    minFix: -0.1,
+    maxFix: +1.1,
+    minFixOn: true,
+    maxFixOn: true,
+  },
+  y: {
+    ...defaultAxisArgs,
+    label: 'y ►',
+    coordName: 'y',
+    minFix: -0.1,
+    maxFix: +1.1,
+    minFixOn: true,
+    maxFixOn: true,
+  },
   title: 'Y-Z Plot',
-  xIs: 'z',
-  yIs: 'y',
-  xLabel: '◄ z',
-  yLabel: 'y ►',
-  invertXscale: true,
   markerImgPaths: ['images/star2.png'],
-  xminFix: -0.1,
-  xmaxFix: +1.1,
-  yminFix: -0.1,
-  ymaxFix: +1.1,
-  xminFixOn: true,
-  xmaxFixOn: true,
-  yminFixOn: true,
-  ymaxFixOn: true,
 };
 
 const curves = {

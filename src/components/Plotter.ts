@@ -1,7 +1,6 @@
 import { ICurves, IPlotArgs } from '../types';
-import { drawRect, setStroke, drawLine, drawText, drawTextVertUp } from '../canvas';
+import { drawRect, setStroke, drawLine, drawText } from '../canvas';
 import { pointRectInsideL } from '../geometry';
-import { numFmt } from '../helpers';
 import { cteSqrtEps, cteEps } from './constants';
 import { Markers } from './Markers';
 import { Legend } from './Legend';
@@ -53,8 +52,8 @@ export class Plotter {
     this.drawRightRuler();
     this.drawBottomRuler();
     this.drawLeftRuler();
-    this.legend.render();
     this.drawFrame();
+    this.legend.render(this.metrics.xf + this.metrics.RR, this.metrics.TR);
   }
 
   clearBackground() {
@@ -111,8 +110,8 @@ export class Plotter {
     }
 
     // choose axes
-    const u = this.args.xIs;
-    const v = this.args.yIs;
+    const u = this.args.x.coordName;
+    const v = this.args.y.coordName;
 
     // draw lines
     this.curves.list.forEach(curve => {
@@ -219,41 +218,8 @@ export class Plotter {
     const bgHeight = Math.max(1, this.metrics.H - this.metrics.hh - this.metrics.TR);
     drawRect(this.dc, 0, this.metrics.yf, this.metrics.W, bgHeight, true);
 
-    // draw x-ticks (vertical lines)
-    const fontTicks = `${this.args.fsizeTicks}px ${this.args.fnameTicks}`;
-    let xreal = this.metrics.ticks.x.lo;
-    while (xreal < this.metrics.limits.xmax) {
-      const x = this.metrics.xScr(xreal);
-      if (x >= this.metrics.x0 && x <= this.metrics.xf) {
-        setStroke(
-          this.dc,
-          this.args.xTicksColor,
-          this.args.xTicksAlpha,
-          this.args.xTicksLineWidth,
-          this.args.xTicksLineStyle,
-        );
-        drawLine(this.dc, x, this.metrics.yf, x, this.metrics.yf + this.args.xTicksLength);
-        let y = this.metrics.yf + this.args.xTicksLength;
-        const tx = numFmt(xreal, this.args.xTicksDecDigits);
-        if (this.args.xTicksVert) {
-          y += this.args.padSmall;
-          drawTextVertUp(this.dc, tx, x, y, 'right', 'center', fontTicks, this.args.xTicksColor);
-        } else {
-          drawText(this.dc, tx, x, y, 'center', 'top', fontTicks, this.args.xTicksColor);
-        }
-      }
-      xreal += this.metrics.ticks.x.unit;
-    }
-
-    // x-label
-    if (this.args.xLabel) {
-      const fontLabels = `${this.args.fsizeLabels}px ${this.args.fnameLabels}`;
-      const pad = this.args.padXlabel;
-      const xm = (this.metrics.x0 + this.metrics.xf) / 2;
-      const ym = this.metrics.yf + this.args.xTicksLength + this.metrics.xTickH + pad;
-      const clr = this.args.xTicksColor;
-      drawText(this.dc, this.args.xLabel, xm, ym, 'center', 'top', fontLabels, clr);
-    }
+    // draw scale
+    this.metrics.xscale.draw();
   }
 
   drawLeftRuler() {
@@ -267,40 +233,8 @@ export class Plotter {
     this.dc.fillStyle = this.args.colorLeftRuler;
     drawRect(this.dc, 0, 0, this.metrics.LR, this.metrics.hh + this.metrics.TR, true);
 
-    // draw y-ticks (horizontal lines)
-    const fontTicks = `${this.args.fsizeTicks}px ${this.args.fnameTicks}`;
-    let yreal = this.metrics.ticks.y.lo;
-    while (yreal < this.metrics.limits.ymax) {
-      const y = this.metrics.yScr(yreal);
-      if (y >= this.metrics.y0 && y <= this.metrics.yf) {
-        setStroke(
-          this.dc,
-          this.args.yTicksColor,
-          this.args.yTicksAlpha,
-          this.args.yTicksLineWidth,
-          this.args.yTicksLineStyle,
-        );
-        drawLine(this.dc, this.metrics.x0 - this.args.yTicksLength, y, this.metrics.x0, y);
-        const ty = numFmt(yreal, this.args.xTicksDecDigits);
-        const x = this.metrics.x0 - this.args.yTicksLength - 1;
-        drawText(this.dc, ty, x, y, 'right', 'center', fontTicks, this.args.yTicksColor);
-      }
-      yreal += this.metrics.ticks.y.unit;
-    }
-
-    // y-label
-    if (this.args.yLabel) {
-      const fontLabels = `${this.args.fsizeLabels}px ${this.args.fnameLabels}`;
-      const pad = this.args.padYlabel;
-      const xmid = this.metrics.x0 - this.args.xTicksLength - this.metrics.yTickW - pad;
-      const ymid = (this.metrics.y0 + this.metrics.yf) / 2;
-      const clr = this.args.yTicksColor;
-      if (this.args.yLabelVert) {
-        drawTextVertUp(this.dc, this.args.yLabel, xmid, ymid, 'center', 'bottom', fontLabels, clr);
-      } else {
-        drawText(this.dc, this.args.yLabel, xmid, ymid, 'right', 'center', fontLabels, clr);
-      }
-    }
+    // draw scale
+    this.metrics.yscale.draw();
   }
 
   drawFrame() {

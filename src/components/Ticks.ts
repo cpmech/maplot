@@ -17,19 +17,28 @@ export class Ticks {
     this.limits = limits;
   }
 
+  getRange(): { xmin: number; xmax: number; ymin: number; ymax: number } {
+    return {
+      xmin: this.x.lo,
+      xmax: this.x.lo + this.x.unit * this.x.ndv,
+      ymin: this.y.lo,
+      ymax: this.y.lo + this.y.unit * this.y.ndv,
+    };
+  }
+
   calculate() {
     const dx = this.limits.xmax - this.limits.xmin;
     const dy = this.limits.ymax - this.limits.ymin;
-    let xnumtck = this.args.xTicksNumber;
-    let ynumtck = this.args.yTicksNumber;
+    let xnumtck = this.args.x.t.approxNumber;
+    let ynumtck = this.args.y.t.approxNumber;
     if (Math.abs(dx) <= cteEps) {
       xnumtck = 3;
     }
     if (Math.abs(dy) <= cteEps) {
       ynumtck = 3;
     }
-    const xflag = this.args.xTicksWholeNums;
-    const yflag = this.args.yTicksWholeNums;
+    const xflag = this.args.x.t.wholeNums;
+    const yflag = this.args.y.t.wholeNums;
     if (this.args.equalScale) {
       if (dx <= dy) {
         this.genScaleValues(this.x, this.limits.xmin, this.limits.xmax, xnumtck, xflag);

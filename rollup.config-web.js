@@ -68,4 +68,27 @@ export default [
       commonjs(),
     ],
   })),
+
+  /*
+  {
+    input: `examples/ts/example2.ts`,
+    output: {
+      name: 'example2.ts',
+      file: `dist/examples/ts/example2.js`,
+      format: 'iife',
+    },
+    plugins: [
+      typescript({
+        cacheRoot,
+        typescript: require('typescript'),
+        tsconfigOverride: { compilerOptions: { declaration: false } },
+      }),
+      resolve({
+        mainFields: ['module'],
+        preferBuiltins: true,
+      }),
+      commonjs(),
+    ],
+  },
+  */
 ];

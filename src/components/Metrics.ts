@@ -1,44 +1,52 @@
 import { IPlotArgs, ICurves, ILimits } from '../types';
-import { numFmt } from '../helpers';
-import { textWidthPx } from '../canvas';
 import { cteEps } from './constants';
-import { Limits, getLimitsAroundCurves, checkLimitsForConsistency } from './Limits';
 import { Markers } from './Markers';
 import { Legend } from './Legend';
+import { Scale } from './Scale';
 import { Ticks } from './Ticks';
+import { Limits, getLimitsAroundCurves, checkLimitsForConsistency } from './Limits';
 
-//                |←——————————————————— W ————————————————————→|
-//                       |←——————————— ww ——————————→|
-//                            |←—————— w ——————→|
-//              (0,0)
-//   ———————————  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ ——→ xScr
-//    ↑           ┃      |             '                       ┃
-//    |           ┃   (x0,y0)          ' TR                    ┃
-//    | ————————  ┃      ┌───────────────────────────┐ ——————— ┃ ——→ x
-//    |   ↑       ┃      │ (p0,q0)     ' DV          │    ↑    ┃
-//    |   |  ———  ┃      │    o─────────────────┐    │    |    ┃ ——→ p
-//    |   |   ↑   ┃      │    │                 │    │    |    ┃
-//    |           ┃ —LR— │-DH-│                 │-DH-│-RR-|-RL-┃
-//       hh   h   ┃      │    │                 │    │    |    ┃
-//    H           ┃      │    ↑ yReal           │    │    |    ┃
-//        |   ↓   ┃      │    │                 │    │    |    ┃
-//    |   |  ———  ┃      │    ●─────────────────o    │    |    ┃ ——→ xReal
-//    |   ↓       ┃      │             ' DV  (pf,qf) │    ↓    ┃
-//    |  ———————  ┃ ———— └───────────────────────────┘ ——————— ┃
-//    |           ┃                    ' BR       (xf,yf)      ┃
-//    ↓           ┃                    ' BL                    ┃
-//   ———————————  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-//                |      |    |                              (W,H)
-//                ↓      ↓    ↓
-//               yScr    y    q
+//                |←———————————————————————— W ————————————————————————————————→|
+//                |←——— LR ———|←——————————— ww ——————————→|←——————— RR ————————→|
+//                            .    |←—————— w ——————→|    .                     .
+//              (0,0)         .                           .                     .
+//   ———————————  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ ——→ xScr
+//    ↑   ↑       ┃                         gTR                                 ┃
+//    |  TR       ┃                                                             ┃
+//    |   ↓       ┃        (x0,y0)          gTR                                 ┃
+//    | ————————  ┃  . . . .  ┌───────────────────────────┐        —————        ┃ ——→ x
+//    |   ↑       ┃           │ (p0,q0)     ' dV          │          ↑          ┃
+//    |   |  ———  ┃           │    o─────────────────┐    │          |          ┃ ——→ p
+//    |   |   ↑   ┃           │    │                 │    │    |     |    |     ┃
+//    |           ┃  gLR | LS │-dH-│                 │-dH-│-RS-|-gRR-|-RL-|-gRR-┃
+//       hh   h   ┃           │    │                 │    │    |     |    |     ┃
+//    H           ┃           │    ↑ yReal           │    │          |          ┃
+//        |   ↓   ┃           │    │                 │    │          |          ┃
+//    |   |  ———  ┃           │    ●─────────────────o    │          |          ┃ ——→ xReal
+//    |   ↓       ┃           │             ' dV  (pf,qf) │          ↓          ┃
+//    |  ———————  ┃  . . . .  └───────────────────────────┘        —————        ┃
+//    |   ↑       ┃                        BS          (xf,yf)                  ┃
+//    |   |       ┃                      ───────                                ┃
+//    |           ┃                        gBR                                  ┃
+//    |  BR       ┃                      ───────                                ┃
+//    |           ┃                        BL                                   ┃
+//    |   |       ┃                      ───────                                ┃
+//    ↓   ↓       ┃                        gBR                                  ┃
+//   ———————————  ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+//                |           |    |                                          (W,H)
+//                ↓           ↓    ↓
+//               yScr         y    q
 //
 //    W: figure width          ww: plot area width     w: inner x-y area width
 //    H: figure height         hh: plot area height    h: inner x-y area height
 //
 //    LR : Left Ruler          TR : Top Ruler          xScr ,yScr : "screen" coordinates
+//    LS : Left Scale          gLR: gap for LR         xReal,yReal: x-y (real data) coords
 //    BR : Bottom Ruler        RR : Right Ruler        x    ,y    : plot area coordinates
-//    BL : Bottom Legend       RL : Right Legend       xReal,yReal: x-y (real data) coords
-//    DH : Delta Horizontal    DV : Delta Vertical
+//    BL : Bottom Legend       RL : Right Legend
+//    BS : Bottom Scale        RS : Right Scale
+//    gRR: gap for RS          gBR: gap for BS
+//    dH : Delta Horizontal    dV : Delta Vertical
 
 export class Metrics {
   // input
@@ -48,25 +56,15 @@ export class Metrics {
   markers: Markers;
   legend: Legend;
 
-  // limits and ticks
+  // scale, limits and ticks
+  xscale: Scale;
+  yscale: Scale;
   limits: Limits;
   ticks: Ticks;
 
   // marker multiplier
   markerRefLength: number = 800; // reference width to update marker sizes upon zoom
   curveLimits: ILimits = { xmin: -1, xmax: +1, ymin: -1, ymax: +1 }; // reference values to set markers
-
-  // size of ticks and labels
-  xTickH: number = 0; // bottom (x) tick height
-  xLblH: number = 0; // bottom (x) label height
-  yTickW: number = 0; // left (y) tick width
-  yLblW: number = 0; // left (y) label width
-  xScaleH: number = 0; // total bottom (x) scale height
-  yScaleW: number = 0; // total bottom (y) scale width
-
-  // legTxtW: number = 0; // legend text width
-  // legTxtH: number = 0; // legend text height
-  // legH: number = 0; // total legend height
 
   // geometry
   W: number = 0; // figure width
@@ -75,10 +73,11 @@ export class Metrics {
   RR: number = 0; // Right Ruler thickness (screen coordinates)
   BR: number = 0; // Bottom Ruler thickness (screen coordinates)
   TR: number = 0; // Top Ruler thickness (screen coordinates)
-  RL: number = 0; // Right Legend thickness
   BL: number = 0; // Bottom Legend thickness
-  DH: number = 0; // Delta Horizontal
-  DV: number = 0; // Delta Vertical
+  RL: number = 0; // Right Legend thickness
+  BS: number = 0; // Bottom Scale
+  LS: number = 0; // Left Scale
+  RS: number = 0; // Right Scale
   ww: number = 0; // width of plotting area
   hh: number = 0; // height of plotting area
   w: number = 0; // width of inner x-y area
@@ -110,6 +109,8 @@ export class Metrics {
     this.curves = curves;
     this.markers = markers;
     this.legend = legend;
+    this.xscale = new Scale(dc, args, this, false);
+    this.yscale = new Scale(dc, args, this, true);
     this.limits = new Limits(args, curves);
     this.ticks = new Ticks(args, this.limits);
   }
@@ -139,18 +140,18 @@ export class Metrics {
   setScaleFromStartValues(width: number, height: number) {
     if (
       checkLimitsForConsistency(
-        this.args.xminStart,
-        this.args.xmaxStart,
-        this.args.yminStart,
-        this.args.ymaxStart,
+        this.args.x.minStart,
+        this.args.x.maxStart,
+        this.args.y.minStart,
+        this.args.y.maxStart,
       )
     ) {
       this.W = width;
       this.H = height;
-      this.limits.xmin = this.args.xminStart;
-      this.limits.xmax = this.args.xmaxStart;
-      this.limits.ymin = this.args.yminStart;
-      this.limits.ymax = this.args.ymaxStart;
+      this.limits.xmin = this.args.x.minStart;
+      this.limits.xmax = this.args.x.maxStart;
+      this.limits.ymin = this.args.y.minStart;
+      this.limits.ymax = this.args.y.maxStart;
       this.ticks.calculate();
       this.calculateMetrics();
       this.expandLimitsDueToEqualScale();
@@ -205,7 +206,7 @@ export class Metrics {
 
   // xScr converts real x-coords to to screen coordinates
   xScr(x: number): number {
-    if (this.args.invertXscale) {
+    if (this.args.x.invert) {
       return Math.trunc(this.pf - this.sfx * (x - this.limits.xmin));
     } else {
       return Math.trunc(this.p0 + this.sfx * (x - this.limits.xmin));
@@ -214,7 +215,7 @@ export class Metrics {
 
   // yScr converts real y-coords to to screen coordinates
   yScr(y: number): number {
-    if (this.args.invertYscale) {
+    if (this.args.y.invert) {
       return Math.trunc(this.q0 + this.sfy * (y - this.limits.ymin));
     } else {
       return Math.trunc(this.qf - this.sfy * (y - this.limits.ymin));
@@ -223,7 +224,7 @@ export class Metrics {
 
   // xReal converts to real coordinates
   xReal(xscr: number) {
-    if (this.args.invertXscale) {
+    if (this.args.x.invert) {
       return this.limits.xmin + (this.pf - xscr) / this.sfx;
     } else {
       return this.limits.xmin + (xscr - this.p0) / this.sfx;
@@ -232,7 +233,7 @@ export class Metrics {
 
   // xReal converts to real coordinates
   yReal(yscr: number) {
-    if (this.args.invertYscale) {
+    if (this.args.y.invert) {
       return this.limits.ymin + (yscr - this.q0) / this.sfy;
     } else {
       return this.limits.ymin + (this.qf - yscr) / this.sfy;
@@ -250,115 +251,50 @@ export class Metrics {
   }
 
   private calculateMetrics() {
-    // font strings
-    const fontTicks = `${this.args.fsizeTicks}px ${this.args.fnameTicks}`;
-    const fontLegend = `${this.args.fsizeLegend}px ${this.args.fnameLegend}`;
-    const fontLabels = `${this.args.fsizeLabels}px ${this.args.fnameLabels}`;
-
-    // x-scale (BR): tick text height
-    this.xTickH = this.args.fsizeTicks;
-    if (this.args.xTicksVert) {
-      const tx = '+' + numFmt(this.ticks.x.lo, this.args.xTicksDecDigits);
-      const tw = textWidthPx(this.dc, tx, fontTicks);
-      this.xTickH = tw;
+    // height of title
+    let titleHeightPlusGap = 0;
+    if (this.args.title) {
+      titleHeightPlusGap = this.args.fsizeTitle + 2 * this.args.gTR;
     }
 
-    // x-scale (BR): x-label text height
-    this.xLblH = this.args.fsizeLabels;
-
-    // y-scale (LR): tick text width
-    const ty = '+' + numFmt(this.ticks.y.lo, this.args.yTicksDecDigits);
-    this.yTickW = textWidthPx(this.dc, ty, fontTicks);
-
-    // y-scale (LR): y-label text width
-    if (this.args.yLabelVert) {
-      this.yLblW = this.args.fsizeLabels;
-    } else {
-      this.yLblW = textWidthPx(this.dc, this.args.yLabel, fontLabels);
-    }
+    // scales
+    this.BS = this.xscale.getSize();
+    this.LS = this.yscale.getSize();
+    this.RS = 0;
 
     // legend dimensions
-    /*
-    this.legTxtW = 0;
-    this.legTxtH = 0;
-    this.legH = 0;
+    this.BL = 0;
+    this.RL = 0;
+    let gBRtotal = this.args.gBR; // because of scale
+    let gRRtotal = 0;
     if (this.args.legendOn) {
-      const th = this.args.fsizeLegend;
-      const mrl = this.markerRefLength;
-      const lms = this.args.legMarkerSizeRefProp;
-      this.curves.list.forEach(curve => {
-        const tw = textWidthPx(this.dc, curve.label, fontLegend);
-        const s = this.markers.getSize(curve.style, mrl, lms);
-        this.legTxtW = Math.max(this.legTxtW, tw);
-        this.legTxtH = Math.max(this.legTxtH, th, s / 2);
-      });
-      this.legH = (this.args.padLines + this.legTxtH) * this.args.legNrow;
-    }
-    */
-    /*
-    if (this.args.legendOn) {
-      const mrl = this.markerRefLength;
-      let legLineLen = this.args.legLineLen;
-      if (this.args.legAtBottom) {
+      const legDims = this.legend.getDims();
+      if (this.args.legendAtBottom) {
+        gBRtotal += this.args.gBR;
+        this.BL = legDims.height;
       } else {
-        this.curves.list.forEach(curve => {
-          const s = this.markers.getSize(curve.style, mrl);
-          // if (curve.style.lineStyle === '')
-          legLineLen = Math.max(legLineLen, s);
-        });
-        console.log(legLineLen);
+        gRRtotal = 2 * this.args.gRR;
+        this.RL = legDims.width;
       }
     }
-    */
 
-    // height of x-scale (ticks + label)
-    this.xScaleH = this.args.xTicksLength + this.xTickH + this.xLblH + this.args.padXlabel * 2;
-
-    // width of y-scale (ticks + label)
-    this.yScaleW = this.args.yTicksLength + this.yTickW + this.yLblW + this.args.padYlabel * 2;
-
-    // geometry
-    this.LR = 0;
-    this.RR = 6;
-    this.BR = 0;
-    this.TR = 6;
-    this.RL = 0;
-    this.BL = 0;
-    this.BR = Math.max(this.BR, this.xScaleH);
-    this.LR = Math.max(this.LR, this.yScaleW);
-    /*
-    if (this.args.legAtBottom) {
-      this.BR += this.legH;
-    } else {
-      this.RR = this.args.legLineLen + this.args.legTxtGap + this.legTxtW;
-      this.RR += this.args.padSmall + this.args.padLegRR;
-    }
-    */
-
-    // minimum values
-    this.LR = Math.max(this.LR, this.args.minWidthLR);
-    this.BR = Math.max(this.BR, this.args.minHeightBR);
-    this.RR = Math.max(this.RR, this.args.minWidthRR);
-
-    // height of title
-    if (this.args.title) {
-      const th = this.args.fsizeTitle;
-      this.TR = th + this.args.padTitle;
-    }
+    // rulers
+    this.TR = Math.max(this.args.minTR, titleHeightPlusGap);
+    this.LR = Math.max(this.args.minLR, this.args.gLR + this.LS);
+    this.BR = Math.max(this.args.minBR, gBRtotal + this.BS + this.BL);
+    this.RR = Math.max(this.args.minRR, gRRtotal + this.RS + this.RL);
 
     // geometry
-    this.DH = this.args.deltaH;
-    this.DV = this.args.deltaV;
     this.ww = Math.max(1, this.W - (this.LR + this.RR + this.RL));
     this.hh = Math.max(1, this.H - (this.TR + this.BR + this.BL));
-    this.w = Math.max(1, this.ww - 2 * this.DH);
-    this.h = Math.max(1, this.hh - 2 * this.DV);
+    this.w = Math.max(1, this.ww - 2 * this.args.dH);
+    this.h = Math.max(1, this.hh - 2 * this.args.dV);
 
     // coordinates
     this.x0 = this.LR;
     this.y0 = this.TR;
-    this.p0 = this.x0 + this.DH;
-    this.q0 = this.y0 + this.DV;
+    this.p0 = this.x0 + this.args.dH;
+    this.q0 = this.y0 + this.args.dV;
     this.xf = this.x0 + this.ww;
     this.yf = this.y0 + this.hh;
     this.pf = this.p0 + this.w;
@@ -396,13 +332,13 @@ export class Metrics {
 
     // expand limits along larger dimension
     if (this.w > this.h) {
-      if (this.args.invertXscale) {
+      if (this.args.x.invert) {
         this.limits.xmax = this.xReal(this.x0);
       } else {
         this.limits.xmax = this.xReal(this.xf);
       }
     } else {
-      if (this.args.invertYscale) {
+      if (this.args.y.invert) {
         this.limits.ymax = this.yReal(this.yf);
       } else {
         this.limits.ymax = this.yReal(this.y0);

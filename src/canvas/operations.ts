@@ -1,3 +1,5 @@
+import { drawRect, setStroke } from './drawing';
+
 export const setShadow = (dc: CanvasRenderingContext2D, scale: number = 10) => {
   dc.strokeStyle = 'rgba(255,255,255,0.95)'; // foreground
   dc.fillStyle = dc.strokeStyle; // foreground
@@ -22,4 +24,19 @@ export const textWidthPx = (
   const w = dc.measureText(txt).width;
   dc.font = prevFont;
   return Math.ceil(w);
+};
+
+export const drawFilledRectWithEdge = (
+  dc: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  w: number,
+  h: number,
+  fillColor: string = '#9ec6e7',
+  edgeColor: string = '#000000',
+) => {
+  dc.fillStyle = fillColor;
+  drawRect(dc, x, y, w, h, true);
+  setStroke(dc, edgeColor, 1, 1, '-');
+  drawRect(dc, x, y, w, h, false);
 };
