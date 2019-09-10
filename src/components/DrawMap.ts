@@ -67,7 +67,7 @@ export class DrawMap {
 
     // metrics and plotter
     this.metrics = new Metrics(dc, args, curves, this.markers, this.legend);
-    this.plotter = new Plotter(dc, args, curves, this.markers, this.legend, this.metrics);
+    this.plotter = new Plotter(dc, args, curves, this.markers, this.metrics, this.legend);
 
     // TODO: remove next line
     this.metrics.resize(this.canvas.width, this.canvas.height);
