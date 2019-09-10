@@ -1,6 +1,8 @@
-import { ICurves, IPlotArgs, ICoords } from '../types';
+import { ICurves, IPlotArgs, ICoords, IListener } from '../types';
 import { numFmt } from '../helpers';
-import { getMousePos, IListener } from '../dom';
+import { getMousePos, getContext2d } from '../dom';
+import { Markers } from './Markers';
+import { Legend } from './Legend';
 import { Metrics } from './Metrics';
 import { Plotter } from './Plotter';
 import { StatusBar } from './StatusBar';
@@ -17,6 +19,8 @@ export class DrawMap {
 
   // metrics and plotter
   args: IPlotArgs | null = null;
+  markers: Markers | null = null;
+  legend: Legend | null = null;
   metrics: Metrics | null = null;
   plotter: Plotter | null = null;
 
@@ -40,7 +44,7 @@ export class DrawMap {
   rescaleListeners: IListener[] = [];
 
   init(
-    cvCanvas: string,
+    canvasDivId: string,
     stStatus: string,
     btnZoomIn: string,
     btnZoomOut: string,
@@ -49,29 +53,23 @@ export class DrawMap {
     args: IPlotArgs,
     curves: ICurves,
   ) {
-    // check
-    if (!args) {
-      throw new Error(`DrawMap: args = ${args} is invalid`);
-    }
-    if (!curves) {
-      throw new Error(`DrawMap: curves = ${curves} is invalid`);
-    }
-
-    // canvas
-    const eleCanvas = document.getElementById(cvCanvas) as HTMLCanvasElement;
-    if (!eleCanvas) {
-      throw new Error('cannot find canvas element');
-    }
-    this.canvas = eleCanvas;
+    // canvas and DC
+    const { canvas, dc } = getContext2d(canvasDivId);
+    this.canvas = canvas;
 
     // status bar
     this.statusBar = new StatusBar(stStatus);
 
-    // metrics and plotter
+    // args, markers and legend
     this.args = args;
-    const dc = this.canvas.getContext('2d') as CanvasRenderingContext2D;
-    this.metrics = new Metrics(dc, args, curves);
-    this.plotter = new Plotter(dc, args, curves, this.metrics);
+    this.markers = new Markers(dc, args);
+    this.legend = new Legend(dc, args, curves, this.markers);
+
+    // metrics and plotter
+    this.metrics = new Metrics(dc, args, curves, this.markers, this.legend);
+    this.plotter = new Plotter(dc, args, curves, this.markers, this.legend, this.metrics);
+
+    // TODO: remove next line
     this.metrics.resize(this.canvas.width, this.canvas.height);
 
     // buttons

@@ -3,18 +3,31 @@ import { drawRect, setStroke, drawLine, drawText, drawTextVertUp, textWidthPx } 
 import { pointRectInsideL } from '../geometry';
 import { numFmt } from '../helpers';
 import { cteSqrtEps, cteEps } from './constants';
+import { Markers } from './Markers';
+import { Legend } from './Legend';
 import { Metrics } from './Metrics';
 
 export class Plotter {
   dc: CanvasRenderingContext2D;
   args: IPlotArgs;
   curves: ICurves;
+  markers: Markers;
+  legend: Legend;
   metrics: Metrics;
 
-  constructor(dc: CanvasRenderingContext2D, args: IPlotArgs, curves: ICurves, metrics: Metrics) {
+  constructor(
+    dc: CanvasRenderingContext2D,
+    args: IPlotArgs,
+    curves: ICurves,
+    markers: Markers,
+    legend: Legend,
+    metrics: Metrics,
+  ) {
     this.dc = dc;
     this.args = args;
     this.curves = curves;
+    this.markers = markers;
+    this.legend = legend;
     this.metrics = metrics;
   }
 
@@ -146,11 +159,11 @@ export class Plotter {
             if (i >= idx) {
               const x = this.metrics.xScr(c[u][i]);
               let y = this.metrics.yScr(c[v][i]);
-              this.metrics.markers.draw(x, y, curve.style, mm);
+              this.markers.draw(x, y, curve.style, mm);
               if (i === 0 && curve.tagFirstPoint) {
                 const lbl = curve.label;
                 const clr = this.args.colorMarkerLabel;
-                y -= this.metrics.markers.getSize(curve.style, mm) / 2;
+                y -= this.markers.getSize(curve.style, mm) / 2;
                 drawText(this.dc, lbl, x, y, 'center', 'bottom', fontMarkerLabel, clr);
               }
               idx += curve.style.markerEvery;
@@ -316,13 +329,15 @@ export class Plotter {
 
   drawLegendAtBottomRuler() {
     // check
-    if (this.metrics.BR < 1 || !this.args.legendOn || !this.args.legAtBottom) {
+    if (this.metrics.BR < 1 || !this.args.legendOn || !this.args.legendAtBottom) {
       return;
     }
 
     // font strings
     const fontLabels = `${this.args.fsizeLabels}px ${this.args.fnameLabels}`;
     const fontLegend = `${this.args.fsizeLegend}px ${this.args.fnameLegend}`;
+
+    /*
 
     // compute legend data, where the legend "icon" dimensions are:
     //
@@ -348,9 +363,9 @@ export class Plotter {
     this.curves.list.forEach(curve => {
       // icon={line,marker} and label
       if (curve.style.markerType) {
-        const sz = this.metrics.markers.getSize(curve.style, mm, this.args.legMarkerSize);
+        const sz = this.markers.getSize(curve.style, mm, this.args.legMarkerSizeRefProp);
         if (xl + hll + sz < this.metrics.xf) {
-          this.metrics.markers.draw(xl + hll, yl, curve.style, mm, this.args.legMarkerSize);
+          this.markers.draw(xl + hll, yl, curve.style, mm, this.args.legMarkerSizeRefProp);
         }
       }
       if (curve.style.lineStyle) {
@@ -389,16 +404,20 @@ export class Plotter {
         col++;
       }
     });
+
+    */
   }
 
   drawLegendAtRightRuler() {
     // check
-    if (this.metrics.RR < 1 || !this.args.legendOn || this.args.legAtBottom) {
+    if (this.metrics.RR < 1 || !this.args.legendOn || this.args.legendAtBottom) {
       return;
     }
 
     // font strings
     const fontLegend = `${this.args.fsizeLegend}px ${this.args.fnameLegend}`;
+
+    /*
 
     // compute legend data, where the legend "icon" dimensions are:
     //
@@ -418,7 +437,7 @@ export class Plotter {
     this.curves.list.forEach(curve => {
       // icon={line,marker} and label
       if (curve.style.markerType !== 'none') {
-        this.metrics.markers.draw(xl + hll, yl, curve.style, mm, this.args.legMarkerSize);
+        this.markers.draw(xl + hll, yl, curve.style, mm, this.args.legMarkerSizeRefProp);
       }
       if (curve.style.lineStyle) {
         setStroke(
@@ -438,5 +457,7 @@ export class Plotter {
       // update row position
       yl += hei + this.args.legGap;
     });
+
+    */
   }
 }

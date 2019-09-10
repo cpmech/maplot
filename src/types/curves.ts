@@ -23,13 +23,13 @@ export interface ICurveStyle {
 }
 
 export interface ICurve {
+  style: ICurveStyle; // line and marker arguments
   label: string; // curve name or connection pair such as 'San Francisco -> Los Angeles'
-  kind: string; // e.g. connection, city, fortress, base, mine, ...
   x: number[]; // x-coordinates
   y: number[]; // y-coordinates
-  z: number[]; // z-coordinates
-  style: ICurveStyle; // line and marker arguments
-  tagFirstPoint: boolean; // tag first point with label
+  z?: number[]; // z-coordinates
+  kind?: string; // e.g. connection, city, fortress, base, mine, ...
+  tagFirstPoint?: boolean; // tag first point with label
 }
 
 export interface ICurves {

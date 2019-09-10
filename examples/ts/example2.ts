@@ -8,6 +8,7 @@ import {
   Resizer,
   getColor,
   getContext2d,
+  Markers,
 } from '../../src';
 
 const { canvas, dc } = getContext2d('myCanvas');
@@ -18,7 +19,6 @@ const args: IPlotArgs = {
   xIs: 'x',
   yIs: 'y',
   legendOn: true,
-  legAtBottom: false,
   markerImgPaths: ['images/blue-hrect.png', 'images/road-sign1.png'],
 };
 
@@ -142,8 +142,10 @@ const curves: ICurves = {
   ],
 };
 
-const metrics = new Metrics(dc, args, curves);
-const plotter = new Plotter(dc, args, curves, metrics);
+const markers = new Markers(dc, args);
+const legend = new Legend(dc, args, curves, markers);
+const metrics = new Metrics(dc, args, curves, markers);
+const plotter = new Plotter(dc, args, curves, metrics, markers);
 const resizer = new Resizer();
 
 function resizeCanvas() {

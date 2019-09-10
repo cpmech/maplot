@@ -6,3 +6,4 @@ export * from './geometry';
 export * from './helpers';
 export * from './io';
 export * from './types';
+export * from './StaticGraph';

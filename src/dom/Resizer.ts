@@ -1,44 +1,47 @@
-export type IResizeFunction = (width: number, height: number) => void;
-
-export interface IListener {
-  kind: string; // e.g. mousemove, click
-  obj: EventListenerObject; // listener *object*
-}
-
-export const zeroResizeFunction: IResizeFunction = (width: number, height: number) => {
-  /*do nothing*/
-};
-
-export const zeroListener: IListener = {
-  kind: '',
-  obj: {
-    handleEvent: (event: Event): void => {
-      /* do nothing */
-    },
-  },
-};
+import { IResizeFunction, IListener } from '../types';
 
 export class Resizer {
-  callbackFcn: IResizeFunction = zeroResizeFunction;
-  listener: IListener = zeroListener;
+  callbackFcn: IResizeFunction;
+  widthMultiplier: number;
+  heightMultiplier: number;
+  listener?: IListener;
 
-  init(callbackFcn: IResizeFunction) {
-    this.callbackFcn = callbackFcn;
+  constructor(
+    callbackFunction: IResizeFunction,
+    widthMultiplier: number = 1,
+    heightMultiplier: number = 1,
+  ) {
+    this.callbackFcn = callbackFunction;
+    this.widthMultiplier = widthMultiplier;
+    this.heightMultiplier = heightMultiplier;
+  }
+
+  start() {
     this.listener = {
       kind: 'resize',
       obj: { handleEvent: this.handleResize.bind(this) },
     };
     window.addEventListener(this.listener.kind, this.listener.obj);
-    this.callbackFcn(window.innerWidth, window.innerHeight);
+    this.callbackFcn({
+      windowWidth: window.innerWidth * this.widthMultiplier,
+      windowHeight: window.innerHeight * this.heightMultiplier,
+      clientWidth: document.documentElement.clientWidth * this.widthMultiplier,
+      clientHeight: document.documentElement.clientHeight * this.heightMultiplier,
+    });
   }
 
-  finish() {
-    window.removeEventListener(this.listener.kind, this.listener.obj, false);
+  stop() {
+    if (this.listener) {
+      window.removeEventListener(this.listener.kind, this.listener.obj, false);
+    }
   }
 
   handleResize(event: Event) {
-    if (this.callbackFcn) {
-      this.callbackFcn(window.innerWidth, window.innerHeight);
-    }
+    this.callbackFcn({
+      windowWidth: window.innerWidth * this.widthMultiplier,
+      windowHeight: window.innerHeight * this.heightMultiplier,
+      clientWidth: document.documentElement.clientWidth * this.widthMultiplier,
+      clientHeight: document.documentElement.clientHeight * this.heightMultiplier,
+    });
   }
 }

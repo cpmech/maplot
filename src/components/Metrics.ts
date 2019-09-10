@@ -4,6 +4,7 @@ import { textWidthPx } from '../canvas';
 import { cteEps } from './constants';
 import { Limits, getLimitsAroundCurves, checkLimitsForConsistency } from './Limits';
 import { Markers } from './Markers';
+import { Legend } from './Legend';
 import { Ticks } from './Ticks';
 
 //                |←——————————————————— W ————————————————————→|
@@ -45,6 +46,7 @@ export class Metrics {
   args: IPlotArgs;
   curves: ICurves;
   markers: Markers;
+  legend: Legend;
 
   // limits and ticks
   limits: Limits;
@@ -96,11 +98,18 @@ export class Metrics {
   pf: number = 0; // x-max of plotting area
   qf: number = 0; // y-max of plotting area
 
-  constructor(dc: CanvasRenderingContext2D, args: IPlotArgs, curves: ICurves) {
+  constructor(
+    dc: CanvasRenderingContext2D,
+    args: IPlotArgs,
+    curves: ICurves,
+    markers: Markers,
+    legend: Legend,
+  ) {
     this.dc = dc;
     this.args = args;
     this.curves = curves;
-    this.markers = new Markers(dc, args);
+    this.markers = markers;
+    this.legend = legend;
     this.limits = new Limits(args, curves);
     this.ticks = new Ticks(args, this.limits);
   }
@@ -286,19 +295,21 @@ export class Metrics {
       this.legH = (this.args.padLines + this.legTxtH) * this.args.legNrow;
     }
     */
+    /*
     if (this.args.legendOn) {
       const mrl = this.markerRefLength;
       let legLineLen = this.args.legLineLen;
       if (this.args.legAtBottom) {
-        /* TODO */
       } else {
         this.curves.list.forEach(curve => {
           const s = this.markers.getSize(curve.style, mrl);
-          if (curve.style.lineStyle === '') legLineLen = Math.max(legLineLen, s);
+          // if (curve.style.lineStyle === '')
+          legLineLen = Math.max(legLineLen, s);
         });
         console.log(legLineLen);
       }
     }
+    */
 
     // height of x-scale (ticks + label)
     this.xScaleH = this.args.xTicksLength + this.xTickH + this.xLblH + this.args.padXlabel * 2;

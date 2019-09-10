@@ -1,5 +1,6 @@
+import { IPlotArgs, ICurves, ICurveStyle } from '../types';
+import { setStroke, drawLine } from '../canvas';
 import { Markers } from './Markers';
-import { IPlotArgs, ICurves } from '../types';
 
 export class Legend {
   // input
@@ -17,14 +18,24 @@ export class Legend {
 
   render() {}
 
-  private iconTextAtRight() {
+  private iconTextAtRight(u0: number, v0: number, style: ICurveStyle) {
+    const lineLen = 20;
+    const gapLeft = 25;
+    const gapMiddle = 5;
+    const gapRight = 50;
+    //
     //            |← lineLen →|← gapMiddle →|← labelLen →|
     //   gapLeft →[   line    |             |    txt     ]← gapRight
     //
-    //    example:     ——x—— x = y
+    //  example:         ——o—— x = y²
     //
-    //   [gap][line|txt][gap][line|txt] ...  ←  yl
-    //        ↑              ↑
-    //        x              x
+
+    const u = u0 + gapLeft;
+    const v = v0;
+    const du = lineLen;
+    if (style.lineStyle !== 'none') {
+      setStroke(this.dc, style.lineColor, style.lineAlpha, style.lineWidth, style.lineStyle);
+      drawLine(this.dc, u, v, u + du, v);
+    }
   }
 }

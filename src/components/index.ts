@@ -1,5 +1,6 @@
 export * from './CursorStatus';
 export * from './DrawMap';
+export * from './Legend';
 export * from './Limits';
 export * from './Markers';
 export * from './Metrics';

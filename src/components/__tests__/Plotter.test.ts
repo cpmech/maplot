@@ -1,4 +1,6 @@
 import { IPlotArgs, ICurves, defaultPlotArgs, defaultCurveStyle } from '../../types';
+import { Markers } from '../Markers';
+import { Legend } from '../Legend';
 import { Metrics } from '../Metrics';
 import { Plotter } from '../Plotter';
 
@@ -32,15 +34,18 @@ const curves: ICurves = {
 };
 
 describe('Plotter', () => {
+  const markers = new Markers(dc, args);
+  const legend = new Legend(dc, args, curves, markers);
+
   it('constructor works', () => {
-    const metrics = new Metrics(dc, args, curves);
-    const plt = new Plotter(dc, args, curves, metrics);
+    const metrics = new Metrics(dc, args, curves, markers, legend);
+    const plt = new Plotter(dc, args, curves, markers, legend, metrics);
     expect(plt.curves.list.length).toBe(1);
   });
 
   it('default render works', () => {
-    const metrics = new Metrics(dc, args, curves);
-    const plt = new Plotter(dc, args, curves, metrics);
+    const metrics = new Metrics(dc, args, curves, markers, legend);
+    const plt = new Plotter(dc, args, curves, markers, legend, metrics);
     plt.render();
     expect(dc).toMatchSnapshot();
   });

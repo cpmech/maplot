@@ -27,12 +27,12 @@ export interface IPlotArgs {
 
   // legend
   legendOn: boolean; // legend is on
-  legAtBottom: boolean; // legend at bottom
-  legLineLen: number; // length of legend line indicator
-  legGap: number; // legend: gap between icons
-  legTxtGap: number; // legend: gap between line and text
-  legNrow: number; // legend: number of rows
-  legMarkerSizeRefProp: number; // legend: marker size
+  legendAtBottom: boolean; // legend at bottom
+  // legLineLen: number; // length of legend line indicator
+  // legGap: number; // legend: gap between icons
+  // legTxtGap: number; // legend: gap between line and text
+  // legNrow: number; // legend: number of rows
+  // legMarkerSizeRefProp: number; // legend: marker size
 
   // constants
   padTitle: number; // padding for title drawing
@@ -145,12 +145,12 @@ export const defaultPlotArgs: IPlotArgs = {
 
   // legend
   legendOn: false,
-  legAtBottom: false,
-  legLineLen: 30,
-  legGap: 20,
-  legTxtGap: 4,
-  legNrow: 1,
-  legMarkerSizeRefProp: 0,
+  legendAtBottom: false,
+  // legLineLen: 30,
+  // legGap: 20,
+  // legTxtGap: 4,
+  // legNrow: 1,
+  // legMarkerSizeRefProp: 0,
 
   // constants
   padTitle: 20,
