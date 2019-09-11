@@ -13,7 +13,7 @@ const colorScheme = 'medium2';
 
 const args: IPlotArgs = {
   ...defaultPlotArgs,
-  markerSizeAuto: false,
+  markerSizeAuto: true,
   x: {
     ...defaultAxisArgs,
     label: 'x ►',

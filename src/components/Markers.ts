@@ -23,20 +23,19 @@ export class Markers {
   }
 
   getSize(style: ICurveStyle, referenceLength: number, fixedSize?: number): number {
-    if (fixedSize && fixedSize > 0) {
-      return fixedSize;
-    }
-
+    // 'none'
     if (style.markerType === 'none') {
       return 0;
     }
 
+    // multiplier and size
     let mm = 1.0;
-    if (this.args.markerSizeAuto) {
+    let ms = fixedSize || style.markerSize;
+    if (fixedSize === undefined && this.args.markerSizeAuto) {
       mm = this.args.markerSizeRefProp * referenceLength;
     }
 
-    let ms = style.markerSize;
+    // size if 'img'
     if (ms === 0) {
       if (style.markerType === 'img') {
         const img = this.img(style);
@@ -46,6 +45,7 @@ export class Markers {
       }
     }
 
+    // additional multiplier
     let c = 1.0;
 
     // 'img'
@@ -65,14 +65,15 @@ export class Markers {
 
     // '+'
     if (style.markerType === '+') {
-      c = 0.8;
+      c = 1.2;
     }
 
     // 'x'
     if (style.markerType === 'x') {
-      c = 0.6;
+      c = 1.0;
     }
 
+    // results
     const size = c * mm * ms;
     return Math.max(this.args.markerSizeMin, Math.min(size, this.args.markerSizeMax));
   }
@@ -83,11 +84,13 @@ export class Markers {
       return;
     }
 
+    // size
+    const s = this.getSize(style, referenceLength, fixedSize);
+
     // 'img'
     if (style.markerType === 'img') {
       const img = this.img(style);
       const f = img.height / img.width;
-      const s = this.getSize(style, referenceLength, fixedSize);
       const r = s / 2;
       if (img.width > img.height) {
         this.dc.drawImage(img, x - r, y - r * f, s, s * f);
@@ -99,7 +102,6 @@ export class Markers {
 
     // 'o'
     if (style.markerType === 'o') {
-      const s = this.getSize(style, referenceLength, fixedSize);
       const r = s / 2;
       this.activateStyle(style);
       if (style.markerIsVoid) {
@@ -122,7 +124,6 @@ export class Markers {
 
     // 's'
     if (style.markerType === 's') {
-      const s = this.getSize(style, referenceLength, fixedSize);
       const h = s / 2;
       this.activateStyle(style);
       if (style.markerIsVoid) {
@@ -145,19 +146,19 @@ export class Markers {
 
     // '+'
     if (style.markerType === '+') {
-      const s = this.getSize(style, referenceLength, fixedSize);
+      const h = s / 2;
       this.activateStyle(style);
-      drawLine(this.dc, x - s, y, x + s, y);
-      drawLine(this.dc, x, y - s, x, y + s);
+      drawLine(this.dc, x - h, y, x + h, y);
+      drawLine(this.dc, x, y - h, x, y + h);
       return;
     }
 
     // 'x'
     if (style.markerType === 'x') {
-      const s = this.getSize(style, referenceLength, fixedSize);
+      const h = s / 2;
       this.activateStyle(style);
-      drawLine(this.dc, x - s, y - s, x + s, y + s);
-      drawLine(this.dc, x - s, y + s, x + s, y - s);
+      drawLine(this.dc, x - h, y - h, x + h, y + h);
+      drawLine(this.dc, x - h, y + h, x + h, y - h);
       return;
     }
 

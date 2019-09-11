@@ -47,6 +47,7 @@ export interface ILegendArgs {
   drawIconFrame: boolean; // draw frame around icons
 
   // constants
+  markerSize: number; // marker size
   gapH: number; // gap between border and line or label (horizontal)
   gapV: number; // gap between icon border and marker or text (vertical)
   gapEnd: number; // gap between marker and line end
@@ -180,6 +181,7 @@ export const defaultLegendArgs: ILegendArgs = {
   drawIconFrame: true,
 
   // constants
+  markerSize: 12,
   gapH: 8,
   gapV: 8,
   gapEnd: 12,
