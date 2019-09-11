@@ -128,7 +128,8 @@ export class Legend {
     // constants
     const l = this.args.l;
     const style = curve.style;
-    const markerSize = this.markers.getSize(style, 0, l.markerSize);
+    const fixedSize = l.useOriginalMarkerSize ? style.markerSize : l.markerSize;
+    const markerSize = this.markers.getSize(style, 0, fixedSize);
     const lineWidth = style.lineStyle !== 'none' ? style.lineWidth : 0;
     const lineLen = Math.max(l.lineLen, markerSize);
     const symbolH = Math.max(lineWidth, markerSize);
@@ -165,7 +166,8 @@ export class Legend {
     // constants
     const l = this.args.l;
     const style = curve.style;
-    const markerSize = this.markers.getSize(style, 0, l.markerSize);
+    const fixedSize = l.useOriginalMarkerSize ? style.markerSize : l.markerSize;
+    const markerSize = this.markers.getSize(style, 0, fixedSize);
     let lineLen = Math.max(l.lineLen, markerSize);
 
     // variables
@@ -195,7 +197,7 @@ export class Legend {
 
     // draw marker
     if (style.markerType !== 'none') {
-      this.markers.draw(x + lineLen / 2, y, style, 0, l.markerSize);
+      this.markers.draw(x + lineLen / 2, y, style, 0, fixedSize);
     }
 
     // draw text

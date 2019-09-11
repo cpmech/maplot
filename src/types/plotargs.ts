@@ -45,6 +45,7 @@ export interface ILegendArgs {
   labelColor: string; // color of labels
   labelAtRight: boolean; // draw label @ right of marker/line
   drawIconFrame: boolean; // draw frame around icons
+  useOriginalMarkerSize: boolean; // use original markersize or l.markerSize
 
   // constants
   markerSize: number; // marker size
@@ -179,6 +180,7 @@ export const defaultLegendArgs: ILegendArgs = {
   labelColor: '#414141',
   labelAtRight: false,
   drawIconFrame: true,
+  useOriginalMarkerSize: true,
 
   // constants
   markerSize: 12,
