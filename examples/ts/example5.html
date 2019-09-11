@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Map And Plot Utilities -- Example 3</title>
+
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
+  </head>
+
+  <style>
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      max-height: 100%;
+      float: left;
+      width: 100%;
+    }
+
+    .root {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .controlContainer {
+      position: absolute;
+      right: 0;
+      top: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 60px;
+      width: 100%;
+    }
+
+    .statusBarContainer {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      background-color: #cecece;
+      display: flex;
+      align-items: center;
+      height: 32px;
+      width: 100%;
+    }
+
+    .statusBar {
+      padding-left: 24px;
+    }
+
+    .controlButton {
+      background-color: #ececec;
+      border: none;
+      color: #414141;
+      padding: 10px 24px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 6px;
+      -webkit-transition-duration: 0.4s;
+      transition-duration: 0.4s;
+    }
+
+    .controlButton:hover {
+      background-color: #414141;
+      color: white;
+    }
+  </style>
+
+  <body>
+    <div class="root">
+      <canvas id="myCanvas"></canvas>
+      <div class="controlContainer">
+        <div id="control">
+          <button id="btnZoomIn" class="controlButton">Zoom In</button>
+          <button id="btnZoomOut" class="controlButton">Zoom Out</button>
+          <button id="btnFocus" class="controlButton">Focus</button>
+          <button id="btnRescale" class="controlButton">Rescale</button>
+        </div>
+      </div>
+      <div class="statusBarContainer">
+        <div id="statusBar" class="statusBar">STATUS BAR</div>
+      </div>
+    </div>
+
+    <script src="/dist/examples/ts/example5.js"></script>
+    <script src="/reload/reload.js"></script>
+  </body>
+</html>

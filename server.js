@@ -24,16 +24,10 @@ app.get('/1', function(req, res) {
   res.sendFile(path.join(__dirname, 'examples', 'js', 'example1.html'));
 });
 
-app.get('/2', function(req, res) {
-  res.sendFile(path.join(__dirname, 'examples', 'ts', 'example2.html'));
-});
-
-app.get('/3', function(req, res) {
-  res.sendFile(path.join(__dirname, 'examples', 'ts', 'example3.html'));
-});
-
-app.get('/4', function(req, res) {
-  res.sendFile(path.join(__dirname, 'examples', 'ts', 'example4.html'));
+[2, 3, 4, 5].forEach(e => {
+  app.get(`/${e}`, function(req, res) {
+    res.sendFile(path.join(__dirname, 'examples', 'ts', `example${e}.html`));
+  });
 });
 
 const server = http.createServer(app);

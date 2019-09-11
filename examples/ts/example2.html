@@ -35,41 +35,11 @@
       overflow: hidden;
       white-space: nowrap;
     }
-
-    .content {
-      background: #ececec;
-    }
-
-    .canvasGrid {
-      display: flex;
-      flex-flow: column;
-    }
-
-    .canvasRow {
-      display: flex;
-      flex-flow: row;
-    }
-
-    #xyCanvas {
-      background: red;
-    }
-    #yzCanvas {
-      background: green;
-    }
-    #zxCanvas {
-      background: blue;
-    }
   </style>
 
   <body>
     <div class="root">
-      <div class="content">
-        <div class="canvasGrid">
-          <div class="canvasRow">
-            <canvas id="myCanvas"></canvas>
-          </div>
-        </div>
-      </div>
+      <canvas id="myCanvas"></canvas>
     </div>
 
     <script src="/dist/examples/ts/example2.js"></script>

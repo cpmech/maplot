@@ -37,6 +37,7 @@ export default [
     ],
   },
 
+  /*
   // examples written in JS
   ...exampleFilesJS.map(f => ({
     input: `examples/js/${f}`,
@@ -68,13 +69,13 @@ export default [
       commonjs(),
     ],
   })),
+  */
 
-  /*
   {
-    input: `examples/ts/example2.ts`,
+    input: `examples/ts/example5.ts`,
     output: {
-      name: 'example2.ts',
-      file: `dist/examples/ts/example2.js`,
+      name: 'example5.ts',
+      file: `dist/examples/ts/example5.js`,
       format: 'iife',
     },
     plugins: [
@@ -90,5 +91,4 @@ export default [
       commonjs(),
     ],
   },
-  */
 ];
