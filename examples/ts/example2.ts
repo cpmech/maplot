@@ -9,8 +9,11 @@ import {
   StaticGraph,
 } from '../../src';
 
+const colorScheme = 'medium2';
+
 const args: IPlotArgs = {
   ...defaultPlotArgs,
+  markerSizeAuto: false,
   x: {
     ...defaultAxisArgs,
     label: 'x ►',
@@ -41,11 +44,11 @@ const curves: ICurves = {
       y: NX,
       style: {
         ...defaultCurveStyle,
-        lineColor: getColor(0, 'medium2'),
+        lineColor: getColor(0, colorScheme),
         markerType: 'img',
         markerImg: 'images/road-sign1.png',
         markerSize: 64,
-        markerColor: '#ffd600',
+        markerColor: '#000000',
         markerLineColor: '#000000',
         markerEvery: 5,
       },
@@ -56,11 +59,11 @@ const curves: ICurves = {
       y: MX,
       style: {
         ...defaultCurveStyle,
-        lineColor: getColor(4, 'medium2'),
+        lineColor: getColor(1, colorScheme),
         markerType: 'img',
         markerImg: 'images/blue-hrect.png',
         markerSize: 128,
-        markerColor: '#ffd600',
+        markerColor: '#000000',
         markerLineColor: '#000000',
         markerEvery: 5,
       },
@@ -71,9 +74,9 @@ const curves: ICurves = {
       y: X,
       style: {
         ...defaultCurveStyle,
-        lineColor: '#0f0',
-        markerColor: '#f00',
-        markerLineColor: '#000',
+        lineColor: getColor(2, colorScheme),
+        markerColor: '#000000',
+        markerLineColor: '#000000',
       },
     },
     {
@@ -83,7 +86,7 @@ const curves: ICurves = {
       y: XX,
       style: {
         ...defaultCurveStyle,
-        lineColor: getColor(0),
+        lineColor: getColor(3, colorScheme),
         markerType: 'none',
       },
     },
@@ -94,9 +97,9 @@ const curves: ICurves = {
       z: [],
       style: {
         ...defaultCurveStyle,
-        lineColor: getColor(1),
+        lineColor: getColor(4, colorScheme),
         markerType: '+',
-        markerColor: '#555555',
+        markerColor: '#000000',
       },
     },
     {
@@ -105,9 +108,9 @@ const curves: ICurves = {
       y: ZP5,
       style: {
         ...defaultCurveStyle,
-        lineColor: getColor(5),
+        lineColor: getColor(5, colorScheme),
         markerType: 'x',
-        markerColor: '#f18a1f',
+        markerColor: '#000000',
       },
     },
     {
@@ -116,9 +119,9 @@ const curves: ICurves = {
       y: OMX2,
       style: {
         ...defaultCurveStyle,
-        lineColor: getColor(2),
+        lineColor: getColor(6, colorScheme),
         markerType: 's',
-        markerColor: '#ffd600',
+        markerColor: '#000000',
         markerLineColor: '#000000',
       },
     },

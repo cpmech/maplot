@@ -35,13 +35,22 @@ export interface IAxisArgs {
 }
 
 export interface ILegendArgs {
+  // options
   on: boolean; // legend is on
   atBottom: boolean; // legend at bottom
   nCol: number; // number of columns
   lineLen: number; // length of line
-  gapLineLabel: number; // gap between line and label
-  gapIconsHoriz: number; // gap between icons (horizonal)
-  gapIconsVert: number; // gap between icons (vertical)
+  labelColor: string; // color of labels
+  labelAtRight: boolean; // draw label @ right of marker/line
+
+  // constants
+  gapH: number; // gap between border and line or label (horizontal)
+  gapV: number; // gap between icon border and marker or text (vertical)
+  gapEnd: number; // gap between marker and line end
+  gapLabelH: number; // gap between line and label (horizontal)
+  gapLabelV: number; // gap between line and label (vertical)
+  gapIconsH: number; // gap between icons (horizonal)
+  gapIconsV: number; // gap between icons (vertical)
 }
 
 export interface IPlotArgs {
@@ -152,13 +161,22 @@ export const defaultAxisArgs: IAxisArgs = {
 };
 
 export const defaultLegendArgs: ILegendArgs = {
+  // options
   on: true,
   atBottom: false,
   nCol: 3,
   lineLen: 100,
-  gapLineLabel: 10,
-  gapIconsHoriz: 5,
-  gapIconsVert: 5,
+  labelColor: '#414141',
+  labelAtRight: false,
+
+  // constants
+  gapH: 6,
+  gapV: 30,
+  gapEnd: 20,
+  gapLabelH: 10,
+  gapLabelV: 40,
+  gapIconsH: 15,
+  gapIconsV: 5,
 };
 
 export const defaultPlotArgs: IPlotArgs = {

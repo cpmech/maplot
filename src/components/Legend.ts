@@ -1,6 +1,58 @@
-import { IPlotArgs, ICurve, ICurves, ICurveStyle } from '../types';
-import { setStroke, drawLine, drawRect, drawFilledRectWithEdge, textWidthPx } from '../canvas';
+import { IPlotArgs, ICurve, ICurves } from '../types';
+import { setStroke, drawLine, drawText, drawFilledRectWithEdge, textWidthPx } from '../canvas';
 import { Markers } from './Markers';
+
+// example of icons:
+//
+//           ————o————
+//             x = y²
+//   or:
+//           ————o———— x = y²
+//
+//
+// A: the icon is:
+//
+//   ———————————
+//        ↑
+//       gapV
+//        |             |← lineLen →|
+//        |       gapH →[   line    ]← gapH
+//     gapLabelV
+//        |                 label
+//        |
+//       gapV
+//        ↓
+//   ———————————
+//
+//
+// B: the icon with the label @ right is:
+//
+//   ———————————
+//        ↑
+//       gapV
+//        |          |← lineLen →|← gapLabelH →|← labelLen →|
+//        |    gapH →[   line    |             |    txt     ]← gapH
+//        |
+//       gapV
+//        ↓
+//   ———————————
+//
+//
+// the line is:
+//
+//     ———————————################——————————
+//     |← gapEnd →|← markerSize →|← gapEnd →|
+//
+//
+// so, the total length is:
+//
+//     lineLen = 2*gapEnd + max{l.lineLen,markerSize}
+//
+// A:  w = 2*gapH + max{lineLen,labelLen}
+//     h = 2*gapV + gapLabelV + max{markerSize,lineWidth} + fontSize
+//
+// B:  w = 2*gapH + lineLen + gapLabelH + labelLen
+//     h = 2*gapV + max{markerSize,lineWidth,fontSize}
 
 export class Legend {
   // input
@@ -59,8 +111,8 @@ export class Legend {
       let x = 0;
       for (let col = 0; col < nCol; col++) {
         const curve = curves[idxCurve];
-        this.iconTextAtRight(x, y, colWidths[col], rowHeights[row], curve.style);
-        x += colWidths[col] + l.gapIconsHoriz;
+        this.drawIcon(x, y, colWidths[col], rowHeights[row], curve);
+        x += colWidths[col] + l.gapIconsH;
         idxCurve++;
         if (idxCurve === curves.length) {
           break;
@@ -69,47 +121,95 @@ export class Legend {
       if (idxCurve === curves.length) {
         break;
       }
-      y += rowHeights[row] + l.gapIconsVert;
+      y += rowHeights[row] + l.gapIconsV;
     }
 
     this.dc.restore();
   }
 
   private iconDims(curve: ICurve): { w: number; h: number } {
-    // const lineLen = Math.max(this.args.l.lineLen, style.markerSize)
-    const font = `${this.args.fsizeLegend}px ${this.args.fnameLegend}`;
+    // constants
     const l = this.args.l;
-    const labelLen = textWidthPx(this.dc, curve.label, font);
-    return {
-      w: l.lineLen + l.gapLineLabel + labelLen,
-      h: Math.max(curve.style.markerSize, this.args.fsizeLegend),
-    };
+    const style = curve.style;
+    const refProp = this.args.markerSizeRefProp;
+    const markerSize = this.markers.getSize(style, refProp);
+    const lineWidth = style.lineStyle !== 'none' ? style.lineWidth : 0;
+    const lineLen = Math.max(l.lineLen, markerSize);
+    const symbolH = Math.max(lineWidth, markerSize);
+
+    // variables
+    let w = 2 * l.gapH + lineLen;
+    let h = 2 * l.gapV + symbolH;
+
+    // with markers
+    if (style.markerType !== 'none') {
+      w += 2 * l.gapEnd;
+    }
+
+    // with labels
+    if (curve.label) {
+      const font = `${this.args.fsizeLegend}px ${this.args.fnameLegend}`;
+      const labelLen = textWidthPx(this.dc, curve.label, font);
+      if (l.labelAtRight) {
+        w += l.gapLabelH + labelLen;
+        if (this.args.fsizeLegend > symbolH) {
+          h = 2 * l.gapV + this.args.fsizeLegend;
+        }
+      } else {
+        w = Math.max(w, 2 * l.gapH + labelLen);
+        h += l.gapLabelV + this.args.fsizeLegend;
+      }
+    }
+
+    // results
+    return { w, h };
   }
 
-  private iconTextAtRight(x: number, y: number, w: number, h: number, style: ICurveStyle) {
-    drawFilledRectWithEdge(this.dc, x, y, w, h, '#cecece', '#ececec');
+  private drawIcon(x0: number, y0: number, w: number, h: number, curve: ICurve) {
+    drawFilledRectWithEdge(this.dc, x0, y0, w, h, '#ffffff', '#000000');
 
-    // const lineLen = 20;
-    // const gapLeft = 25;
-    // const gapMiddle = 5;
-    // const gapRight = 50;
-    //
-    //            |← lineLen →|← gapMiddle →|← labelLen →|
-    //   gapLeft →[   line    |             |    txt     ]← gapRight
-    //
-    //  example:         ——o—— x = y²
-    //
-
-    // const u = u0 + gapLeft;
-    // const v = v0;
-    // const du = lineLen;
-
+    // constants
     const l = this.args.l;
+    const style = curve.style;
+    const refProp = this.args.markerSizeRefProp;
+    const markerSize = this.markers.getSize(style, refProp);
+    let lineLen = Math.max(l.lineLen, markerSize);
+
+    // variables
+    const y = y0 + h / 2;
+    let x = x0 + l.gapH;
+
+    // line length
+    if (style.markerType !== 'none') {
+      lineLen += 2 * l.gapEnd;
+    }
+
+    // center line/marker if no label or vertical label
+    if (curve.label === '' || !l.labelAtRight) {
+      x = x0 + (w - lineLen) / 2;
+    }
+
+    // draw line
     if (style.lineStyle !== 'none') {
-      const dx = l.lineLen;
-      const dy = h / 2;
       setStroke(this.dc, style.lineColor, style.lineAlpha, style.lineWidth, style.lineStyle);
-      drawLine(this.dc, x, y + dy, x + dx, y + dy);
+      drawLine(this.dc, x, y, x + lineLen, y);
+    }
+
+    // draw marker
+    if (style.markerType !== 'none') {
+      this.markers.draw(x + lineLen / 2, y, style, this.args.markerSizeRefProp);
+    }
+
+    // draw text
+    if (curve.label) {
+      const font = `${this.args.fsizeLegend}px ${this.args.fnameLegend}`;
+      if (l.labelAtRight) {
+        const xl = x + lineLen + l.gapLabelH;
+        drawText(this.dc, curve.label, xl, y, 'left', 'center', font);
+      } else {
+        const xl = x0 + w / 2;
+        drawText(this.dc, curve.label, xl, y + l.gapLabelV, 'center', 'top', font);
+      }
     }
   }
 }
