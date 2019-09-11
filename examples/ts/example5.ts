@@ -8,6 +8,8 @@ import {
   defaultAxisArgs,
   getColor,
   DynamicGraph,
+  numFmt,
+  ICoordsToString,
 } from '../../src';
 
 const colorScheme = 'medium2';
@@ -133,6 +135,16 @@ const padding: IPadding = {
   bottom: 32,
 };
 
+const statusString: ICoordsToString = (x: number, y: number): string => {
+  const txr = numFmt(x, 3);
+  const tyr = numFmt(y, 3);
+  const txn = numFmt(x / 8, 3);
+  const tyn = numFmt(y / 8, 3);
+  const tworld = `WORLD ${args.x.coordName} = ${txr} : ${args.y.coordName} = ${tyr}`;
+  const tnether = `NETHER ${args.x.coordName} = ${txn} : ${args.y.coordName} = ${tyn}`;
+  return `${tworld} | ${tnether}`;
+};
+
 const graph = new DynamicGraph(
   args,
   curves,
@@ -145,6 +157,7 @@ const graph = new DynamicGraph(
   1,
   1,
   padding,
+  statusString,
 );
 
 (async () => {

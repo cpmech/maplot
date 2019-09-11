@@ -1,3 +1,4 @@
+export * from './auxiliary';
 export * from './canvas';
 export * from './curves';
 export * from './geometry';

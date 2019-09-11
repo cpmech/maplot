@@ -1,4 +1,4 @@
-import { ICurves, IPlotArgs, ICoords, IListener, IPadding } from './types';
+import { ICurves, IPlotArgs, ICoords, IListener, IPadding, ICoordsToString } from './types';
 import { StatusBar } from './components';
 import { StaticGraph } from './StaticGraph';
 import { getContext2d, getElement, getMousePos } from './dom';
@@ -44,6 +44,7 @@ export class DynamicGraph {
     canvasWidthMultiplier: number = 1,
     canvasHeightMultiplier: number = 1,
     canvasPadding?: IPadding,
+    coordsString?: ICoordsToString,
   ) {
     // essential
     const { canvas } = getContext2d(canvasDivId);
@@ -65,7 +66,7 @@ export class DynamicGraph {
     this.btnRescale = getElement(btnRescaleDivId);
 
     // status bar
-    this.statusBar = new StatusBar(statusDivId);
+    this.statusBar = new StatusBar(statusDivId, coordsString);
 
     // add canvas listeners
     this.canvasListeners = [
@@ -199,15 +200,7 @@ export class DynamicGraph {
   handleMouseMove(event: MouseEvent) {
     const { x, y } = getMousePos(this.canvas, event);
     if (this.statusBar.show) {
-      const xreal = this.graph.metrics.xReal(x);
-      const yreal = this.graph.metrics.yReal(y);
-      const txr = numFmt(xreal, this.args.x.t.decDigits);
-      const tyr = numFmt(yreal, this.args.x.t.decDigits);
-      const txn = numFmt(xreal / 8, this.args.x.t.decDigits);
-      const tyn = numFmt(yreal / 8, this.args.x.t.decDigits);
-      const tworld = `WORLD ${this.args.x.coordName} = ${txr} : ${this.args.y.coordName} = ${tyr}`;
-      const tnether = `NETHER ${this.args.x.coordName} = ${txn} : ${this.args.y.coordName} = ${tyn}`;
-      this.statusBar.set(`${tworld} | ${tnether}`);
+      this.statusBar.set('', this.graph.metrics.xReal(x), this.graph.metrics.yReal(y), x, y);
     }
     if (this.dragging) {
       event.preventDefault();
