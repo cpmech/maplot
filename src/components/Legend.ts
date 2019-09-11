@@ -92,7 +92,7 @@ export class Legend {
     if (nRow < 1 || nCol < 1) {
       return { width: 0, height: 0 };
     }
-    const { rowH, colW } = this.rowAndColSizes(nRow, nCol);
+    const { rowH, colW, rowL } = this.rowAndColSizes(nRow, nCol);
     const l = this.args.l;
     const curves = this.curves.list;
 
@@ -107,7 +107,7 @@ export class Legend {
       let x = 0;
       for (let col = 0; col < nCol; col++) {
         const curve = curves[idxCurve];
-        this.drawIcon(x, y, colW[col], rowH[row], curve);
+        this.drawIcon(x, y, colW[col], rowH[row], rowL[row], curve);
         x += colW[col] + l.gapIconsH;
         idxCurve++;
         if (idxCurve === curves.length) {
@@ -124,7 +124,7 @@ export class Legend {
     this.dc.restore();
   }
 
-  private iconDims(curve: ICurve): { w: number; h: number } {
+  private iconDims(curve: ICurve): { w: number; h: number; hl: number } {
     // constants
     const l = this.args.l;
     const style = curve.style;
@@ -159,20 +159,26 @@ export class Legend {
     }
 
     // results
-    return { w, h };
+    return {
+      w,
+      h,
+      hl: l.gapV + symbolH / 2, // height from top border to line/marker
+    };
   }
 
-  private drawIcon(x0: number, y0: number, w: number, h: number, curve: ICurve) {
+  private drawIcon(x0: number, y0: number, w: number, h: number, hl: number, curve: ICurve) {
     // constants
     const l = this.args.l;
     const style = curve.style;
     const refProp = this.args.markerSizeRefProp;
     const markerSize = this.markers.getSize(style, refProp);
+    const lineWidth = style.lineStyle !== 'none' ? style.lineWidth : 0;
     let lineLen = Math.max(l.lineLen, markerSize);
+    const symbolH = Math.max(lineWidth, markerSize);
 
     // variables
-    const y = y0 + h / 2;
     let x = x0 + l.gapH;
+    const y = y0 + hl;
 
     // line length
     if (style.markerType !== 'none') {
@@ -208,7 +214,8 @@ export class Legend {
         drawText(this.dc, curve.label, xl, y, 'left', 'center', font);
       } else {
         const xl = x0 + w / 2;
-        drawText(this.dc, curve.label, xl, y + l.gapLabelV, 'center', 'top', font);
+        const yl = y + symbolH / 2 + l.gapLabelV;
+        drawText(this.dc, curve.label, xl, yl, 'center', 'top', font);
       }
     }
   }
@@ -221,17 +228,22 @@ export class Legend {
     return { nRow, nCol };
   }
 
-  private rowAndColSizes(nRow: number, nCol: number): { rowH: number[]; colW: number[] } {
+  private rowAndColSizes(
+    nRow: number,
+    nCol: number,
+  ): { rowH: number[]; colW: number[]; rowL: number[] } {
     const curves = this.curves.list;
     const colW = Array(nCol).fill(0);
     const rowH = Array(nRow).fill(0);
+    const rowL = Array(nRow).fill(0); // height of line/marker
     for (let iCurve = 0; iCurve < curves.length; iCurve++) {
       const row = Math.floor(iCurve / nCol);
       const col = iCurve % nCol;
-      const { w, h } = this.iconDims(curves[iCurve]);
+      const { w, h, hl } = this.iconDims(curves[iCurve]);
       colW[col] = Math.max(colW[col], w);
       rowH[row] = Math.max(rowH[row], h);
+      rowL[row] = Math.max(rowL[row], hl);
     }
-    return { rowH, colW };
+    return { rowH, colW, rowL };
   }
 }
