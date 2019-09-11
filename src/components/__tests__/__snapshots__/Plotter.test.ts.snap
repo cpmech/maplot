@@ -5,6 +5,7 @@ CanvasRenderingContext2D {
   "_canvas": <canvas />,
   "_directionStack": Array [
     "inherit",
+    "inherit",
   ],
   "_drawCalls": Array [
     Object {
@@ -26,6 +27,33 @@ CanvasRenderingContext2D {
     },
   ],
   "_events": Array [
+    Object {
+      "props": Object {},
+      "transform": Array [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "save",
+    },
+    Object {
+      "props": Object {
+        "x": 0,
+        "y": 0,
+      },
+      "transform": Array [
+        1,
+        0,
+        0,
+        1,
+        0,
+        0,
+      ],
+      "type": "translate",
+    },
     Object {
       "props": Object {
         "value": 1,
@@ -73,42 +101,55 @@ CanvasRenderingContext2D {
     },
   ],
   "_fillStyleStack": Array [
+    "#000",
     "#fff",
   ],
   "_filterStack": Array [
     "none",
+    "none",
   ],
   "_fontStack": Array [
+    "10px sans-serif",
     "10px sans-serif",
   ],
   "_globalAlphaStack": Array [
     1,
+    1,
   ],
   "_globalCompositeOperationStack": Array [
+    "source-over",
     "source-over",
   ],
   "_imageSmoothingEnabledStack": Array [
     true,
+    true,
   ],
   "_imageSmoothingQualityStack": Array [
+    "low",
     "low",
   ],
   "_lineCapStack": Array [
     "butt",
+    "butt",
   ],
   "_lineDashOffsetStack": Array [
+    0,
     0,
   ],
   "_lineDashStack": Array [
     Array [],
+    Array [],
   ],
   "_lineJoinStack": Array [
+    "miter",
     "miter",
   ],
   "_lineWidthStack": Array [
     1,
+    undefined,
   ],
   "_miterLimitStack": Array [
+    10,
     10,
   ],
   "_path": Array [
@@ -127,27 +168,42 @@ CanvasRenderingContext2D {
   ],
   "_shadowBlurStack": Array [
     0,
+    0,
   ],
   "_shadowColorStack": Array [
+    "rgba(0, 0, 0, 0)",
     "rgba(0, 0, 0, 0)",
   ],
   "_shadowOffsetXStack": Array [
     0,
+    0,
   ],
   "_shadowOffsetYStack": Array [
     0,
+    0,
   ],
-  "_stackIndex": 0,
+  "_stackIndex": 1,
   "_strokeStyleStack": Array [
+    "#000",
     "#000",
   ],
   "_textAlignStack": Array [
     "start",
+    "start",
   ],
   "_textBaselineStack": Array [
     "alphabetic",
+    "alphabetic",
   ],
   "_transformStack": Array [
+    Array [
+      1,
+      0,
+      0,
+      1,
+      0,
+      0,
+    ],
     Array [
       1,
       0,
@@ -206,7 +262,17 @@ CanvasRenderingContext2D {
   "resetTransform": [MockFunction],
   "restore": [MockFunction],
   "rotate": [MockFunction],
-  "save": [MockFunction],
+  "save": [MockFunction] {
+    "calls": Array [
+      Array [],
+    ],
+    "results": Array [
+      Object {
+        "type": "return",
+        "value": undefined,
+      },
+    ],
+  },
   "scale": [MockFunction],
   "scrollPathIntoView": [MockFunction],
   "setLineDash": [MockFunction],
@@ -215,6 +281,19 @@ CanvasRenderingContext2D {
   "strokeRect": [MockFunction],
   "strokeText": [MockFunction],
   "transform": [MockFunction],
-  "translate": [MockFunction],
+  "translate": [MockFunction] {
+    "calls": Array [
+      Array [
+        0,
+        0,
+      ],
+    ],
+    "results": Array [
+      Object {
+        "type": "return",
+        "value": undefined,
+      },
+    ],
+  },
 }
 `;

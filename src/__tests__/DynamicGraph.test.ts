@@ -47,14 +47,14 @@ const curves: ICurves = {
 describe('DynamicGraph', () => {
   it('works', () => {
     const g = new DynamicGraph(
+      args,
+      curves,
       'myCanvas',
       'myStatus',
       'zoomIn',
       'zoomOut',
       'focus',
       'rescale',
-      args,
-      curves,
     );
   });
 });

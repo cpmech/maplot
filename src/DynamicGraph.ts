@@ -1,34 +1,17 @@
-import { ICurves, IPlotArgs, ICoords, IListener } from './types';
+import { ICurves, IPlotArgs, ICoords, IListener, IPadding } from './types';
+import { StatusBar } from './components';
+import { StaticGraph } from './StaticGraph';
+import { getContext2d, getElement, getMousePos } from './dom';
 import { numFmt } from './helpers';
-import { getMousePos, getContext2d } from './dom';
-import { Markers } from './components/Markers';
-import { Legend } from './components/Legend';
-import { Metrics } from './components/Metrics';
-import { Plotter } from './components/Plotter';
-import { StatusBar } from './components/StatusBar';
+
+const ZOOM_FACTOR = 1.1; // must be greater than 1.0
 
 export class DynamicGraph {
-  // constants
-  zoomFactor: number = 1.1; // must be greater than 1.0
-
-  // canvas
-  canvas: HTMLCanvasElement;
-
-  // status bar
-  statusBar: StatusBar;
-
-  // metrics and plotter
+  // essential
   args: IPlotArgs;
-  markers: Markers;
-  legend: Legend;
-  metrics: Metrics;
-  plotter: Plotter;
-
-  // cursor coords
-  coordsAtMouseDown: ICoords = { x: 0, y: 0 };
-  translate: ICoords = { x: 0, y: 0 };
-  offset: ICoords = { x: 0, y: 0 };
-  dragging: boolean = false;
+  canvas: HTMLCanvasElement;
+  graph: StaticGraph;
+  statusBar: StatusBar;
 
   // buttons
   btnZoomIn: HTMLElement;
@@ -43,37 +26,46 @@ export class DynamicGraph {
   focusListeners: IListener[] = [];
   rescaleListeners: IListener[] = [];
 
+  // cursor coords
+  coordsAtMouseDown: ICoords = { x: 0, y: 0 };
+  translate: ICoords = { x: 0, y: 0 };
+  offset: ICoords = { x: 0, y: 0 };
+  dragging: boolean = false;
+
   constructor(
+    args: IPlotArgs,
+    curves: ICurves,
     canvasDivId: string,
     statusDivId: string,
     btnZoomInDivId: string,
     btnZoomOutDivId: string,
     btnFocusDivId: string,
     btnRescaleDivId: string,
-    args: IPlotArgs,
-    curves: ICurves,
+    canvasWidthMultiplier: number = 1,
+    canvasHeightMultiplier: number = 1,
+    canvasPadding?: IPadding,
   ) {
-    // canvas and DC
-    const { canvas, dc } = getContext2d(canvasDivId);
+    // essential
+    const { canvas } = getContext2d(canvasDivId);
+    this.args = args;
     this.canvas = canvas;
+    this.graph = new StaticGraph(
+      args,
+      curves,
+      canvasDivId,
+      canvasWidthMultiplier,
+      canvasHeightMultiplier,
+      canvasPadding,
+    );
+
+    // buttons
+    this.btnZoomIn = getElement(btnZoomInDivId);
+    this.btnZoomOut = getElement(btnZoomOutDivId);
+    this.btnFocus = getElement(btnFocusDivId);
+    this.btnRescale = getElement(btnRescaleDivId);
 
     // status bar
     this.statusBar = new StatusBar(statusDivId);
-
-    // args, markers and legend
-    this.args = args;
-    this.markers = new Markers(dc, args);
-    this.legend = new Legend(dc, args, curves, this.markers);
-
-    // metrics and plotter
-    this.metrics = new Metrics(dc, args, curves, this.markers, this.legend);
-    this.plotter = new Plotter(dc, args, curves, this.markers, this.metrics, this.legend);
-
-    // buttons
-    this.btnZoomIn = document.getElementById(btnZoomInDivId) as HTMLElement;
-    this.btnZoomOut = document.getElementById(btnZoomOutDivId) as HTMLElement;
-    this.btnFocus = document.getElementById(btnFocusDivId) as HTMLElement;
-    this.btnRescale = document.getElementById(btnRescaleDivId) as HTMLElement;
 
     // add canvas listeners
     this.canvasListeners = [
@@ -153,10 +145,7 @@ export class DynamicGraph {
   }
 
   async init() {
-    await this.markers.init();
-    // this.resizer.start();
-    // render
-    this.render();
+    await this.graph.init();
   }
 
   finish() {
@@ -184,93 +173,74 @@ export class DynamicGraph {
   }
 
   render() {
-    if (this.canvas && this.plotter) {
-      const dc = this.canvas.getContext('2d') as CanvasRenderingContext2D;
-      dc.save();
-      this.plotter.render();
-      dc.restore();
-    }
+    this.graph.plotter.render();
   }
 
   scaleFromCurves() {
-    if (this.canvas && this.metrics) {
-      this.metrics.setScaleBasedOnCurves(this.canvas.width, this.canvas.height);
-      this.render();
-    }
+    this.graph.metrics.setScaleBasedOnCurves(this.canvas.width, this.canvas.height);
+    this.render();
   }
 
   scaleFromStartValues() {
-    if (this.canvas && this.metrics) {
-      this.metrics.setScaleFromStartValues(this.canvas.width, this.canvas.height);
-      this.render();
-    }
+    this.graph.metrics.setScaleFromStartValues(this.canvas.width, this.canvas.height);
+    this.render();
   }
 
   translateTo(x: number, y: number) {
-    if (this.metrics) {
-      this.metrics.translateTo(x, y);
-      this.render();
-    }
+    this.graph.metrics.translateTo(x, y);
+    this.render();
   }
 
   resize() {
-    if (this.canvas && this.metrics) {
-      this.metrics.resize(this.canvas.width, this.canvas.height);
-      this.render();
-    }
+    this.graph.metrics.resize(this.canvas.width, this.canvas.height);
+    this.render();
   }
 
   handleMouseMove(event: MouseEvent) {
-    if (this.canvas) {
-      const { x, y } = getMousePos(this.canvas, event);
-      if (this.statusBar && this.statusBar.show && this.args && this.metrics) {
-        const xreal = this.metrics.xReal(x);
-        const yreal = this.metrics.yReal(y);
-        const txr = numFmt(xreal, this.args.x.t.decDigits);
-        const tyr = numFmt(yreal, this.args.x.t.decDigits);
-        const txn = numFmt(xreal / 8, this.args.x.t.decDigits);
-        const tyn = numFmt(yreal / 8, this.args.x.t.decDigits);
-        const tworld = `WORLD ${this.args.x.coordName} = ${txr} : ${this.args.y.coordName} = ${tyr}`;
-        const tnether = `NETHER ${this.args.x.coordName} = ${txn} : ${this.args.y.coordName} = ${tyn}`;
-        this.statusBar.set(`${tworld} | ${tnether}`);
-      }
-      if (this.dragging) {
-        event.preventDefault();
-        event.stopPropagation();
-        this.translate.x = x - this.offset.x;
-        this.translate.y = y - this.offset.y;
-        if (this.metrics) {
-          const dxreal = this.metrics.dxReal(this.translate.x);
-          const dyreal = this.metrics.dyReal(this.translate.y);
-          this.metrics.translateLimitsRelativeToCopy(dxreal, dyreal);
-          this.render();
-        }
+    const { x, y } = getMousePos(this.canvas, event);
+    if (this.statusBar.show) {
+      const xreal = this.graph.metrics.xReal(x);
+      const yreal = this.graph.metrics.yReal(y);
+      const txr = numFmt(xreal, this.args.x.t.decDigits);
+      const tyr = numFmt(yreal, this.args.x.t.decDigits);
+      const txn = numFmt(xreal / 8, this.args.x.t.decDigits);
+      const tyn = numFmt(yreal / 8, this.args.x.t.decDigits);
+      const tworld = `WORLD ${this.args.x.coordName} = ${txr} : ${this.args.y.coordName} = ${tyr}`;
+      const tnether = `NETHER ${this.args.x.coordName} = ${txn} : ${this.args.y.coordName} = ${tyn}`;
+      this.statusBar.set(`${tworld} | ${tnether}`);
+    }
+    if (this.dragging) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.translate.x = x - this.offset.x;
+      this.translate.y = y - this.offset.y;
+      if (this.graph.metrics) {
+        const dxreal = this.graph.metrics.dxReal(this.translate.x);
+        const dyreal = this.graph.metrics.dyReal(this.translate.y);
+        this.graph.metrics.translateLimitsRelativeToCopy(dxreal, dyreal);
+        this.render();
       }
     }
   }
 
   handleMouseDown(event: MouseEvent) {
-    if (this.canvas) {
-      event.preventDefault();
-      const { x, y } = getMousePos(this.canvas, event);
-      this.coordsAtMouseDown.x = x;
-      this.coordsAtMouseDown.y = y;
-      this.offset.x = x - this.translate.x;
-      this.offset.y = y - this.translate.y;
-      this.dragging = true;
-      this.canvas.style.cursor = 'all-scroll';
-    }
+    event.preventDefault();
+    const { x, y } = getMousePos(this.canvas, event);
+    this.coordsAtMouseDown.x = x;
+    this.coordsAtMouseDown.y = y;
+    this.offset.x = x - this.translate.x;
+    this.offset.y = y - this.translate.y;
+    this.dragging = true;
+    this.canvas.style.cursor = 'all-scroll';
   }
 
   handleMouseUp(event: MouseEvent) {
-    if (this.canvas && this.metrics) {
-      event.preventDefault();
-      this.metrics.copyLimits();
-      this.translate.x = 0;
-      this.translate.y = 0;
-      this.dragging = false;
-      this.canvas.style.cursor = 'crosshair';
-    }
+    event.preventDefault();
+    this.graph.metrics.copyLimits();
+    this.translate.x = 0;
+    this.translate.y = 0;
+    this.dragging = false;
+    this.canvas.style.cursor = 'crosshair';
   }
 
   handleMouseOver(event: MouseEvent) {
@@ -288,9 +258,9 @@ export class DynamicGraph {
   }
 
   handleMouseWheel(event: WheelEvent) {
-    if (event.shiftKey && this.metrics) {
-      const factor = event.deltaY > 0 ? this.zoomFactor : 1.0 / this.zoomFactor;
-      if (this.metrics.zoom(factor)) {
+    if (event.shiftKey) {
+      const factor = event.deltaY > 0 ? ZOOM_FACTOR : 1.0 / ZOOM_FACTOR;
+      if (this.graph.metrics.zoom(factor)) {
         event.preventDefault();
         this.render();
       }
@@ -298,30 +268,22 @@ export class DynamicGraph {
   }
 
   handleZoomIn() {
-    if (this.metrics) {
-      if (this.metrics.zoom(1.0 / this.zoomFactor)) {
-        this.render();
-      }
+    if (this.graph.metrics.zoom(1.0 / ZOOM_FACTOR)) {
+      this.render();
     }
   }
 
   handleZoomOut() {
-    if (this.metrics) {
-      if (this.metrics.zoom(this.zoomFactor)) {
-        this.render();
-      }
+    if (this.graph.metrics.zoom(ZOOM_FACTOR)) {
+      this.render();
     }
   }
 
   handleFocus() {
-    if (this.metrics) {
-      this.scaleFromCurves();
-    }
+    this.scaleFromCurves();
   }
 
   handleRescale() {
-    if (this.metrics) {
-      this.scaleFromStartValues();
-    }
+    this.scaleFromStartValues();
   }
 }

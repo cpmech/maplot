@@ -1,6 +1,6 @@
+import { ICurves, IPlotArgs, IPadding } from './types';
 import { Markers, Legend, Metrics, Plotter } from './components';
 import { Resizer, getContext2d } from './dom';
-import { ICurves, IPlotArgs, IPadding } from './types';
 
 export class StaticGraph {
   markers: Markers;
