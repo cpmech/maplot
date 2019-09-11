@@ -176,13 +176,13 @@ export const defaultLegendArgs: ILegendArgs = {
   drawIconFrame: true,
 
   // constants
-  gapH: 6,
-  gapV: 6,
+  gapH: 8,
+  gapV: 8,
   gapEnd: 12,
   gapLabelH: 8,
   gapLabelV: 8,
-  gapIconsH: 3,
-  gapIconsV: 3,
+  gapIconsH: 5,
+  gapIconsV: 5,
 
   // styling
   frameFillColor: '#ffffff',
