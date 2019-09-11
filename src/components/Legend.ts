@@ -186,7 +186,7 @@ export class Legend {
 
     // draw frame
     if (l.drawIconFrame) {
-      drawFilledRectWithEdge(this.dc, x0, y0, w, h, '#ffffff', '#000000');
+      drawFilledRectWithEdge(this.dc, x0, y0, w, h, l.frameFillColor, l.frameEdgeColor);
     }
 
     // draw line

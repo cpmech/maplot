@@ -38,6 +38,8 @@ export interface ILegendArgs {
   // options
   on: boolean; // legend is on
   atBottom: boolean; // legend at bottom
+  centerH: boolean; // center within plot area (horizontally)
+  centerV: boolean; // center within plot area (vertically)
   nCol: number; // number of columns
   lineLen: number; // length of line
   labelColor: string; // color of labels
@@ -169,7 +171,9 @@ export const defaultLegendArgs: ILegendArgs = {
   // options
   on: true,
   atBottom: false,
-  nCol: 3,
+  centerH: true,
+  centerV: true,
+  nCol: 0,
   lineLen: 50,
   labelColor: '#414141',
   labelAtRight: false,
@@ -181,12 +185,12 @@ export const defaultLegendArgs: ILegendArgs = {
   gapEnd: 12,
   gapLabelH: 8,
   gapLabelV: 8,
-  gapIconsH: 5,
-  gapIconsV: 5,
+  gapIconsH: 8,
+  gapIconsV: 8,
 
   // styling
   frameFillColor: '#ffffff',
-  frameEdgeColor: '#000000',
+  frameEdgeColor: '#ffffff',
 };
 
 export const defaultPlotArgs: IPlotArgs = {

@@ -44,7 +44,7 @@ import { Limits, getLimitsAroundCurves, checkLimitsForConsistency } from './Limi
 //    LS : Left Scale          gLR: gap for LR         xReal,yReal: x-y (real data) coords
 //    BR : Bottom Ruler        RR : Right Ruler        x    ,y    : plot area coordinates
 //    BL : Bottom Legend       RL : Right Legend
-//    BS : Bottom Scale        RS : Right Scale
+//    BS : Bottom Scale        RS : Right Scale        LL: other dimension of legend
 //    gRR: gap for RS          gBR: gap for BS
 //    dH : Delta Horizontal    dV : Delta Vertical
 
@@ -75,6 +75,7 @@ export class Metrics {
   TR: number = 0; // Top Ruler thickness (screen coordinates)
   BL: number = 0; // Bottom Legend thickness
   RL: number = 0; // Right Legend thickness
+  LL: number = 0; // Other dimension of legend
   BS: number = 0; // Bottom Scale
   LS: number = 0; // Left Scale
   RS: number = 0; // Right Scale
@@ -265,6 +266,7 @@ export class Metrics {
     // legend dimensions
     this.BL = 0;
     this.RL = 0;
+    this.LL = 0;
     let gBRtotal = this.args.gBR;
     let gRRtotal = this.args.gRR;
     if (this.legend && this.args.l.on) {
@@ -272,9 +274,11 @@ export class Metrics {
       if (this.args.l.atBottom) {
         gBRtotal += this.args.gBR;
         this.BL = legDims.height;
+        this.LL = legDims.width;
       } else {
         gRRtotal += this.args.gRR;
         this.RL = legDims.width;
+        this.LL = legDims.height;
       }
     }
 

@@ -52,14 +52,8 @@ export class Plotter {
     this.drawRightRuler();
     this.drawBottomRuler();
     this.drawLeftRuler();
+    this.drawLegend();
     this.drawFrame();
-    if (this.legend && this.args.l.on) {
-      if (this.args.l.atBottom) {
-        this.legend.render(this.args.gLR, this.metrics.H - this.args.gBR - this.metrics.BL);
-      } else {
-        this.legend.render(this.metrics.xf + this.args.gRR, this.metrics.TR);
-      }
-    }
   }
 
   clearBackground() {
@@ -241,6 +235,32 @@ export class Plotter {
 
     // draw scale
     this.metrics.yscale.draw();
+  }
+
+  drawLegend() {
+    if (!this.legend || !this.args.l.on) {
+      return;
+    }
+    let x0 = this.metrics.xf + this.args.gRR;
+    let y0 = this.metrics.TR;
+    if (this.args.l.atBottom) {
+      x0 = this.args.gLR;
+      y0 = this.metrics.H - this.args.gBR - this.metrics.BL;
+      if (this.args.l.centerH) {
+        const d = (this.metrics.W - this.metrics.LL) / 2;
+        if (d >= 0) {
+          x0 = d;
+        }
+      }
+    } else {
+      if (this.args.l.centerV) {
+        const d = (this.metrics.H - this.metrics.LL) / 2;
+        if (d >= 0) {
+          y0 = d;
+        }
+      }
+    }
+    this.legend.render(x0, y0);
   }
 
   drawFrame() {
