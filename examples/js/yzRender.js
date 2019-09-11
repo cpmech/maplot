@@ -2,6 +2,7 @@ import {
   defaultPlotArgs,
   defaultAxisArgs,
   defaultCurveStyle,
+  defaultLegendArgs,
   StaticGraph,
 } from '../../dist/esm/index-all-in-one';
 import { x, y, z } from './data1';
@@ -26,6 +27,11 @@ const args = {
     maxFix: +1.1,
     minFixOn: true,
     maxFixOn: true,
+  },
+  l: {
+    ...defaultLegendArgs,
+    on: false,
+    atBottom: false,
   },
   title: 'Y-Z Plot',
   markerImgPaths: ['images/star2.png'],

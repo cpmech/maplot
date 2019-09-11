@@ -2,6 +2,7 @@ import {
   defaultPlotArgs,
   defaultAxisArgs,
   defaultCurveStyle,
+  defaultLegendArgs,
   StaticGraph,
 } from '../../dist/esm/index-all-in-one';
 import { x, y, z } from './data1';
@@ -15,6 +16,11 @@ const args = {
   y: {
     ...defaultAxisArgs,
     coordName: 'y',
+  },
+  l: {
+    ...defaultLegendArgs,
+    on: false,
+    atBottom: false,
   },
   title: 'X-Y Plot',
   markerImgPaths: ['images/circle-cross1.png'],

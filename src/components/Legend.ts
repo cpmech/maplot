@@ -129,7 +129,6 @@ export class Legend {
     const l = this.args.l;
     const style = curve.style;
     const markerSize = this.markers.getSize(style, 0, l.markerSize);
-    console.log('markerSize =', markerSize);
     const lineWidth = style.lineStyle !== 'none' ? style.lineWidth : 0;
     const lineLen = Math.max(l.lineLen, markerSize);
     const symbolH = Math.max(lineWidth, markerSize);
