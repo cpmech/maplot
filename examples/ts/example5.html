@@ -36,6 +36,10 @@
       white-space: nowrap;
     }
 
+    .myCanvas {
+      cursor: crosshair;
+    }
+
     .controlContainer {
       position: absolute;
       right: 0;
@@ -86,7 +90,7 @@
 
   <body>
     <div class="root">
-      <canvas id="myCanvas"></canvas>
+      <canvas id="myCanvas" class="myCanvas"></canvas>
       <div id="control" class="controlContainer">
         <!-- zoom in -->
         <button id="btnZoomIn" class="controlButton">

@@ -31,10 +31,6 @@ export class Plotter {
   }
 
   render() {
-    // offset
-    this.dc.save();
-    this.dc.translate(this.metrics.offsetX, this.metrics.offsetY);
-
     // clear background
     this.clearBackground();
 
@@ -58,9 +54,6 @@ export class Plotter {
     this.drawLeftRuler();
     this.drawLegend();
     this.drawFrame();
-
-    // restore DC
-    this.dc.restore();
   }
 
   clearBackground() {
@@ -189,13 +182,15 @@ export class Plotter {
     this.dc.globalAlpha = 1;
     this.dc.fillStyle = this.args.colorTopRuler;
     const bgWidth = Math.max(1, this.metrics.W - this.metrics.LR);
-    drawRect(this.dc, this.metrics.LR, 0, bgWidth, this.metrics.TR, true);
+    const ox = this.metrics.offsetX;
+    const oy = this.metrics.offsetY;
+    drawRect(this.dc, ox + this.metrics.LR, oy, bgWidth, this.metrics.TR, true);
 
     // draw title
     if (this.args.title) {
       const fontTitle = `${this.args.fsizeTitle}px ${this.args.fnameTitle}`;
-      const x = this.metrics.W / 2;
-      const y = this.metrics.TR / 2;
+      const x = ox + this.metrics.W / 2;
+      const y = oy + this.metrics.TR / 2;
       drawText(this.dc, this.args.title, x, y, 'center', 'center', fontTitle);
     }
   }
@@ -223,7 +218,8 @@ export class Plotter {
     this.dc.globalAlpha = 1;
     this.dc.fillStyle = this.args.colorBottomRuler;
     const bgHeight = Math.max(1, this.metrics.H - this.metrics.hh - this.metrics.TR);
-    drawRect(this.dc, 0, this.metrics.yf, this.metrics.W, bgHeight, true);
+    const ox = this.metrics.offsetX;
+    drawRect(this.dc, ox, this.metrics.yf, this.metrics.W, bgHeight, true);
 
     // draw scale
     this.metrics.xscale.draw();
@@ -238,7 +234,9 @@ export class Plotter {
     // clear background
     this.dc.globalAlpha = 1;
     this.dc.fillStyle = this.args.colorLeftRuler;
-    drawRect(this.dc, 0, 0, this.metrics.LR, this.metrics.hh + this.metrics.TR, true);
+    const ox = this.metrics.offsetX;
+    const oy = this.metrics.offsetY;
+    drawRect(this.dc, ox, oy, this.metrics.LR, this.metrics.hh + this.metrics.TR, true);
 
     // draw scale
     this.metrics.yscale.draw();
@@ -289,7 +287,9 @@ export class Plotter {
         this.args.frameLineWidth,
         this.args.frameLineStyle,
       );
-      drawRect(this.dc, 0, 0, this.metrics.W, this.metrics.H, false);
+      const ox = this.metrics.offsetX;
+      const oy = this.metrics.offsetY;
+      drawRect(this.dc, ox, oy, this.metrics.W, this.metrics.H, false);
     }
   }
 }

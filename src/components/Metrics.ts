@@ -9,7 +9,7 @@ import { Limits, getLimitsAroundCurves, checkLimitsForConsistency } from './Limi
 //                |←———————————————————————— W ————————————————————————————————→|
 //                |←——— LR ———|←——————————— ww ——————————→|←——————— RR ————————→|
 //                            .    |←—————— w ——————→|    .                     .
-//              (0,0)         .                           .                     .
+//        (offsetX,offsetY)   .                           .                     .
 //   ———————————  ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓ ——→ xScr
 //    ↑   ↑       ┃                         gTR                                 ┃
 //    |  TR       ┃                                                             ┃
@@ -57,8 +57,9 @@ export class Metrics {
   legend?: Legend;
 
   // offset whole graph
-  offsetX: number = 0;
-  offsetY: number = 0;
+  padding: IPadding;
+  offsetX: number;
+  offsetY: number;
 
   // scale, limits and ticks
   xscale: Scale;
@@ -108,6 +109,7 @@ export class Metrics {
     curves: ICurves,
     markers: Markers,
     legend?: Legend,
+    padding?: IPadding,
   ) {
     this.dc = dc;
     this.args = args;
@@ -118,28 +120,27 @@ export class Metrics {
     this.yscale = new Scale(dc, args, this, true);
     this.limits = new Limits(args, curves);
     this.ticks = new Ticks(args, this.limits);
+    if (padding) {
+      this.padding = { ...padding };
+    } else {
+      this.padding = { top: 0, left: 0, right: 0, bottom: 0 };
+    }
+    this.offsetX = this.padding.left;
+    this.offsetY = this.padding.top;
   }
 
-  resize(width: number, height: number, padding?: IPadding) {
-    const w = padding ? width - padding.left - padding.right : width;
-    const h = padding ? height - padding.top - padding.bottom : height;
-    this.offsetX = 0;
-    this.offsetY = 0;
-    if (padding) {
-      this.offsetX = padding.left;
-      this.offsetY = padding.top;
-    }
+  resize(width: number, height: number) {
     if (this.curves.list.length > 0) {
-      this.setScaleBasedOnCurves(w, h);
+      this.setScaleBasedOnCurves(width, height);
     } else {
-      this.setScaleFromStartValues(w, h);
+      this.setScaleFromStartValues(width, height);
     }
   }
 
   setScaleBasedOnCurves(width: number, height: number) {
     if (this.curves.list.length > 0) {
-      this.W = width;
-      this.H = height;
+      this.W = width - this.padding.left - this.padding.right;
+      this.H = height - this.padding.top - this.padding.bottom;
       this.curveLimits = this.limits.aroundCurves();
       this.ticks.calculate();
       this.calculateMetrics();
@@ -159,8 +160,8 @@ export class Metrics {
         this.args.y.maxStart,
       )
     ) {
-      this.W = width;
-      this.H = height;
+      this.W = width - this.padding.left - this.padding.right;
+      this.H = height - this.padding.top - this.padding.bottom;
       this.limits.xmin = this.args.x.minStart;
       this.limits.xmax = this.args.x.maxStart;
       this.limits.ymin = this.args.y.minStart;
@@ -307,8 +308,8 @@ export class Metrics {
     this.h = Math.max(1, this.hh - 2 * this.args.dV);
 
     // coordinates
-    this.x0 = this.LR;
-    this.y0 = this.TR;
+    this.x0 = this.offsetX + this.LR;
+    this.y0 = this.offsetY + this.TR;
     this.p0 = this.x0 + this.args.dH;
     this.q0 = this.y0 + this.args.dV;
     this.xf = this.x0 + this.ww;

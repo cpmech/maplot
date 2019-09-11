@@ -7,7 +7,6 @@ import {
   defaultLegendArgs,
   defaultAxisArgs,
   getColor,
-  StaticGraph,
   DynamicGraph,
 } from '../../src';
 
@@ -16,6 +15,7 @@ const colorScheme = 'medium2';
 const args: IPlotArgs = {
   ...defaultPlotArgs,
   markerSizeAuto: false,
+  frameShow: true,
   x: {
     ...defaultAxisArgs,
     label: 'x ►',
@@ -128,12 +128,24 @@ const curves: ICurves = {
 
 const padding: IPadding = {
   top: 40,
-  left: 0,
-  right: 0,
+  left: 100,
+  right: 200,
   bottom: 32,
 };
 
-const graph = new StaticGraph(args, curves, 'myCanvas', 1, 1, padding);
+const graph = new DynamicGraph(
+  args,
+  curves,
+  'myCanvas',
+  'statusBar',
+  'btnZoomIn',
+  'btnZoomOut',
+  'btnFocus',
+  'btnRescale',
+  1,
+  1,
+  padding,
+);
 
 (async () => {
   await graph.init();
