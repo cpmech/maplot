@@ -15,7 +15,7 @@ const colorScheme = 'medium2';
 const args: IPlotArgs = {
   ...defaultPlotArgs,
   markerSizeAuto: false,
-  frameShow: true,
+  frameShow: false,
   x: {
     ...defaultAxisArgs,
     label: 'x ►',
@@ -128,8 +128,8 @@ const curves: ICurves = {
 
 const padding: IPadding = {
   top: 40,
-  left: 100,
-  right: 200,
+  left: 0,
+  right: 0,
   bottom: 32,
 };
 
