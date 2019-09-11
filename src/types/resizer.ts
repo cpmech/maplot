@@ -1,8 +1,6 @@
 export interface IResizeDims {
-  windowWidth: number;
-  windowHeight: number;
-  clientWidth: number;
-  clientHeight: number;
+  width: number;
+  height: number;
 }
 
 export type IResizeFunction = (dims: IResizeDims) => void;

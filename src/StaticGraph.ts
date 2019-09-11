@@ -22,9 +22,9 @@ export class StaticGraph {
     this.metrics = new Metrics(dc, args, curves, this.markers, this.legend);
     this.plotter = new Plotter(dc, args, curves, this.markers, this.metrics, this.legend);
     this.resizer = new Resizer(
-      ({ clientWidth, clientHeight }) => {
-        canvas.width = clientWidth;
-        canvas.height = clientHeight;
+      ({ width, height }) => {
+        canvas.width = width;
+        canvas.height = height;
         this.metrics.resize(canvas.width, canvas.height);
         this.plotter.render();
       },

@@ -22,12 +22,7 @@ export class Resizer {
       obj: { handleEvent: this.handleResize.bind(this) },
     };
     window.addEventListener(this.listener.kind, this.listener.obj);
-    this.callbackFcn({
-      windowWidth: window.innerWidth * this.widthMultiplier,
-      windowHeight: window.innerHeight * this.heightMultiplier,
-      clientWidth: document.documentElement.clientWidth * this.widthMultiplier,
-      clientHeight: document.documentElement.clientHeight * this.heightMultiplier,
-    });
+    this.doResize();
   }
 
   stop() {
@@ -37,11 +32,13 @@ export class Resizer {
   }
 
   handleResize(event: Event) {
+    this.doResize();
+  }
+
+  private doResize() {
     this.callbackFcn({
-      windowWidth: window.innerWidth * this.widthMultiplier,
-      windowHeight: window.innerHeight * this.heightMultiplier,
-      clientWidth: document.documentElement.clientWidth * this.widthMultiplier,
-      clientHeight: document.documentElement.clientHeight * this.heightMultiplier,
+      width: document.documentElement.clientWidth * this.widthMultiplier,
+      height: document.documentElement.clientHeight * this.heightMultiplier,
     });
   }
 }
