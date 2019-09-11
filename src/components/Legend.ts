@@ -69,50 +69,46 @@ export class Legend {
   }
 
   getDims(): { width: number; height: number } {
+    const { nRow, nCol } = this.nRowCol();
+    if (nRow < 1 || nCol < 1) {
+      return { width: 0, height: 0 };
+    }
+    const { rowH, colW } = this.rowAndColSizes(nRow, nCol);
+    const l = this.args.l;
     return {
-      width: 600,
-      height: 600,
+      width: colW.reduce((acc, curr) => acc + curr, 0) + (nCol - 1) * l.gapIconsH,
+      height: rowH.reduce((acc, curr) => acc + curr, 0) + (nRow - 1) * l.gapIconsV,
     };
   }
 
   render(offsetX: number, offsetY: number) {
-    this.dc.save();
-    this.dc.translate(offsetX, offsetY);
-
+    // check
     if (this.curves.list.length < 1) {
       return;
     }
 
-    const { width, height } = this.getDims();
-
-    drawFilledRectWithEdge(this.dc, 0, 0, width, height);
-
-    const curves = this.curves.list;
-    const l = this.args.l;
-    const nCol = l.nCol > 0 ? l.nCol : l.atBottom ? curves.length : 1;
-    const nRow = Math.trunc(curves.length / nCol) + 1;
-
-    console.log('nRow =', nRow, ' nCol =', nCol);
-
-    const colWidths = Array(nCol).fill(0);
-    const rowHeights = Array(nRow).fill(0);
-    for (let iCurve = 0; iCurve < curves.length; iCurve++) {
-      const row = Math.floor(iCurve / nCol);
-      const col = iCurve % nCol;
-      const { w, h } = this.iconDims(curves[iCurve]);
-      colWidths[col] = Math.max(colWidths[col], w);
-      rowHeights[row] = Math.max(rowHeights[row], h);
+    // constants
+    const { nRow, nCol } = this.nRowCol();
+    if (nRow < 1 || nCol < 1) {
+      return { width: 0, height: 0 };
     }
-    console.log('colWidths =', colWidths, ' rowHeights =', rowHeights);
+    const { rowH, colW } = this.rowAndColSizes(nRow, nCol);
+    const l = this.args.l;
+    const curves = this.curves.list;
 
+    // save DC
+    this.dc.save();
+    this.dc.translate(offsetX, offsetY);
+
+    // draw icons
     let y = 0;
     let idxCurve = 0;
     for (let row = 0; row < nRow; row++) {
       let x = 0;
       for (let col = 0; col < nCol; col++) {
         const curve = curves[idxCurve];
-        this.drawIcon(x, y, colWidths[col], rowHeights[row], curve);
-        x += colWidths[col] + l.gapIconsH;
+        this.drawIcon(x, y, colW[col], rowH[row], curve);
+        x += colW[col] + l.gapIconsH;
         idxCurve++;
         if (idxCurve === curves.length) {
           break;
@@ -121,9 +117,10 @@ export class Legend {
       if (idxCurve === curves.length) {
         break;
       }
-      y += rowHeights[row] + l.gapIconsV;
+      y += rowH[row] + l.gapIconsV;
     }
 
+    // restore DC
     this.dc.restore();
   }
 
@@ -166,8 +163,6 @@ export class Legend {
   }
 
   private drawIcon(x0: number, y0: number, w: number, h: number, curve: ICurve) {
-    drawFilledRectWithEdge(this.dc, x0, y0, w, h, '#ffffff', '#000000');
-
     // constants
     const l = this.args.l;
     const style = curve.style;
@@ -187,6 +182,11 @@ export class Legend {
     // center line/marker if no label or vertical label
     if (curve.label === '' || !l.labelAtRight) {
       x = x0 + (w - lineLen) / 2;
+    }
+
+    // draw frame
+    if (l.drawIconFrame) {
+      drawFilledRectWithEdge(this.dc, x0, y0, w, h, '#ffffff', '#000000');
     }
 
     // draw line
@@ -211,5 +211,27 @@ export class Legend {
         drawText(this.dc, curve.label, xl, y + l.gapLabelV, 'center', 'top', font);
       }
     }
+  }
+
+  private nRowCol(): { nRow: number; nCol: number } {
+    const l = this.args.l;
+    const curves = this.curves.list;
+    const nCol = l.nCol > 0 ? l.nCol : l.atBottom ? curves.length : 1;
+    const nRow = Math.trunc(curves.length / nCol) + 1;
+    return { nRow, nCol };
+  }
+
+  private rowAndColSizes(nRow: number, nCol: number): { rowH: number[]; colW: number[] } {
+    const curves = this.curves.list;
+    const colW = Array(nCol).fill(0);
+    const rowH = Array(nRow).fill(0);
+    for (let iCurve = 0; iCurve < curves.length; iCurve++) {
+      const row = Math.floor(iCurve / nCol);
+      const col = iCurve % nCol;
+      const { w, h } = this.iconDims(curves[iCurve]);
+      colW[col] = Math.max(colW[col], w);
+      rowH[row] = Math.max(rowH[row], h);
+    }
+    return { rowH, colW };
   }
 }

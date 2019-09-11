@@ -42,6 +42,7 @@ export interface ILegendArgs {
   lineLen: number; // length of line
   labelColor: string; // color of labels
   labelAtRight: boolean; // draw label @ right of marker/line
+  drawIconFrame: boolean; // draw frame around icons
 
   // constants
   gapH: number; // gap between border and line or label (horizontal)
@@ -51,6 +52,10 @@ export interface ILegendArgs {
   gapLabelV: number; // gap between line and label (vertical)
   gapIconsH: number; // gap between icons (horizonal)
   gapIconsV: number; // gap between icons (vertical)
+
+  // styling
+  frameFillColor: string; // color for frame
+  frameEdgeColor: string; // color for edge of frame
 }
 
 export interface IPlotArgs {
@@ -165,18 +170,23 @@ export const defaultLegendArgs: ILegendArgs = {
   on: true,
   atBottom: false,
   nCol: 3,
-  lineLen: 100,
+  lineLen: 50,
   labelColor: '#414141',
   labelAtRight: false,
+  drawIconFrame: true,
 
   // constants
   gapH: 6,
-  gapV: 30,
-  gapEnd: 20,
-  gapLabelH: 10,
-  gapLabelV: 40,
-  gapIconsH: 15,
-  gapIconsV: 5,
+  gapV: 6,
+  gapEnd: 12,
+  gapLabelH: 8,
+  gapLabelV: 8,
+  gapIconsH: 3,
+  gapIconsV: 3,
+
+  // styling
+  frameFillColor: '#ffffff',
+  frameEdgeColor: '#000000',
 };
 
 export const defaultPlotArgs: IPlotArgs = {
