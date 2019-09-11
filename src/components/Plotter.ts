@@ -247,7 +247,7 @@ export class Plotter {
       return;
     }
     let x0 = this.metrics.xf + this.args.gRR;
-    let y0 = this.metrics.TR;
+    let y0 = this.metrics.offsetY + this.metrics.TR;
     if (this.args.l.atBottom) {
       x0 = this.args.gLR;
       y0 = this.metrics.H - this.args.gBR - this.metrics.BL;
@@ -259,9 +259,9 @@ export class Plotter {
       }
     } else {
       if (this.args.l.centerV) {
-        const d = (this.metrics.H - this.metrics.LL) / 2;
+        const d = (this.metrics.hh - this.metrics.LL) / 2;
         if (d >= 0) {
-          y0 = d;
+          y0 = this.metrics.y0 + d;
         }
       }
     }
