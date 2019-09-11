@@ -1,28 +1,28 @@
-import { ICurves, IPlotArgs, ICoords, IListener } from '../types';
-import { numFmt } from '../helpers';
-import { getMousePos, getContext2d } from '../dom';
-import { Markers } from './Markers';
-import { Legend } from './Legend';
-import { Metrics } from './Metrics';
-import { Plotter } from './Plotter';
-import { StatusBar } from './StatusBar';
+import { ICurves, IPlotArgs, ICoords, IListener } from './types';
+import { numFmt } from './helpers';
+import { getMousePos, getContext2d } from './dom';
+import { Markers } from './components/Markers';
+import { Legend } from './components/Legend';
+import { Metrics } from './components/Metrics';
+import { Plotter } from './components/Plotter';
+import { StatusBar } from './components/StatusBar';
 
-export class DrawMap {
+export class DynamicGraph {
   // constants
   zoomFactor: number = 1.1; // must be greater than 1.0
 
   // canvas
-  canvas: HTMLCanvasElement | null = null;
+  canvas: HTMLCanvasElement;
 
   // status bar
-  statusBar: StatusBar | null = null;
+  statusBar: StatusBar;
 
   // metrics and plotter
-  args: IPlotArgs | null = null;
-  markers: Markers | null = null;
-  legend: Legend | null = null;
-  metrics: Metrics | null = null;
-  plotter: Plotter | null = null;
+  args: IPlotArgs;
+  markers: Markers;
+  legend: Legend;
+  metrics: Metrics;
+  plotter: Plotter;
 
   // cursor coords
   coordsAtMouseDown: ICoords = { x: 0, y: 0 };
@@ -31,10 +31,10 @@ export class DrawMap {
   dragging: boolean = false;
 
   // buttons
-  btnZoomIn: HTMLElement | null = null;
-  btnZoomOut: HTMLElement | null = null;
-  btnFocus: HTMLElement | null = null;
-  btnRescale: HTMLElement | null = null;
+  btnZoomIn: HTMLElement;
+  btnZoomOut: HTMLElement;
+  btnFocus: HTMLElement;
+  btnRescale: HTMLElement;
 
   // listeners
   canvasListeners: IListener[] = [];
@@ -43,13 +43,13 @@ export class DrawMap {
   focusListeners: IListener[] = [];
   rescaleListeners: IListener[] = [];
 
-  init(
+  constructor(
     canvasDivId: string,
-    stStatus: string,
-    btnZoomIn: string,
-    btnZoomOut: string,
-    btnFocus: string,
-    btnRescale: string,
+    statusDivId: string,
+    btnZoomInDivId: string,
+    btnZoomOutDivId: string,
+    btnFocusDivId: string,
+    btnRescaleDivId: string,
     args: IPlotArgs,
     curves: ICurves,
   ) {
@@ -58,7 +58,7 @@ export class DrawMap {
     this.canvas = canvas;
 
     // status bar
-    this.statusBar = new StatusBar(stStatus);
+    this.statusBar = new StatusBar(statusDivId);
 
     // args, markers and legend
     this.args = args;
@@ -69,14 +69,11 @@ export class DrawMap {
     this.metrics = new Metrics(dc, args, curves, this.markers, this.legend);
     this.plotter = new Plotter(dc, args, curves, this.markers, this.metrics, this.legend);
 
-    // TODO: remove next line
-    this.metrics.resize(this.canvas.width, this.canvas.height);
-
     // buttons
-    this.btnZoomIn = document.getElementById(btnZoomIn) as HTMLElement;
-    this.btnZoomOut = document.getElementById(btnZoomOut) as HTMLElement;
-    this.btnFocus = document.getElementById(btnFocus) as HTMLElement;
-    this.btnRescale = document.getElementById(btnRescale) as HTMLElement;
+    this.btnZoomIn = document.getElementById(btnZoomInDivId) as HTMLElement;
+    this.btnZoomOut = document.getElementById(btnZoomOutDivId) as HTMLElement;
+    this.btnFocus = document.getElementById(btnFocusDivId) as HTMLElement;
+    this.btnRescale = document.getElementById(btnRescaleDivId) as HTMLElement;
 
     // add canvas listeners
     this.canvasListeners = [
@@ -153,7 +150,11 @@ export class DrawMap {
     this.rescaleListeners.forEach(
       l => this.btnRescale && this.btnRescale.addEventListener(l.kind, l.obj, false),
     );
+  }
 
+  async init() {
+    await this.markers.init();
+    // this.resizer.start();
     // render
     this.render();
   }

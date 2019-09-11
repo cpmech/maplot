@@ -1,10 +1,15 @@
-import { StaticGraph } from '../StaticGraph';
+import { DynamicGraph } from '../DynamicGraph';
 import { IPlotArgs, defaultPlotArgs, ICurves, defaultCurveStyle } from '../types';
 
 beforeEach(() => {
   document.body.innerHTML = `
     <div>
       <canvas id="myCanvas"></canvas>
+      <div id="myStatus"></div>
+      <button id="zoomIn"></button>
+      <button id="zoomOut"></button>
+      <button id="focus"></button>
+      <button id="rescale"></button>
     </div>`;
 });
 
@@ -39,8 +44,17 @@ const curves: ICurves = {
   ],
 };
 
-describe('StaticGraph', () => {
-  it('works', async () => {
-    const g = new StaticGraph(args, curves, 'myCanvas', 0.25, 0.33);
+describe('DynamicGraph', () => {
+  it('works', () => {
+    const g = new DynamicGraph(
+      'myCanvas',
+      'myStatus',
+      'zoomIn',
+      'zoomOut',
+      'focus',
+      'rescale',
+      args,
+      curves,
+    );
   });
 });
