@@ -1,4 +1,4 @@
-import { IPlotArgs, ICurves, ILimits } from '../types';
+import { IPlotArgs, ICurves, ILimits, IPadding } from '../types';
 import { cteEps } from './constants';
 import { Markers } from './Markers';
 import { Legend } from './Legend';
@@ -55,6 +55,10 @@ export class Metrics {
   curves: ICurves;
   markers: Markers;
   legend?: Legend;
+
+  // offset whole graph
+  offsetX: number = 0;
+  offsetY: number = 0;
 
   // scale, limits and ticks
   xscale: Scale;
@@ -116,11 +120,19 @@ export class Metrics {
     this.ticks = new Ticks(args, this.limits);
   }
 
-  resize(width: number, height: number) {
+  resize(width: number, height: number, padding?: IPadding) {
+    const w = padding ? width - padding.left - padding.right : width;
+    const h = padding ? height - padding.top - padding.bottom : height;
+    this.offsetX = 0;
+    this.offsetY = 0;
+    if (padding) {
+      this.offsetX = padding.left;
+      this.offsetY = padding.top;
+    }
     if (this.curves.list.length > 0) {
-      this.setScaleBasedOnCurves(width, height);
+      this.setScaleBasedOnCurves(w, h);
     } else {
-      this.setScaleFromStartValues(width, height);
+      this.setScaleFromStartValues(w, h);
     }
   }
 

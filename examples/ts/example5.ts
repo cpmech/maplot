@@ -1,6 +1,7 @@
 import {
   ICurves,
   IPlotArgs,
+  IPadding,
   defaultPlotArgs,
   defaultCurveStyle,
   defaultLegendArgs,
@@ -125,7 +126,14 @@ const curves: ICurves = {
   ],
 };
 
-const graph = new StaticGraph(args, curves, 'myCanvas');
+const padding: IPadding = {
+  top: 40,
+  left: 0,
+  right: 0,
+  bottom: 32,
+};
+
+const graph = new StaticGraph(args, curves, 'myCanvas', 1, 1, padding);
 
 (async () => {
   await graph.init();

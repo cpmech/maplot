@@ -1,6 +1,6 @@
 import { Markers, Legend, Metrics, Plotter } from './components';
 import { Resizer, getContext2d } from './dom';
-import { ICurves, IPlotArgs } from './types';
+import { ICurves, IPlotArgs, IPadding } from './types';
 
 export class StaticGraph {
   markers: Markers;
@@ -15,6 +15,7 @@ export class StaticGraph {
     canvasDivId: string,
     canvasWidthMultiplier: number = 1,
     canvasHeightMultiplier: number = 1,
+    canvasPadding?: IPadding,
   ) {
     const { canvas, dc } = getContext2d(canvasDivId);
     this.markers = new Markers(dc, args);
@@ -25,7 +26,7 @@ export class StaticGraph {
       ({ width, height }) => {
         canvas.width = width;
         canvas.height = height;
-        this.metrics.resize(canvas.width, canvas.height);
+        this.metrics.resize(canvas.width, canvas.height, canvasPadding);
         this.plotter.render();
       },
       canvasWidthMultiplier,

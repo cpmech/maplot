@@ -31,6 +31,10 @@ export class Plotter {
   }
 
   render() {
+    // offset
+    this.dc.save();
+    this.dc.translate(this.metrics.offsetX, this.metrics.offsetY);
+
     // clear background
     this.clearBackground();
 
@@ -54,6 +58,9 @@ export class Plotter {
     this.drawLeftRuler();
     this.drawLegend();
     this.drawFrame();
+
+    // restore DC
+    this.dc.restore();
   }
 
   clearBackground() {
