@@ -24,7 +24,7 @@ app.get('/1', function(req, res) {
   res.sendFile(path.join(__dirname, 'examples', 'js', 'example1.html'));
 });
 
-[2, 3, 4, 5].forEach(e => {
+[2, 3, 4, 5, 6].forEach(e => {
   app.get(`/${e}`, function(req, res) {
     res.sendFile(path.join(__dirname, 'examples', 'ts', `example${e}.html`));
   });

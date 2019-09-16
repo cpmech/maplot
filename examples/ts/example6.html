@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <title>Map And Plot Utilities -- Example 3</title>
+
+    <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
+  </head>
+
+  <style>
+    html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      /* backface-visibility: hidden; */
+      /* -webkit-backface-visibility: hidden; */
+      overscroll-behavior: none;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      max-height: 100%;
+      float: left;
+      width: 100%;
+      overscroll-behavior: none;
+    }
+
+    .root {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .myCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      cursor: crosshair;
+    }
+
+    .controlContainer {
+      position: fixed;
+      right: 0;
+      top: 0;
+    }
+
+    .controlWrapper {
+      display: flex;
+      justify-content: right;
+      align-items: center;
+      height: 40px;
+      width: 100%;
+      z-index: 1;
+      background-color: white;
+    }
+
+    .controlButton {
+      background-color: #ececec;
+      border: none;
+      color: #414141;
+      padding: 5px 5px 3px 5px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 10px;
+      margin: 0px 5px;
+      cursor: pointer;
+      border-radius: 6px;
+      -webkit-transition-duration: 0.4s;
+      transition-duration: 0.4s;
+    }
+
+    .controlButton:hover {
+      background-color: #414141;
+      color: white;
+    }
+
+    .statusBarContainer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+    }
+
+    .statusBarWrapper {
+      background-color: #cecece;
+      display: flex;
+      align-items: center;
+      height: 32px;
+      z-index: 1;
+      overflow: hidden;
+    }
+
+    .statusBar {
+      padding-left: 20px;
+    }
+  </style>
+
+  <body>
+    <div class="root">
+      <canvas id="myCanvas" class="myCanvas"></canvas>
+      <div id="control" class="controlContainer">
+        <div class="controlWrapper">
+          <!-- zoom in -->
+          <button id="btnZoomIn" class="controlButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path
+                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+              />
+              <path fill="none" d="M0 0h24v24H0V0z" />
+              <path d="M12 10h-2v2H9v-2H7V9h2V7h1v2h2v1z" />
+            </svg>
+          </button>
+
+          <!-- zoom out -->
+          <button id="btnZoomOut" class="controlButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path fill="none" d="M0 0h24v24H0V0z" />
+              <path
+                d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14zM7 9h5v1H7z"
+              />
+            </svg>
+          </button>
+
+          <!-- focus -->
+          <button id="btnFocus" class="controlButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M12 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm-7 7H3v4c0 1.1.9 2 2 2h4v-2H5v-4zM5 5h4V3H5c-1.1 0-2 .9-2 2v4h2V5zm14-2h-4v2h4v4h2V5c0-1.1-.9-2-2-2zm0 16h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4z"
+              />
+            </svg>
+          </button>
+
+          <!-- rescale -->
+          <button id="btnRescale" class="controlButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+              <path
+                d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"
+              />
+              <path d="M0 0h24v24H0z" fill="none" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="statusBarContainer">
+        <div class="statusBarWrapper">
+          <div id="statusBar" class="statusBar">STATUS BAR</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="/dist/examples/ts/example6.js"></script>
+    <script src="/reload/reload.js"></script>
+  </body>
+</html>

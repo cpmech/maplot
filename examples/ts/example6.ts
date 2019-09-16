@@ -28,7 +28,6 @@ const args: IPlotArgs = {
     atBottom: false,
   },
   title: 'Many Curves (interactive)',
-  markerImgPaths: ['images/city-200.png', 'images/road-sign1.png'],
 };
 
 const I = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
@@ -49,10 +48,7 @@ const curves: ICurves = {
       style: {
         ...defaultCurveStyle,
         lineColor: getColor(0, colorScheme),
-        markerType: 'img',
-        markerImg: 'images/city-200.png',
-        markerSize: 96,
-        markerEvery: 5,
+        markerType: 'o',
       },
     },
     {
@@ -62,9 +58,7 @@ const curves: ICurves = {
       style: {
         ...defaultCurveStyle,
         lineColor: getColor(1, colorScheme),
-        markerType: 'img',
-        markerImg: 'images/road-sign1.png',
-        markerSize: 64,
+        markerType: '+',
         markerEvery: 5,
       },
     },
