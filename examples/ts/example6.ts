@@ -32,36 +32,11 @@ const args: IPlotArgs = {
 
 const I = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
 const X = I.map(i => i / 20.0);
-const XX = X.map(x => x * x);
 const OMX = X.map(x => 1 - x);
-const OMX2 = X.map(x => 1 - x * x);
 const ZP5 = X.map(x => 0.5);
-const MX = X.map(x => 4 * x * (1 - x));
-const NX = X.map(x => 1 - 4 * x * (1 - x));
 
 const curves: ICurves = {
   list: [
-    {
-      label: 'y = -4 x (1 - x)',
-      x: X,
-      y: NX,
-      style: {
-        ...defaultCurveStyle,
-        lineColor: getColor(0, colorScheme),
-        markerType: 'o',
-      },
-    },
-    {
-      label: 'y = 4 x (1 - x)',
-      x: X,
-      y: MX,
-      style: {
-        ...defaultCurveStyle,
-        lineColor: getColor(1, colorScheme),
-        markerType: '+',
-        markerEvery: 5,
-      },
-    },
     {
       label: 'y = x',
       x: X,
@@ -71,17 +46,6 @@ const curves: ICurves = {
         lineColor: getColor(2, colorScheme),
         markerColor: '#000000',
         markerLineColor: '#000000',
-      },
-    },
-    {
-      label: 'y = x²',
-      kind: 'curve',
-      x: X,
-      y: XX,
-      style: {
-        ...defaultCurveStyle,
-        lineColor: getColor(3, colorScheme),
-        markerType: 'none',
       },
     },
     {
@@ -107,18 +71,6 @@ const curves: ICurves = {
         markerColor: '#000000',
       },
     },
-    {
-      label: 'y = 1 - x²',
-      x: X,
-      y: OMX2,
-      style: {
-        ...defaultCurveStyle,
-        lineColor: getColor(6, colorScheme),
-        markerType: 's',
-        markerColor: '#000000',
-        markerLineColor: '#000000',
-      },
-    },
   ],
 };
 
@@ -130,13 +82,7 @@ const padding: IPadding = {
 };
 
 const statusString: ICoordsToString = (x: number, y: number): string => {
-  const txr = numFmt(x, 3);
-  const tyr = numFmt(y, 3);
-  const txn = numFmt(x / 8, 3);
-  const tyn = numFmt(y / 8, 3);
-  const tworld = `WORLD ${args.x.coordName} = ${txr} : ${args.y.coordName} = ${tyr}`;
-  const tnether = `NETHER ${args.x.coordName} = ${txn} : ${args.y.coordName} = ${tyn}`;
-  return `${tworld} | ${tnether}`;
+  return `(${numFmt(x, 3, 8)},${numFmt(y, 3, 8)})`;
 };
 
 const graph = new DynamicGraph(
