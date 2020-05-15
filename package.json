@@ -1,13 +1,13 @@
 {
-  "name": "@plabs/maplot",
+  "name": "@cpmech/maplot",
   "version": "0.1.0",
   "license": "MIT",
   "author": {
-    "name": "Pedroso Labs",
-    "email": "pedroso.xlabs@gmail.com",
-    "url": "https://github.com/pedrosolabs"
+    "name": "Dorival Pedroso",
+    "email": "dorival.pedroso@gmail.com",
+    "url": "https://github.com/cpmech"
   },
-  "repository": "pedrosolabs/maplot",
+  "repository": "cpmech/maplot",
   "scripts": {
     "tsnode": "ts-node -O '{\"module\":\"commonjs\",\"resolveJsonModule\":true}'",
     "start": "yarn tsnode src/index.ts",
@@ -24,7 +24,7 @@
   },
   "description": "maplot",
   "keywords": [
-    "maplot"
+    "plotting"
   ],
   "files": [
     "dist"
