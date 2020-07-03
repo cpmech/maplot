@@ -20,7 +20,7 @@
     "cov": "yarn build && jest --coverage",
     "integ": "jest -c jest.config-integ.js --verbose",
     "integw": "jest -c jest.config-integ.js --verbose --watch",
-    "dist": "yarn build && yarn publish --access=public"
+    "dist": "yarn build && yarn publish --access=public && git push && git push --tags"
   },
   "description": "maplot",
   "keywords": [
