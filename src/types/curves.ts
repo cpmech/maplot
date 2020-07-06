@@ -1,4 +1,4 @@
-import { LineStyle } from '../types';
+export type LineStyle = '-' | '--' | ':' | 'none';
 
 export type MarkerType = 'o' | 's' | '+' | 'x' | 'img' | 'none';
 
@@ -55,3 +55,30 @@ export const defaultCurveStyle: ICurveStyle = {
   markerLineStyle: 'none',
   markerIsVoid: false,
 };
+
+export const newZeroCurveStyle = (): ICurveStyle => ({
+  lineColor: '',
+  lineAlpha: 0,
+  lineStyle: '-',
+  lineWidth: 0,
+  markerType: '+',
+  markerImg: '',
+  markerColor: '',
+  markerAlpha: 0,
+  markerSize: 0,
+  markerEvery: 0,
+  markerLineColor: '',
+  markerLineWidth: 0,
+  markerLineStyle: '-',
+  markerIsVoid: false,
+});
+
+export const newZeroCurve = (): ICurve => ({
+  style: newZeroCurveStyle(),
+  label: '',
+  x: [],
+  y: [],
+  z: [],
+  kind: '',
+  tagFirstPoint: false,
+});

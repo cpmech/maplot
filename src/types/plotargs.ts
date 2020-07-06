@@ -1,4 +1,4 @@
-import { LineStyle } from '../types';
+import { LineStyle } from './curves';
 
 export interface ITicksArgs {
   vertNums: boolean; // vertical scale numbers
