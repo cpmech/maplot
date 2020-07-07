@@ -2,7 +2,6 @@ import { ICurves, IPlotArgs, ICoords, IListener, IPadding, ICoordsToString } fro
 import { StatusBar } from './components';
 import { StaticGraph } from './StaticGraph';
 import { getContext2d, getElement, getMousePos } from './dom';
-import { numFmt } from './helpers';
 
 const ZOOM_FACTOR = 1.1; // must be greater than 1.0
 
@@ -100,7 +99,7 @@ export class DynamicGraph {
       },
     ];
     this.canvasListeners.forEach(
-      l => this.canvas && this.canvas.addEventListener(l.kind, l.obj, false),
+      (l) => this.canvas && this.canvas.addEventListener(l.kind, l.obj, false),
     );
 
     // add button listeners
@@ -111,7 +110,7 @@ export class DynamicGraph {
       },
     ];
     this.zoomInListeners.forEach(
-      l => this.btnZoomIn && this.btnZoomIn.addEventListener(l.kind, l.obj, false),
+      (l) => this.btnZoomIn && this.btnZoomIn.addEventListener(l.kind, l.obj, false),
     );
 
     this.zoomOutListeners = [
@@ -121,7 +120,7 @@ export class DynamicGraph {
       },
     ];
     this.zoomOutListeners.forEach(
-      l => this.btnZoomOut && this.btnZoomOut.addEventListener(l.kind, l.obj, false),
+      (l) => this.btnZoomOut && this.btnZoomOut.addEventListener(l.kind, l.obj, false),
     );
 
     this.focusListeners = [
@@ -131,7 +130,7 @@ export class DynamicGraph {
       },
     ];
     this.focusListeners.forEach(
-      l => this.btnFocus && this.btnFocus.addEventListener(l.kind, l.obj, false),
+      (l) => this.btnFocus && this.btnFocus.addEventListener(l.kind, l.obj, false),
     );
 
     this.rescaleListeners = [
@@ -141,7 +140,7 @@ export class DynamicGraph {
       },
     ];
     this.rescaleListeners.forEach(
-      l => this.btnRescale && this.btnRescale.addEventListener(l.kind, l.obj, false),
+      (l) => this.btnRescale && this.btnRescale.addEventListener(l.kind, l.obj, false),
     );
   }
 
@@ -152,24 +151,24 @@ export class DynamicGraph {
   finish() {
     // remove canvas listeners
     this.canvasListeners.forEach(
-      l => this.canvas && this.canvas.removeEventListener(l.kind, l.obj, false),
+      (l) => this.canvas && this.canvas.removeEventListener(l.kind, l.obj, false),
     );
 
     // remove button listeners
     this.zoomInListeners.forEach(
-      l => this.btnZoomIn && this.btnZoomIn.removeEventListener(l.kind, l.obj, false),
+      (l) => this.btnZoomIn && this.btnZoomIn.removeEventListener(l.kind, l.obj, false),
     );
 
     this.zoomOutListeners.forEach(
-      l => this.btnZoomOut && this.btnZoomOut.removeEventListener(l.kind, l.obj, false),
+      (l) => this.btnZoomOut && this.btnZoomOut.removeEventListener(l.kind, l.obj, false),
     );
 
     this.focusListeners.forEach(
-      l => this.btnFocus && this.btnFocus.removeEventListener(l.kind, l.obj, false),
+      (l) => this.btnFocus && this.btnFocus.removeEventListener(l.kind, l.obj, false),
     );
 
     this.rescaleListeners.forEach(
-      l => this.btnRescale && this.btnRescale.removeEventListener(l.kind, l.obj, false),
+      (l) => this.btnRescale && this.btnRescale.removeEventListener(l.kind, l.obj, false),
     );
   }
 
