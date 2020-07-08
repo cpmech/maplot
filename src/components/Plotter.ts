@@ -114,7 +114,7 @@ export class Plotter {
     const v = this.args.y.coordName;
 
     // draw lines
-    this.curves.list.forEach(curve => {
+    this.curves.list.forEach((curve) => {
       const c = curve as any;
       if (curve.style.lineStyle && c[u].length > 1) {
         setStroke(
@@ -147,7 +147,7 @@ export class Plotter {
     // draw markers
     const fontMarkerLabel = `${this.args.fsizeMarkerLabel}px ${this.args.fnameMarkerLabel}`;
     const mm = this.metrics.markerRefLength;
-    this.curves.list.forEach(curve => {
+    this.curves.list.forEach((curve) => {
       const c = curve as any;
       if (curve.style.markerType) {
         let idx = 0;
