@@ -5,15 +5,24 @@ export class Resizer {
   widthMultiplier: number;
   heightMultiplier: number;
   listener?: IListener;
+  parent?: HTMLDivElement | null;
 
   constructor(
     callbackFunction: IResizeFunction,
     widthMultiplier: number = 1,
     heightMultiplier: number = 1,
+    parentDivIdOrElem: string | HTMLDivElement | null = null,
   ) {
     this.callbackFcn = callbackFunction;
     this.widthMultiplier = widthMultiplier;
     this.heightMultiplier = heightMultiplier;
+    if (parentDivIdOrElem) {
+      if (typeof parentDivIdOrElem === 'string') {
+        this.parent = document.getElementById(parentDivIdOrElem) as HTMLDivElement;
+      } else {
+        this.parent = parentDivIdOrElem;
+      }
+    }
   }
 
   start() {
@@ -36,9 +45,17 @@ export class Resizer {
   }
 
   private doResize() {
-    this.callbackFcn({
-      width: document.documentElement.clientWidth * this.widthMultiplier,
-      height: document.documentElement.clientHeight * this.heightMultiplier,
-    });
+    if (this.parent) {
+      console.log(this.parent.clientWidth, this.parent.clientHeight);
+      this.callbackFcn({
+        width: this.parent.clientWidth * this.widthMultiplier,
+        height: this.parent.clientHeight * this.heightMultiplier,
+      });
+    } else {
+      this.callbackFcn({
+        width: document.documentElement.clientWidth * this.widthMultiplier,
+        height: document.documentElement.clientHeight * this.heightMultiplier,
+      });
+    }
   }
 }

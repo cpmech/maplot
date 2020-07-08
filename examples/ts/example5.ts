@@ -32,13 +32,13 @@ const args: IPlotArgs = {
 };
 
 const I = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20];
-const X = I.map(i => i / 20.0);
-const XX = X.map(x => x * x);
-const OMX = X.map(x => 1 - x);
-const OMX2 = X.map(x => 1 - x * x);
-const ZP5 = X.map(x => 0.5);
-const MX = X.map(x => 4 * x * (1 - x));
-const NX = X.map(x => 1 - 4 * x * (1 - x));
+const X = I.map((i) => i / 20.0);
+const XX = X.map((x) => x * x);
+const OMX = X.map((x) => 1 - x);
+const OMX2 = X.map((x) => 1 - x * x);
+const ZP5 = X.map((x) => 0.5);
+const MX = X.map((x) => 4 * x * (1 - x));
+const NX = X.map((x) => 1 - 4 * x * (1 - x));
 
 const curves: ICurves = {
   list: [
@@ -148,6 +148,7 @@ const statusString: ICoordsToString = (x: number, y: number): string => {
 const graph = new DynamicGraph(
   args,
   curves,
+  'myCanvasParent',
   'myCanvas',
   'statusBar',
   'btnZoomIn',

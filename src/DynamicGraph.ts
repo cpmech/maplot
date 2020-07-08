@@ -34,6 +34,7 @@ export class DynamicGraph {
   constructor(
     args: IPlotArgs,
     curves: ICurves,
+    canvasParentDivIdOrElem: string | HTMLDivElement,
     canvasDivIdOrElem: string | HTMLCanvasElement,
     statusDivId: string,
     btnZoomInDivId: string,
@@ -52,6 +53,7 @@ export class DynamicGraph {
     this.graph = new StaticGraph(
       args,
       curves,
+      canvasParentDivIdOrElem,
       canvasDivIdOrElem,
       canvasWidthMultiplier,
       canvasHeightMultiplier,
