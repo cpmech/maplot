@@ -3,13 +3,17 @@ export interface IContext2d {
   dc: CanvasRenderingContext2D;
 }
 
-export const getContext2d = (canvasDivId: string): IContext2d => {
-  const el = document.getElementById(canvasDivId);
-  if (!el) {
-    throw new Error(`cannot get "${canvasDivId}"`);
+export const getContext2d = (canvasDivIdOrElem: string | HTMLCanvasElement): IContext2d => {
+  let canvas: HTMLCanvasElement;
+  if (typeof canvasDivIdOrElem === 'string') {
+    const el = document.getElementById(canvasDivIdOrElem);
+    if (!el) {
+      throw new Error(`cannot get "${canvasDivIdOrElem}"`);
+    }
+    canvas = el as HTMLCanvasElement;
+  } else {
+    canvas = canvasDivIdOrElem;
   }
-
-  const canvas = el as HTMLCanvasElement;
   const dc = canvas.getContext('2d');
   if (!dc) {
     throw new Error('cannot get device context');

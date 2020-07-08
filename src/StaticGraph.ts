@@ -12,12 +12,12 @@ export class StaticGraph {
   constructor(
     args: IPlotArgs,
     curves: ICurves,
-    canvasDivId: string,
+    canvasDivIdOrElem: string | HTMLCanvasElement,
     canvasWidthMultiplier: number = 1,
     canvasHeightMultiplier: number = 1,
     canvasPadding?: IPadding,
   ) {
-    const { canvas, dc } = getContext2d(canvasDivId);
+    const { canvas, dc } = getContext2d(canvasDivIdOrElem);
     this.markers = new Markers(dc, args);
     this.legend = new Legend(dc, args, curves, this.markers);
     this.metrics = new Metrics(dc, args, curves, this.markers, this.legend, canvasPadding);

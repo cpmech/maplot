@@ -34,7 +34,7 @@ export class DynamicGraph {
   constructor(
     args: IPlotArgs,
     curves: ICurves,
-    canvasDivId: string,
+    canvasDivIdOrElem: string | HTMLCanvasElement,
     statusDivId: string,
     btnZoomInDivId: string,
     btnZoomOutDivId: string,
@@ -46,13 +46,13 @@ export class DynamicGraph {
     coordsString?: ICoordsToString,
   ) {
     // essential
-    const { canvas } = getContext2d(canvasDivId);
+    const { canvas } = getContext2d(canvasDivIdOrElem);
     this.args = args;
     this.canvas = canvas;
     this.graph = new StaticGraph(
       args,
       curves,
-      canvasDivId,
+      canvasDivIdOrElem,
       canvasWidthMultiplier,
       canvasHeightMultiplier,
       canvasPadding,
