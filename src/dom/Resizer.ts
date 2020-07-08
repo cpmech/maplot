@@ -46,7 +46,6 @@ export class Resizer {
 
   private doResize() {
     if (this.parent) {
-      console.log(this.parent.clientWidth, this.parent.clientHeight);
       this.callbackFcn({
         width: this.parent.clientWidth * this.widthMultiplier,
         height: this.parent.clientHeight * this.heightMultiplier,
