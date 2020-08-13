@@ -6,14 +6,14 @@ import commonjs from 'rollup-plugin-commonjs';
 
 const cacheRoot = '/tmp/rollup_typescript_cache';
 
-const isJSFile = filename => /\.[j]sx?$/.test(filename);
-const isTSFile = filename => /\.[t]sx?$/.test(filename);
+const isJSFile = (filename) => /\.[j]sx?$/.test(filename);
+const isTSFile = (filename) => /\.[t]sx?$/.test(filename);
 
 const examplesDirJS = path.resolve(__dirname, 'examples', 'js');
 const examplesDirTS = path.resolve(__dirname, 'examples', 'ts');
 
-const exampleFilesJS = fs.readdirSync(examplesDirJS).filter(n => isJSFile(n));
-const exampleFilesTS = fs.readdirSync(examplesDirTS).filter(n => isTSFile(n));
+const exampleFilesJS = fs.readdirSync(examplesDirJS).filter((n) => isJSFile(n));
+const exampleFilesTS = fs.readdirSync(examplesDirTS).filter((n) => isTSFile(n));
 
 export default [
   // the ESM module including all dependencies
@@ -38,7 +38,7 @@ export default [
   },
 
   // examples written in JS
-  ...exampleFilesJS.map(f => ({
+  ...exampleFilesJS.map((f) => ({
     input: `examples/js/${f}`,
     output: {
       name: f,
@@ -48,7 +48,7 @@ export default [
   })),
 
   // examples written in TS
-  ...exampleFilesTS.map(f => ({
+  ...exampleFilesTS.map((f) => ({
     input: `examples/ts/${f}`,
     output: {
       name: f,
@@ -69,7 +69,6 @@ export default [
     ],
   })),
 
-  /*
   {
     input: `examples/ts/example5.ts`,
     output: {
@@ -90,5 +89,4 @@ export default [
       commonjs(),
     ],
   },
-  */
 ];
