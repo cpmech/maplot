@@ -1,4 +1,4 @@
-import { ICurves, IPlotArgs, defaultPlotArgs, defaultCurveStyle, StaticGraph } from '../../src';
+import { ICurves, IPlotArgs, defaultPlotArgs, defaultCurveStyle, StaticGraph } from '../src';
 
 const images = [
   { filePath: 'images/blue-hrect.png', markerSize: 0, label: 'H-Rect' },
@@ -9,7 +9,7 @@ const images = [
 const args: IPlotArgs = {
   ...defaultPlotArgs,
   title: 'Many Curves',
-  markerImgPaths: images.map(image => image.filePath),
+  markerImgPaths: images.map((image) => image.filePath),
   markerSizeAuto: true,
   equalScale: true,
 };
@@ -29,7 +29,7 @@ const curves: ICurves = {
   })),
 };
 
-const graph = new StaticGraph(args, curves, 'myCanvas');
+const graph = new StaticGraph(args, curves, 'myCanvasParent', 'myCanvas');
 
 (async () => {
   await graph.init();

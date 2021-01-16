@@ -41,6 +41,12 @@ const curves: ICurves = {
 
 describe('StaticGraph', () => {
   it('works', async () => {
-    const g = new StaticGraph(args, curves, 'myCanvas', 0.25, 0.33);
+    const g = new StaticGraph(
+      args,
+      curves,
+      'myCanvasParent',
+      'myCanvas',
+      0.25,
+      0.33);
   });
 });

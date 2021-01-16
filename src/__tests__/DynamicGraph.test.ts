@@ -49,6 +49,7 @@ describe('DynamicGraph', () => {
     const g = new DynamicGraph(
       args,
       curves,
+      'myCanvasParent',
       'myCanvas',
       'myStatus',
       'zoomIn',

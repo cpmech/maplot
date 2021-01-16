@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Example 2: Checking legend placement and size with large icons</title>
+    <title>Example 1: Use of coordName for selecting x,y,z</title>
 
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
@@ -35,14 +35,38 @@
       overflow: hidden;
       white-space: nowrap;
     }
+
+    .content {
+      background: #ececec;
+    }
+
+    .canvasGrid {
+      display: flex;
+      flex-flow: column;
+    }
+
+    .canvasRow {
+      display: flex;
+      flex-flow: row;
+    }
   </style>
 
   <body>
     <div class="root">
-      <canvas id="myCanvas"></canvas>
+      <div class="content">
+        <div class="canvasGrid">
+          <div class="canvasRow">
+            <canvas id="xyCanvas"></canvas>
+            <canvas id="zxCanvas"></canvas>
+          </div>
+          <div class="canvasRow">
+            <canvas id="yzCanvas"></canvas>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <script src="/dist/examples/ts/example2.js"></script>
+    <script src="/dist/examples/example1.js"></script>
     <script src="/reload/reload.js"></script>
   </body>
 </html>

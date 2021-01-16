@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Example 4: Test with very large icons</title>
+    <title>Example 2: Checking legend placement and size with large icons</title>
 
     <link rel="shortcut icon" href="/assets/favicon.ico" type="image/x-icon" />
     <link rel="icon" href="/assets/favicon.ico" type="image/x-icon" />
@@ -39,10 +39,12 @@
 
   <body>
     <div class="root">
-      <canvas id="myCanvas"></canvas>
+      <div id="myCanvasParent" style="width: 100%; height: 100vh; background-color: lightpink">
+        <canvas id="myCanvas"></canvas>
+      </div>
     </div>
 
-    <script src="/dist/examples/ts/example4.js"></script>
+    <script src="/dist/examples/example2.js"></script>
     <script src="/reload/reload.js"></script>
   </body>
 </html>

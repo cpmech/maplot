@@ -6,14 +6,10 @@ import commonjs from 'rollup-plugin-commonjs';
 
 const cacheRoot = '/tmp/rollup_typescript_cache';
 
-const isJSFile = (filename) => /\.[j]sx?$/.test(filename);
 const isTSFile = (filename) => /\.[t]sx?$/.test(filename);
 
-const examplesDirJS = path.resolve(__dirname, 'examples', 'js');
-const examplesDirTS = path.resolve(__dirname, 'examples', 'ts');
-
-const exampleFilesJS = fs.readdirSync(examplesDirJS).filter((n) => isJSFile(n));
-const exampleFilesTS = fs.readdirSync(examplesDirTS).filter((n) => isTSFile(n));
+const examplesDir = path.resolve(__dirname, 'examples');
+const exampleFiles = fs.readdirSync(examplesDir).filter((n) => isTSFile(n));
 
 export default [
   // the ESM module including all dependencies
@@ -37,22 +33,12 @@ export default [
     ],
   },
 
-  // examples written in JS
-  ...exampleFilesJS.map((f) => ({
-    input: `examples/js/${f}`,
+  // examples
+  ...exampleFiles.map((f) => ({
+    input: `examples/${f}`,
     output: {
       name: f,
-      file: `dist/examples/js/${f}`,
-      format: 'iife',
-    },
-  })),
-
-  // examples written in TS
-  ...exampleFilesTS.map((f) => ({
-    input: `examples/ts/${f}`,
-    output: {
-      name: f,
-      file: `dist/examples/ts/${f.replace(/\.[^\.]+$/, '.js')}`,
+      file: `dist/examples/${f.replace(/\.[^\.]+$/, '.js')}`,
       format: 'iife',
     },
     plugins: [
@@ -69,11 +55,12 @@ export default [
     ],
   })),
 
+  /*
   {
-    input: `examples/ts/example5.ts`,
+    input: `examples/example5.ts`,
     output: {
       name: 'example5.ts',
-      file: `dist/examples/ts/example5.js`,
+      file: `dist/examples/example5.js`,
       format: 'iife',
     },
     plugins: [
@@ -89,4 +76,5 @@ export default [
       commonjs(),
     ],
   },
+  */
 ];

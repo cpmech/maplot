@@ -12,7 +12,7 @@ export class StaticGraph {
   constructor(
     args: IPlotArgs,
     curves: ICurves,
-    canvasParentDivIdOrElem: string | HTMLDivElement,
+    canvasParentDivIdOrElem: string | HTMLDivElement | null,
     canvasDivIdOrElem: string | HTMLCanvasElement,
     canvasWidthMultiplier: number = 1,
     canvasHeightMultiplier: number = 1,

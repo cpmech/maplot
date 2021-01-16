@@ -3,6 +3,10 @@
 exports[`Plotter default render works 1`] = `
 CanvasRenderingContext2D {
   "_canvas": <canvas />,
+  "_clipIndex": 1,
+  "_clipStack": Array [
+    Array [],
+  ],
   "_directionStack": Array [
     "inherit",
   ],
@@ -42,7 +46,7 @@ CanvasRenderingContext2D {
     },
     Object {
       "props": Object {
-        "value": "#fff",
+        "value": "#ffffff",
       },
       "transform": Array [
         1,
@@ -73,7 +77,7 @@ CanvasRenderingContext2D {
     },
   ],
   "_fillStyleStack": Array [
-    "#fff",
+    "#ffffff",
   ],
   "_filterStack": Array [
     "none",
@@ -139,7 +143,7 @@ CanvasRenderingContext2D {
   ],
   "_stackIndex": 0,
   "_strokeStyleStack": Array [
-    "#000",
+    "#000000",
   ],
   "_textAlignStack": Array [
     "start",
